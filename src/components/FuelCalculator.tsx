@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { LocationInput } from './LocationInput';
+import { FuelTypeSelect, FuelType, getDefaultPrice } from './FuelTypeSelect';
+import { ConsumptionHelper } from './ConsumptionHelper';
+import { ResultCard } from './ResultCard';
+import { FuelComparison } from './FuelComparison';
+import { ExampleRoutes } from './ExampleRoutes';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { 
   Fuel, 
@@ -29,6 +33,7 @@ export const FuelCalculator = () => {
   const [manualDistance, setManualDistance] = useState('');
   const [useManualDistance, setUseManualDistance] = useState(false);
   const [roundTrip, setRoundTrip] = useState(false);
+  const [fuelType, setFuelType] = useState<FuelType>('pb95');
   const [fuelConsumption, setFuelConsumption] = useState('7');
   const [fuelPrice, setFuelPrice] = useState('6.50');
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
@@ -39,6 +44,11 @@ export const FuelCalculator = () => {
     : autoDistance;
 
   const effectiveDistance = distance ? (roundTrip ? distance * 2 : distance) : null;
+
+  // Update price when fuel type changes
+  useEffect(() => {
+    setFuelPrice(getDefaultPrice(fuelType));
+  }, [fuelType]);
 
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
@@ -83,6 +93,15 @@ export const FuelCalculator = () => {
     }
   }, [effectiveDistance, fuelConsumption, fuelPrice]);
 
+  const handleExampleRouteSelect = (from: string, to: string) => {
+    setUseManualDistance(false);
+    setPointA(from);
+    setPointB(to);
+    // Trigger location search
+    setCoordsA(null);
+    setCoordsB(null);
+  };
+
   return (
     <div className="w-full max-w-xl mx-auto">
       {/* Header */}
@@ -91,10 +110,10 @@ export const FuelCalculator = () => {
           <Fuel className="w-8 h-8 text-primary" />
         </div>
         <h1 className="text-3xl md:text-4xl font-bold mb-2">
-          <span className="gradient-text">Kalkulator Paliwa</span>
+          <span className="gradient-text">Kalkulator Kosztów Przejazdu</span>
         </h1>
         <p className="text-muted-foreground">
-          Oblicz koszt podróży w kilka sekund
+          Oblicz ile zapłacisz za paliwo na trasie A → B
         </p>
       </div>
 
@@ -117,15 +136,15 @@ export const FuelCalculator = () => {
           <div className="space-y-4 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <Route className="w-5 h-5 text-primary" />
-              <h2 className="font-semibold text-foreground">Trasa</h2>
+              <h2 className="font-semibold text-foreground">Trasa samochodowa (A → B)</h2>
             </div>
 
             <LocationInput
-              label="Punkt startowy"
+              label="Punkt startowy (A)"
               value={pointA}
               onChange={setPointA}
               onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
-              placeholder="np. Warszawa, Berlin, Praga..."
+              placeholder="np. Warszawa"
             />
 
             <div className="flex justify-center my-2">
@@ -135,12 +154,31 @@ export const FuelCalculator = () => {
             </div>
 
             <LocationInput
-              label="Punkt docelowy"
+              label="Punkt docelowy (B)"
               value={pointB}
               onChange={setPointB}
               onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
-              placeholder="np. Kraków, Wiedeń, Paryż..."
+              placeholder="np. Kraków"
             />
+
+            {/* Distance Display */}
+            {(isCalculatingDistance || autoDistance !== null) && (
+              <div className="bg-secondary/50 rounded-xl p-4 animate-scale-in">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Car className="w-5 h-5 text-primary" />
+                    <span className="text-muted-foreground">Dystans trasy</span>
+                  </div>
+                  {isCalculatingDistance ? (
+                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                  ) : (
+                    <span className="text-xl font-bold text-foreground">
+                      {autoDistance} km
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           /* Manual Distance Input */
@@ -163,25 +201,6 @@ export const FuelCalculator = () => {
           </div>
         )}
 
-        {/* Distance Display */}
-        {!useManualDistance && (isCalculatingDistance || autoDistance !== null) && (
-          <div className="bg-secondary/50 rounded-xl p-4 mb-6 animate-scale-in">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Car className="w-5 h-5 text-primary" />
-                <span className="text-muted-foreground">Dystans</span>
-              </div>
-              {isCalculatingDistance ? (
-                <Loader2 className="w-5 h-5 text-primary animate-spin" />
-              ) : (
-                <span className="text-xl font-bold text-foreground">
-                  {autoDistance} km
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Round Trip Toggle */}
         <div className="flex items-center justify-between mb-6 p-4 bg-secondary/30 rounded-xl">
           <div className="flex items-center gap-3">
@@ -197,12 +216,27 @@ export const FuelCalculator = () => {
           />
         </div>
 
+        {/* Round Trip Distance Display */}
+        {roundTrip && distance && (
+          <div className="bg-primary/10 rounded-xl p-4 mb-6 animate-fade-in text-center">
+            <div className="flex items-center justify-center gap-2">
+              <RotateCcw className="w-5 h-5 text-primary" />
+              <span className="text-foreground font-medium">
+                Trasa w obie strony: <span className="text-primary font-bold">{effectiveDistance} km</span>
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Parameters Section */}
         <div className="space-y-4 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Calculator className="w-5 h-5 text-primary" />
             <h2 className="font-semibold text-foreground">Parametry</h2>
           </div>
+
+          {/* Fuel Type */}
+          <FuelTypeSelect value={fuelType} onChange={setFuelType} />
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -221,6 +255,7 @@ export const FuelCalculator = () => {
                   min="0"
                 />
               </div>
+              <ConsumptionHelper onSelect={setFuelConsumption} />
             </div>
 
             <div>
@@ -245,19 +280,20 @@ export const FuelCalculator = () => {
 
         {/* Result Section */}
         {cost !== null && effectiveDistance !== null && (
-          <div className="result-glow bg-gradient-to-br from-primary/20 to-accent/10 rounded-xl p-6 animate-scale-in">
-            <div className="text-center">
-              <p className="text-muted-foreground mb-2">Szacowany koszt podróży</p>
-              <p className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                {cost.toFixed(2)} zł
-              </p>
-              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-4 flex-wrap">
-                <span>{effectiveDistance} km {roundTrip && '(w obie strony)'}</span>
-                <span>•</span>
-                <span>{((effectiveDistance) / 100 * parseFloat(fuelConsumption || '0')).toFixed(1)} L paliwa</span>
-              </div>
-            </div>
-          </div>
+          <>
+            <ResultCard
+              cost={cost}
+              distance={effectiveDistance}
+              consumption={parseFloat(fuelConsumption) || 0}
+              fuelPrice={parseFloat(fuelPrice) || 0}
+              fuelType={fuelType}
+              isRoundTrip={roundTrip}
+            />
+            <FuelComparison 
+              distance={effectiveDistance} 
+              consumption={parseFloat(fuelConsumption) || 7}
+            />
+          </>
         )}
 
         {/* Info */}
@@ -271,9 +307,14 @@ export const FuelCalculator = () => {
         )}
       </div>
 
+      {/* Example Routes */}
+      {!useManualDistance && (
+        <ExampleRoutes onSelect={handleExampleRouteSelect} />
+      )}
+
       {/* Footer */}
       <p className="text-center text-xs text-muted-foreground mt-6 animate-fade-in">
-        Dane o trasie z OpenStreetMap • Wyniki są przybliżone
+        © OpenStreetMap contributors • Wyniki są przybliżone
       </p>
     </div>
   );
