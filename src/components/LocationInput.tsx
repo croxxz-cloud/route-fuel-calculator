@@ -49,10 +49,10 @@ export const LocationInput = ({
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=pl`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`,
         {
           headers: {
-            'Accept-Language': 'pl',
+            'Accept-Language': 'pl,en',
           },
         }
       );

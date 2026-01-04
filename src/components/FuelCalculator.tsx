@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { LocationInput } from './LocationInput';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { 
   Fuel, 
   Route, 
@@ -9,7 +10,9 @@ import {
   ArrowRight, 
   Loader2,
   Car,
-  Banknote
+  Banknote,
+  RotateCcw,
+  Edit3
 } from 'lucide-react';
 
 interface Coordinates {
@@ -22,11 +25,20 @@ export const FuelCalculator = () => {
   const [pointB, setPointB] = useState('');
   const [coordsA, setCoordsA] = useState<Coordinates | null>(null);
   const [coordsB, setCoordsB] = useState<Coordinates | null>(null);
-  const [distance, setDistance] = useState<number | null>(null);
+  const [autoDistance, setAutoDistance] = useState<number | null>(null);
+  const [manualDistance, setManualDistance] = useState('');
+  const [useManualDistance, setUseManualDistance] = useState(false);
+  const [roundTrip, setRoundTrip] = useState(false);
   const [fuelConsumption, setFuelConsumption] = useState('7');
   const [fuelPrice, setFuelPrice] = useState('6.50');
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
   const [cost, setCost] = useState<number | null>(null);
+
+  const distance = useManualDistance 
+    ? (parseFloat(manualDistance) || null)
+    : autoDistance;
+
+  const effectiveDistance = distance ? (roundTrip ? distance * 2 : distance) : null;
 
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
@@ -40,7 +52,7 @@ export const FuelCalculator = () => {
       
       if (data.routes && data.routes.length > 0) {
         const distanceInKm = data.routes[0].distance / 1000;
-        setDistance(Math.round(distanceInKm * 10) / 10);
+        setAutoDistance(Math.round(distanceInKm * 10) / 10);
       }
     } catch (error) {
       console.error('Error fetching distance:', error);
@@ -50,18 +62,18 @@ export const FuelCalculator = () => {
   };
 
   useEffect(() => {
-    if (coordsA && coordsB) {
+    if (coordsA && coordsB && !useManualDistance) {
       fetchDistance();
     }
-  }, [coordsA, coordsB]);
+  }, [coordsA, coordsB, useManualDistance]);
 
   useEffect(() => {
-    if (distance && fuelConsumption && fuelPrice) {
+    if (effectiveDistance && fuelConsumption && fuelPrice) {
       const consumption = parseFloat(fuelConsumption);
       const price = parseFloat(fuelPrice);
       
       if (!isNaN(consumption) && !isNaN(price) && consumption > 0 && price > 0) {
-        const totalCost = (distance / 100) * consumption * price;
+        const totalCost = (effectiveDistance / 100) * consumption * price;
         setCost(Math.round(totalCost * 100) / 100);
       } else {
         setCost(null);
@@ -69,7 +81,7 @@ export const FuelCalculator = () => {
     } else {
       setCost(null);
     }
-  }, [distance, fuelConsumption, fuelPrice]);
+  }, [effectiveDistance, fuelConsumption, fuelPrice]);
 
   return (
     <div className="w-full max-w-xl mx-auto">
@@ -88,38 +100,71 @@ export const FuelCalculator = () => {
 
       {/* Main Card */}
       <div className="glass-card p-6 md:p-8 animate-slide-up">
-        {/* Route Section */}
-        <div className="space-y-4 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Route className="w-5 h-5 text-primary" />
-            <h2 className="font-semibold text-foreground">Trasa</h2>
+        {/* Distance Mode Toggle */}
+        <div className="flex items-center justify-between mb-6 p-4 bg-secondary/30 rounded-xl">
+          <div className="flex items-center gap-3">
+            <Edit3 className="w-5 h-5 text-primary" />
+            <span className="text-sm font-medium text-foreground">Własny dystans</span>
           </div>
-
-          <LocationInput
-            label="Punkt startowy"
-            value={pointA}
-            onChange={setPointA}
-            onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
-            placeholder="np. Warszawa, Centrum"
-          />
-
-          <div className="flex justify-center my-2">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-primary rotate-90" />
-            </div>
-          </div>
-
-          <LocationInput
-            label="Punkt docelowy"
-            value={pointB}
-            onChange={setPointB}
-            onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
-            placeholder="np. Kraków, Rynek Główny"
+          <Switch
+            checked={useManualDistance}
+            onCheckedChange={setUseManualDistance}
           />
         </div>
 
+        {!useManualDistance ? (
+          /* Route Section */
+          <div className="space-y-4 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Route className="w-5 h-5 text-primary" />
+              <h2 className="font-semibold text-foreground">Trasa</h2>
+            </div>
+
+            <LocationInput
+              label="Punkt startowy"
+              value={pointA}
+              onChange={setPointA}
+              onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
+              placeholder="np. Warszawa, Berlin, Praga..."
+            />
+
+            <div className="flex justify-center my-2">
+              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                <ArrowRight className="w-5 h-5 text-primary rotate-90" />
+              </div>
+            </div>
+
+            <LocationInput
+              label="Punkt docelowy"
+              value={pointB}
+              onChange={setPointB}
+              onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
+              placeholder="np. Kraków, Wiedeń, Paryż..."
+            />
+          </div>
+        ) : (
+          /* Manual Distance Input */
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Route className="w-5 h-5 text-primary" />
+              <h2 className="font-semibold text-foreground">Dystans</h2>
+            </div>
+            <div className="relative">
+              <Car className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
+              <Input
+                type="number"
+                value={manualDistance}
+                onChange={(e) => setManualDistance(e.target.value)}
+                placeholder="Wpisz dystans w km"
+                className="pl-12"
+                min="0"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Distance Display */}
-        {(isCalculatingDistance || distance !== null) && (
+        {!useManualDistance && (isCalculatingDistance || autoDistance !== null) && (
           <div className="bg-secondary/50 rounded-xl p-4 mb-6 animate-scale-in">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -130,12 +175,27 @@ export const FuelCalculator = () => {
                 <Loader2 className="w-5 h-5 text-primary animate-spin" />
               ) : (
                 <span className="text-xl font-bold text-foreground">
-                  {distance} km
+                  {autoDistance} km
                 </span>
               )}
             </div>
           </div>
         )}
+
+        {/* Round Trip Toggle */}
+        <div className="flex items-center justify-between mb-6 p-4 bg-secondary/30 rounded-xl">
+          <div className="flex items-center gap-3">
+            <RotateCcw className="w-5 h-5 text-primary" />
+            <div>
+              <span className="text-sm font-medium text-foreground">W obie strony</span>
+              <p className="text-xs text-muted-foreground">Podwój dystans (tam i z powrotem)</p>
+            </div>
+          </div>
+          <Switch
+            checked={roundTrip}
+            onCheckedChange={setRoundTrip}
+          />
+        </div>
 
         {/* Parameters Section */}
         <div className="space-y-4 mb-6">
@@ -184,17 +244,17 @@ export const FuelCalculator = () => {
         </div>
 
         {/* Result Section */}
-        {cost !== null && (
+        {cost !== null && effectiveDistance !== null && (
           <div className="result-glow bg-gradient-to-br from-primary/20 to-accent/10 rounded-xl p-6 animate-scale-in">
             <div className="text-center">
               <p className="text-muted-foreground mb-2">Szacowany koszt podróży</p>
               <p className="text-4xl md:text-5xl font-bold gradient-text mb-2">
                 {cost.toFixed(2)} zł
               </p>
-              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-4">
-                <span>{distance} km</span>
+              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-4 flex-wrap">
+                <span>{effectiveDistance} km {roundTrip && '(w obie strony)'}</span>
                 <span>•</span>
-                <span>{((distance || 0) / 100 * parseFloat(fuelConsumption || '0')).toFixed(1)} L paliwa</span>
+                <span>{((effectiveDistance) / 100 * parseFloat(fuelConsumption || '0')).toFixed(1)} L paliwa</span>
               </div>
             </div>
           </div>
@@ -203,7 +263,10 @@ export const FuelCalculator = () => {
         {/* Info */}
         {!cost && !isCalculatingDistance && (
           <div className="text-center py-6 text-muted-foreground text-sm">
-            Wybierz punkty A i B, aby obliczyć koszt podróży
+            {useManualDistance 
+              ? 'Wpisz dystans, aby obliczyć koszt podróży'
+              : 'Wybierz punkty A i B, aby obliczyć koszt podróży'
+            }
           </div>
         )}
       </div>
