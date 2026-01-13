@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
-
 interface ExampleRoutesProps {
   onSelect: (from: string, to: string) => void;
 }
@@ -22,17 +22,20 @@ const routes = [
 ];
 
 export const ExampleRoutes = ({ onSelect }: ExampleRoutesProps) => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleRoutes = showAll ? routes : routes.slice(0, 6);
+
   return (
-    <div className="mt-8">
-      <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
-        Popularne trasy
+    <div className="bg-card border border-border rounded-2xl p-5">
+      <h3 className="text-sm font-medium text-muted-foreground mb-3">
+        Popularne trasy:
       </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {routes.map((route) => (
+      <div className="space-y-2">
+        {visibleRoutes.map((route) => (
           <button
             key={`${route.from}-${route.to}`}
             onClick={() => onSelect(route.from, route.to)}
-            className="flex items-center gap-3 p-3 bg-secondary/30 hover:bg-secondary/50 rounded-xl transition-all group text-left"
+            className="w-full flex items-center gap-3 p-3 bg-input hover:bg-secondary/80 border border-border hover:border-primary/30 rounded-xl transition-all group text-left"
           >
             <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
             <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -44,6 +47,14 @@ export const ExampleRoutes = ({ onSelect }: ExampleRoutesProps) => {
           </button>
         ))}
       </div>
+      {routes.length > 6 && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="w-full mt-3 py-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+        >
+          {showAll ? 'Pokaż mniej' : `Pokaż wszystkie (${routes.length})`}
+        </button>
+      )}
     </div>
   );
 };
