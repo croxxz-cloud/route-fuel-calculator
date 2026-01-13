@@ -5,6 +5,8 @@ import { ConsumptionHelper } from './ConsumptionHelper';
 import { ResultCard } from './ResultCard';
 import { FuelComparison } from './FuelComparison';
 import { ExampleRoutes } from './ExampleRoutes';
+import { FuelPricesInfo } from './FuelPricesInfo';
+import { useFuelPrices } from '@/hooks/useFuelPrices';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { 
@@ -38,17 +40,18 @@ export const FuelCalculator = () => {
   const [fuelPrice, setFuelPrice] = useState('6.50');
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
   const [cost, setCost] = useState<number | null>(null);
-
+  
+  const { prices } = useFuelPrices();
   const distance = useManualDistance 
     ? (parseFloat(manualDistance) || null)
     : autoDistance;
 
   const effectiveDistance = distance ? (roundTrip ? distance * 2 : distance) : null;
 
-  // Update price when fuel type changes
+  // Update price when fuel type changes - use current market prices
   useEffect(() => {
-    setFuelPrice(getDefaultPrice(fuelType));
-  }, [fuelType]);
+    setFuelPrice(prices[fuelType].toFixed(2));
+  }, [fuelType, prices]);
 
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
@@ -227,6 +230,9 @@ export const FuelCalculator = () => {
             </div>
           </div>
         )}
+
+        {/* Fuel Prices Info */}
+        <FuelPricesInfo prices={prices} />
 
         {/* Parameters Section */}
         <div className="space-y-4 mb-6">

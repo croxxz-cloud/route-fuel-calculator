@@ -14,15 +14,18 @@ interface FuelTypeSelectProps {
   onChange: (value: FuelType) => void;
 }
 
-const fuelTypes: { value: FuelType; label: string; defaultPrice: string }[] = [
-  { value: 'pb95', label: 'Pb95', defaultPrice: '6.50' },
-  { value: 'pb98', label: 'Pb98', defaultPrice: '7.20' },
-  { value: 'diesel', label: 'Diesel', defaultPrice: '6.40' },
-  { value: 'lpg', label: 'LPG', defaultPrice: '3.00' },
+import { getFuelPrices, FuelPrices } from '@/hooks/useFuelPrices';
+
+const fuelTypes: { value: FuelType; label: string }[] = [
+  { value: 'pb95', label: 'Pb95' },
+  { value: 'pb98', label: 'Pb98' },
+  { value: 'diesel', label: 'Diesel' },
+  { value: 'lpg', label: 'LPG' },
 ];
 
 export const getDefaultPrice = (fuelType: FuelType): string => {
-  return fuelTypes.find(f => f.value === fuelType)?.defaultPrice || '6.50';
+  const prices = getFuelPrices();
+  return prices[fuelType].toFixed(2);
 };
 
 export const FuelTypeSelect = ({ value, onChange }: FuelTypeSelectProps) => {

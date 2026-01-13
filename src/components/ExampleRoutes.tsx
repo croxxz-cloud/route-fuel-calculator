@@ -5,12 +5,20 @@ interface ExampleRoutesProps {
 }
 
 const routes = [
+  // Trasy krajowe
   { from: 'Warszawa', to: 'Kraków', distance: 294 },
-  { from: 'Wrocław', to: 'Poznań', distance: 166 },
   { from: 'Gdańsk', to: 'Warszawa', distance: 340 },
+  { from: 'Wrocław', to: 'Poznań', distance: 166 },
   { from: 'Katowice', to: 'Łódź', distance: 194 },
-  { from: 'Szczecin', to: 'Berlin', distance: 145 },
+  { from: 'Poznań', to: 'Warszawa', distance: 310 },
+  { from: 'Lublin', to: 'Kraków', distance: 280 },
+  { from: 'Szczecin', to: 'Gdańsk', distance: 350 },
+  { from: 'Białystok', to: 'Warszawa', distance: 195 },
+  // Trasy międzynarodowe
+  { from: 'Kraków', to: 'Praga', distance: 535 },
+  { from: 'Warszawa', to: 'Berlin', distance: 575 },
   { from: 'Kraków', to: 'Wiedeń', distance: 410 },
+  { from: 'Wrocław', to: 'Drezno', distance: 290 },
 ];
 
 export const ExampleRoutes = ({ onSelect }: ExampleRoutesProps) => {

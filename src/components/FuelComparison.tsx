@@ -1,18 +1,24 @@
 import { Fuel } from 'lucide-react';
+import { getFuelPrices } from '@/hooks/useFuelPrices';
 
 interface FuelComparisonProps {
   distance: number;
   consumption: number;
 }
 
-const fuelPrices = [
-  { type: 'Pb95', price: 6.50, color: 'bg-green-500' },
-  { type: 'Pb98', price: 7.20, color: 'bg-blue-500' },
-  { type: 'Diesel', price: 6.40, color: 'bg-yellow-500' },
-  { type: 'LPG', price: 3.00, color: 'bg-purple-500' },
-];
+const getFuelPricesArray = () => {
+  const prices = getFuelPrices();
+  return [
+    { type: 'Pb95', price: prices.pb95, color: 'bg-green-500' },
+    { type: 'Pb98', price: prices.pb98, color: 'bg-blue-500' },
+    { type: 'Diesel', price: prices.diesel, color: 'bg-yellow-500' },
+    { type: 'LPG', price: prices.lpg, color: 'bg-purple-500' },
+  ];
+};
 
 export const FuelComparison = ({ distance, consumption }: FuelComparisonProps) => {
+  const fuelPrices = getFuelPricesArray();
+  
   const calculateCost = (price: number) => {
     return (distance / 100) * consumption * price;
   };
