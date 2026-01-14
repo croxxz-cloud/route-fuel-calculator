@@ -9,6 +9,7 @@ import { FuelComparison } from './FuelComparison';
 import { ExampleRoutes } from './ExampleRoutes';
 import { CalculatorModeSelector, CalculatorMode } from './CalculatorModeSelector';
 import { InfoBoxes } from './InfoBoxes';
+import { CurrentPricesBar } from './CurrentPricesBar';
 import { useFuelPrices, VehicleType } from '@/hooks/useFuelPrices';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -266,6 +267,9 @@ export const FuelCalculator = () => {
             </label>
             <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
           </div>
+
+          {/* Current Prices Bar */}
+          <CurrentPricesBar prices={prices} vehicleType={vehicleType} />
 
           {/* Parameters Card */}
           <div className="bg-card border border-border rounded-2xl p-5">
