@@ -1,24 +1,28 @@
 import { useState, useEffect } from 'react';
-import { FuelType } from '@/components/FuelTypeSelect';
+
+export type FuelType = 'pb95' | 'pb98' | 'diesel' | 'lpg';
+export type VehicleType = 'fuel' | 'electric';
 
 export interface FuelPrices {
   pb95: number;
   pb98: number;
   diesel: number;
   lpg: number;
+  electric: number; // zł/kWh
   lastUpdated: string;
   source: string;
 }
 
-// Średnie ceny paliw w Polsce - dane z e-petrol.pl
+// Średnie ceny paliw w Polsce - dane orientacyjne
 // Aktualizowane co tydzień (środa)
 const CURRENT_FUEL_PRICES: FuelPrices = {
   pb95: 5.79,
   pb98: 6.59,
   diesel: 6.17,
   lpg: 2.64,
+  electric: 0.85, // średnia cena za kWh na stacjach ładowania
   lastUpdated: '2025-01-08', // Data ostatniej aktualizacji
-  source: 'e-petrol.pl'
+  source: 'ceny orientacyjne'
 };
 
 export const useFuelPrices = () => {
@@ -36,11 +40,11 @@ export const useFuelPrices = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const getPrice = (fuelType: FuelType): number => {
+  const getPrice = (fuelType: FuelType | 'electric'): number => {
     return prices[fuelType];
   };
 
-  const getPriceString = (fuelType: FuelType): string => {
+  const getPriceString = (fuelType: FuelType | 'electric'): string => {
     return prices[fuelType].toFixed(2);
   };
 

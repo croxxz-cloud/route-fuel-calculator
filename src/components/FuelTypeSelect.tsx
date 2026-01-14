@@ -6,15 +6,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Fuel } from 'lucide-react';
+import { getFuelPrices, FuelType } from '@/hooks/useFuelPrices';
 
-export type FuelType = 'pb95' | 'pb98' | 'diesel' | 'lpg';
-
-interface FuelTypeSelectProps {
-  value: FuelType;
-  onChange: (value: FuelType) => void;
-}
-
-import { getFuelPrices, FuelPrices } from '@/hooks/useFuelPrices';
+export type { FuelType } from '@/hooks/useFuelPrices';
 
 const fuelTypes: { value: FuelType; label: string }[] = [
   { value: 'pb95', label: 'Pb95' },
@@ -22,6 +16,11 @@ const fuelTypes: { value: FuelType; label: string }[] = [
   { value: 'diesel', label: 'Diesel' },
   { value: 'lpg', label: 'LPG' },
 ];
+
+interface FuelTypeSelectProps {
+  value: FuelType;
+  onChange: (value: FuelType) => void;
+}
 
 export const getDefaultPrice = (fuelType: FuelType): string => {
   const prices = getFuelPrices();
