@@ -1,4 +1,4 @@
-import { TrendingUp, Calculator, Database } from 'lucide-react';
+import { TrendingUp, Calculator, Database, Zap } from 'lucide-react';
 import { FuelPrices } from '@/hooks/useFuelPrices';
 
 interface InfoBoxesProps {
@@ -15,7 +15,7 @@ export const InfoBoxes = ({ prices }: InfoBoxesProps) => {
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-3 mt-10">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-10">
       <div className="bg-card border border-border rounded-2xl p-5">
         <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-primary" />
@@ -31,13 +31,25 @@ export const InfoBoxes = ({ prices }: InfoBoxesProps) => {
 
       <div className="bg-card border border-border rounded-2xl p-5">
         <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+          <Zap className="w-4 h-4 text-success" />
+          Auta elektryczne
+        </h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li><strong className="text-success">Stacje DC:</strong> ~1.00-2.00 zł/kWh</li>
+          <li><strong className="text-success">Ładowanie w domu:</strong> ~0.65 zł/kWh</li>
+          <li><strong className="text-success">Średnie zużycie:</strong> 15-25 kWh/100km</li>
+        </ul>
+      </div>
+
+      <div className="bg-card border border-border rounded-2xl p-5">
+        <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <Calculator className="w-4 h-4 text-primary" />
           Metodologia
         </h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li><strong>Dystans:</strong> Realna trasa drogowa (OSRM)</li>
-          <li><strong>Koszt:</strong> (dystans / 100) × spalanie × cena</li>
-          <li><strong>Spalanie:</strong> Możesz wpisać własne lub wybrać średnią</li>
+          <li><strong>Koszt:</strong> (dystans / 100) × zużycie × cena</li>
+          <li><strong>Opłaty:</strong> Dodawane do kosztu energii</li>
         </ul>
       </div>
 
@@ -47,9 +59,9 @@ export const InfoBoxes = ({ prices }: InfoBoxesProps) => {
           Źródła danych
         </h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
-          <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OpenStreetMap</a> – mapy i geolokalizacja</li>
-          <li><a href="https://project-osrm.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OSRM</a> – routing tras</li>
-          <li>Średnie ceny rynkowe – orientacyjne</li>
+          <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OpenStreetMap</a> – mapy</li>
+          <li><a href="https://project-osrm.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OSRM</a> – routing</li>
+          <li>Ceny orientacyjne</li>
         </ul>
       </div>
     </div>

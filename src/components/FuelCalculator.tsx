@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { LocationInput } from './LocationInput';
 import { FuelTypeSelect, FuelType } from './FuelTypeSelect';
+import { VehicleTypeSelector } from './VehicleTypeSelector';
+import { TollCostsInput } from './TollCostsInput';
 import { ConsumptionHelper } from './ConsumptionHelper';
 import { ResultCard } from './ResultCard';
 import { FuelComparison } from './FuelComparison';
 import { ExampleRoutes } from './ExampleRoutes';
 import { CalculatorModeSelector, CalculatorMode } from './CalculatorModeSelector';
 import { InfoBoxes } from './InfoBoxes';
-import { useFuelPrices } from '@/hooks/useFuelPrices';
+import { useFuelPrices, VehicleType } from '@/hooks/useFuelPrices';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { 
@@ -18,7 +20,9 @@ import {
   Banknote,
   RotateCcw,
   Calculator,
-  Sparkles
+  Sparkles,
+  Zap,
+  Battery
 } from 'lucide-react';
 
 interface Coordinates {
@@ -28,6 +32,7 @@ interface Coordinates {
 
 export const FuelCalculator = () => {
   const [mode, setMode] = useState<CalculatorMode>('route');
+  const [vehicleType, setVehicleType] = useState<VehicleType>('fuel');
   const [pointA, setPointA] = useState('');
   const [pointB, setPointB] = useState('');
   const [coordsA, setCoordsA] = useState<Coordinates | null>(null);
@@ -37,7 +42,10 @@ export const FuelCalculator = () => {
   const [roundTrip, setRoundTrip] = useState(false);
   const [fuelType, setFuelType] = useState<FuelType>('pb95');
   const [fuelConsumption, setFuelConsumption] = useState('7');
+  const [electricConsumption, setElectricConsumption] = useState('18'); // kWh/100km
   const [fuelPrice, setFuelPrice] = useState('5.79');
+  const [electricPrice, setElectricPrice] = useState('0.85'); // zł/kWh
+  const [tollCosts, setTollCosts] = useState('');
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
   const [cost, setCost] = useState<number | null>(null);
   
@@ -51,8 +59,12 @@ export const FuelCalculator = () => {
 
   // Update price when fuel type changes - use current market prices
   useEffect(() => {
-    setFuelPrice(prices[fuelType].toFixed(2));
-  }, [fuelType, prices]);
+    if (vehicleType === 'fuel') {
+      setFuelPrice(prices[fuelType].toFixed(2));
+    } else {
+      setElectricPrice(prices.electric.toFixed(2));
+    }
+  }, [fuelType, vehicleType, prices]);
 
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
@@ -82,20 +94,34 @@ export const FuelCalculator = () => {
   }, [coordsA, coordsB, mode]);
 
   useEffect(() => {
-    if (effectiveDistance && fuelConsumption && fuelPrice) {
-      const consumption = parseFloat(fuelConsumption);
-      const price = parseFloat(fuelPrice);
+    if (effectiveDistance) {
+      const tollAmount = parseFloat(tollCosts) || 0;
       
-      if (!isNaN(consumption) && !isNaN(price) && consumption > 0 && price > 0) {
-        const totalCost = (effectiveDistance / 100) * consumption * price;
-        setCost(Math.round(totalCost * 100) / 100);
+      if (vehicleType === 'fuel') {
+        const consumption = parseFloat(fuelConsumption);
+        const price = parseFloat(fuelPrice);
+        
+        if (!isNaN(consumption) && !isNaN(price) && consumption > 0 && price > 0) {
+          const fuelCost = (effectiveDistance / 100) * consumption * price;
+          setCost(Math.round((fuelCost + tollAmount) * 100) / 100);
+        } else {
+          setCost(null);
+        }
       } else {
-        setCost(null);
+        const consumption = parseFloat(electricConsumption);
+        const price = parseFloat(electricPrice);
+        
+        if (!isNaN(consumption) && !isNaN(price) && consumption > 0 && price > 0) {
+          const energyCost = (effectiveDistance / 100) * consumption * price;
+          setCost(Math.round((energyCost + tollAmount) * 100) / 100);
+        } else {
+          setCost(null);
+        }
       }
     } else {
       setCost(null);
     }
-  }, [effectiveDistance, fuelConsumption, fuelPrice]);
+  }, [effectiveDistance, fuelConsumption, fuelPrice, electricConsumption, electricPrice, tollCosts, vehicleType]);
 
   const handleExampleRouteSelect = (from: string, to: string) => {
     setMode('route');
@@ -115,10 +141,10 @@ export const FuelCalculator = () => {
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 flex items-center justify-center gap-3 flex-wrap">
           <span>Kalkulator Kosztów Przejazdu</span>
-          <span className="text-2xl">🚗</span>
+          <span className="text-2xl">{vehicleType === 'electric' ? '⚡' : '🚗'}</span>
         </h1>
         <p className="text-muted-foreground max-w-xl mx-auto">
-          Oblicz ile zapłacisz za paliwo na trasie. Wybierz trasę A → B lub wpisz własny dystans.
+          Oblicz ile zapłacisz za {vehicleType === 'electric' ? 'energię' : 'paliwo'} na trasie. Wybierz trasę A → B lub wpisz własny dystans.
         </p>
       </div>
 
@@ -222,6 +248,9 @@ export const FuelCalculator = () => {
             )}
           </div>
 
+          {/* Toll Costs */}
+          <TollCostsInput value={tollCosts} onChange={setTollCosts} />
+
           {/* Example Routes */}
           {mode === 'route' && (
             <ExampleRoutes onSelect={handleExampleRouteSelect} />
@@ -230,6 +259,14 @@ export const FuelCalculator = () => {
 
         {/* Right Column - Parameters & Results */}
         <div className="space-y-4">
+          {/* Vehicle Type Selector */}
+          <div className="bg-card border border-border rounded-2xl p-5">
+            <label className="text-sm font-medium text-muted-foreground mb-3 block">
+              Typ pojazdu:
+            </label>
+            <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
+          </div>
+
           {/* Parameters Card */}
           <div className="bg-card border border-border rounded-2xl p-5">
             <div className="flex items-center gap-2 mb-4">
@@ -237,54 +274,104 @@ export const FuelCalculator = () => {
               <h2 className="font-semibold text-foreground">Parametry</h2>
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-4">
-              {/* Fuel Type */}
-              <div>
-                <FuelTypeSelect value={fuelType} onChange={setFuelType} />
-              </div>
-
-              {/* Consumption */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">
-                  Spalanie (L/100km)
-                </label>
-                <div className="relative">
-                  <Fuel className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
-                  <Input
-                    type="number"
-                    value={fuelConsumption}
-                    onChange={(e) => setFuelConsumption(e.target.value)}
-                    placeholder="7.0"
-                    className="pl-12 h-12"
-                    step="0.1"
-                    min="0"
-                  />
+            {vehicleType === 'fuel' ? (
+              /* Fuel Vehicle Parameters */
+              <div className="grid sm:grid-cols-3 gap-4">
+                {/* Fuel Type */}
+                <div>
+                  <FuelTypeSelect value={fuelType} onChange={setFuelType} />
                 </div>
-                <ConsumptionHelper onSelect={setFuelConsumption} />
-              </div>
 
-              {/* Fuel Price */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">
-                  Cena paliwa (zł/L)
-                </label>
-                <div className="relative">
-                  <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
-                  <Input
-                    type="number"
-                    value={fuelPrice}
-                    onChange={(e) => setFuelPrice(e.target.value)}
-                    placeholder="5.79"
-                    className="pl-12 h-12"
-                    step="0.01"
-                    min="0"
-                  />
+                {/* Consumption */}
+                <div>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
+                    Spalanie (L/100km)
+                  </label>
+                  <div className="relative">
+                    <Fuel className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
+                    <Input
+                      type="number"
+                      value={fuelConsumption}
+                      onChange={(e) => setFuelConsumption(e.target.value)}
+                      placeholder="7.0"
+                      className="pl-12 h-12"
+                      step="0.1"
+                      min="0"
+                    />
+                  </div>
+                  <ConsumptionHelper onSelect={setFuelConsumption} />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Możesz wpisać własną cenę ze stacji
-                </p>
+
+                {/* Fuel Price */}
+                <div>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
+                    Cena paliwa (zł/L)
+                  </label>
+                  <div className="relative">
+                    <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
+                    <Input
+                      type="number"
+                      value={fuelPrice}
+                      onChange={(e) => setFuelPrice(e.target.value)}
+                      placeholder="5.79"
+                      className="pl-12 h-12"
+                      step="0.01"
+                      min="0"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Możesz wpisać własną cenę ze stacji
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* Electric Vehicle Parameters */
+              <div className="grid sm:grid-cols-2 gap-4">
+                {/* Consumption */}
+                <div>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
+                    Zużycie energii (kWh/100km)
+                  </label>
+                  <div className="relative">
+                    <Battery className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-success" />
+                    <Input
+                      type="number"
+                      value={electricConsumption}
+                      onChange={(e) => setElectricConsumption(e.target.value)}
+                      placeholder="18"
+                      className="pl-12 h-12"
+                      step="0.1"
+                      min="0"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Typowo 15-25 kWh/100km
+                  </p>
+                </div>
+
+                {/* Electric Price */}
+                <div>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
+                    Cena energii (zł/kWh)
+                  </label>
+                  <div className="relative">
+                    <Zap className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-success" />
+                    <Input
+                      type="number"
+                      value={electricPrice}
+                      onChange={(e) => setElectricPrice(e.target.value)}
+                      placeholder="0.85"
+                      className="pl-12 h-12"
+                      step="0.01"
+                      min="0"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Stacje DC: ~1-2 zł, dom: ~0.65 zł
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Results Section */}
@@ -293,21 +380,29 @@ export const FuelCalculator = () => {
               <ResultCard
                 cost={cost}
                 distance={effectiveDistance}
-                consumption={parseFloat(fuelConsumption) || 0}
-                fuelPrice={parseFloat(fuelPrice) || 0}
+                consumption={vehicleType === 'fuel' ? parseFloat(fuelConsumption) || 0 : parseFloat(electricConsumption) || 0}
+                energyPrice={vehicleType === 'fuel' ? parseFloat(fuelPrice) || 0 : parseFloat(electricPrice) || 0}
                 fuelType={fuelType}
+                vehicleType={vehicleType}
                 isRoundTrip={roundTrip}
+                tollCosts={parseFloat(tollCosts) || 0}
               />
-              <FuelComparison 
-                distance={effectiveDistance} 
-                consumption={parseFloat(fuelConsumption) || 7}
-              />
+              {vehicleType === 'fuel' && (
+                <FuelComparison 
+                  distance={effectiveDistance} 
+                  consumption={parseFloat(fuelConsumption) || 7}
+                />
+              )}
             </>
           ) : (
             /* Empty State */
             <div className="bg-card border border-border rounded-2xl p-10 text-center">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Car className="w-8 h-8 text-primary" />
+                {vehicleType === 'electric' ? (
+                  <Zap className="w-8 h-8 text-success" />
+                ) : (
+                  <Car className="w-8 h-8 text-primary" />
+                )}
               </div>
               <h3 className="font-semibold text-foreground mb-2">Oblicz koszt przejazdu</h3>
               <p className="text-sm text-muted-foreground max-w-sm mx-auto">
