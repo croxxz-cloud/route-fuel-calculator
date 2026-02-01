@@ -1,4 +1,4 @@
-import { Car, Fuel, Banknote, RotateCcw, Zap, Battery, Receipt } from 'lucide-react';
+import { Car, Fuel, Banknote, RotateCcw, Zap, Battery, Receipt, Clock } from 'lucide-react';
 import { PassengerSplit } from './PassengerSplit';
 import { VehicleType } from '@/hooks/useFuelPrices';
 
@@ -12,6 +12,17 @@ interface ResultCardProps {
   isRoundTrip: boolean;
   tollCosts: number;
 }
+
+const formatTravelTime = (distance: number): string => {
+  // Average speed assumption: 80 km/h for highways/mixed roads
+  const avgSpeed = 80;
+  const hours = distance / avgSpeed;
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  if (h === 0) return `${m} min`;
+  if (m === 0) return `${h} godz.`;
+  return `${h} godz. ${m} min`;
+};
 
 const fuelLabels: Record<string, string> = {
   pb95: 'Pb95',
@@ -76,6 +87,20 @@ export const ResultCard = ({
         </div>
         <div className="bg-background/50 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center gap-1 mb-1">
+            <Clock className="w-3 h-3 text-primary" />
+            <span className="text-xs text-muted-foreground">Czas przejazdu</span>
+          </div>
+          <p className="font-semibold text-foreground">
+            {formatTravelTime(distance)}
+          </p>
+          <p className="text-[10px] text-muted-foreground">bez postojów</p>
+        </div>
+      </div>
+
+      {/* Details Grid - Row 2 */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="bg-background/50 rounded-lg p-3 text-center">
+          <div className="flex items-center justify-center gap-1 mb-1">
             {isElectric ? (
               <Battery className="w-3 h-3 text-success" />
             ) : (
@@ -87,14 +112,6 @@ export const ResultCard = ({
           </div>
           <p className="font-semibold text-foreground">
             {energyAmount.toFixed(1)} {isElectric ? 'kWh' : 'L'}
-          </p>
-        </div>
-        <div className="bg-background/50 rounded-lg p-3 text-center">
-          <span className="text-xs text-muted-foreground">
-            {isElectric ? 'Zużycie' : 'Spalanie'}
-          </span>
-          <p className="font-semibold text-foreground">
-            {consumption} {isElectric ? 'kWh' : 'L'}/100km
           </p>
         </div>
         <div className="bg-background/50 rounded-lg p-3 text-center">
