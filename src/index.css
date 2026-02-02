@@ -6,75 +6,76 @@
 
 @layer base {
   :root {
-    --background: 220 20% 10%;
-    --foreground: 40 10% 95%;
+    /* Orlen Theme - White & Red (Primary) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
-    --card: 220 18% 14%;
-    --card-foreground: 40 10% 95%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 220 18% 14%;
-    --popover-foreground: 40 10% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 35 100% 55%;
-    --primary-foreground: 220 20% 10%;
+    --primary: 0 85% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 20%;
-    --secondary-foreground: 40 10% 85%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 25%;
 
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 35 90% 50%;
-    --accent-foreground: 220 20% 10%;
+    --accent: 0 75% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 22%;
-    --input: 220 15% 18%;
-    --ring: 35 100% 55%;
+    --border: 0 0% 88%;
+    --input: 0 0% 96%;
+    --ring: 0 85% 45%;
 
     --radius: 0.75rem;
 
-    --success: 145 70% 45%;
-    --success-foreground: 145 70% 10%;
+    --success: 145 70% 40%;
+    --success-foreground: 0 0% 100%;
 
-    --glow-primary: 0 0 40px hsl(35 100% 55% / 0.3);
-    --glow-accent: 0 0 60px hsl(35 90% 50% / 0.2);
+    --glow-primary: 0 0 40px hsl(0 85% 45% / 0.3);
+    --glow-accent: 0 0 60px hsl(0 75% 50% / 0.2);
 
-    --sidebar-background: 220 20% 10%;
-    --sidebar-foreground: 40 10% 95%;
-    --sidebar-primary: 35 100% 55%;
-    --sidebar-primary-foreground: 220 20% 10%;
-    --sidebar-accent: 220 15% 20%;
-    --sidebar-accent-foreground: 40 10% 85%;
-    --sidebar-border: 220 15% 22%;
-    --sidebar-ring: 35 100% 55%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 0 85% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 25%;
+    --sidebar-border: 0 0% 88%;
+    --sidebar-ring: 0 85% 45%;
   }
 
-  /* Forest Green Theme */
+  /* Orlen Theme - White & Red */
   .dark {
-    --background: 150 25% 7%;
-    --foreground: 140 15% 95%;
-    --card: 150 22% 11%;
-    --card-foreground: 140 15% 95%;
-    --popover: 150 22% 11%;
-    --popover-foreground: 140 15% 95%;
-    --primary: 145 80% 50%;
-    --primary-foreground: 150 25% 7%;
-    --secondary: 150 18% 16%;
-    --secondary-foreground: 140 15% 85%;
-    --muted: 150 18% 14%;
-    --muted-foreground: 150 12% 50%;
-    --accent: 160 75% 45%;
-    --accent-foreground: 150 25% 7%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 85% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 75% 50%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 150 18% 18%;
-    --input: 150 18% 14%;
-    --ring: 145 80% 50%;
-    --success: 145 80% 50%;
-    --success-foreground: 145 80% 10%;
+    --border: 0 0% 88%;
+    --input: 0 0% 96%;
+    --ring: 0 85% 45%;
+    --success: 145 70% 40%;
+    --success-foreground: 0 0% 100%;
   }
 }
 
@@ -90,27 +91,27 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  /* Light mode support */
+  /* Light mode - same as dark (Orlen white theme) */
   :root:not(.dark) {
-    --background: 220 20% 96%;
-    --foreground: 220 20% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
-    --primary: 35 100% 45%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 85% 45%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 220 20% 20%;
-    --muted: 220 15% 90%;
-    --muted-foreground: 220 10% 40%;
-    --accent: 35 90% 40%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 75% 50%;
     --accent-foreground: 0 0% 100%;
-    --border: 220 15% 85%;
-    --input: 220 15% 95%;
-    --ring: 35 100% 45%;
-    --success: 145 70% 35%;
-    --success-foreground: 145 70% 95%;
+    --border: 0 0% 88%;
+    --input: 0 0% 96%;
+    --ring: 0 85% 45%;
+    --success: 145 70% 40%;
+    --success-foreground: 0 0% 100%;
   }
 }
 

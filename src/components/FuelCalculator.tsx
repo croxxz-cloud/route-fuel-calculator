@@ -149,6 +149,27 @@ export const FuelCalculator = () => {
         </p>
       </div>
 
+      {/* Mobile-first: Vehicle Type & Prices Bar at top */}
+      <div className="lg:hidden space-y-4 mb-6">
+        {/* Vehicle Type Selector */}
+        <div className="bg-card border border-border rounded-2xl p-5">
+          <label className="text-sm font-medium text-muted-foreground mb-3 block">
+            Typ pojazdu:
+          </label>
+          <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
+        </div>
+
+        {/* Current Prices Bar */}
+        <CurrentPricesBar prices={prices} vehicleType={vehicleType} />
+
+        {/* Fuel Type for mobile */}
+        {vehicleType === 'fuel' && (
+          <div className="bg-card border border-border rounded-2xl p-5">
+            <FuelTypeSelect value={fuelType} onChange={setFuelType} />
+          </div>
+        )}
+      </div>
+
       {/* Main Calculator Grid */}
       <div className="grid lg:grid-cols-[340px_1fr] gap-6">
         {/* Left Column - Mode & Inputs */}
@@ -260,16 +281,18 @@ export const FuelCalculator = () => {
 
         {/* Right Column - Parameters & Results */}
         <div className="space-y-4">
-          {/* Vehicle Type Selector */}
-          <div className="bg-card border border-border rounded-2xl p-5">
+          {/* Vehicle Type Selector - Hidden on mobile (shown at top) */}
+          <div className="hidden lg:block bg-card border border-border rounded-2xl p-5">
             <label className="text-sm font-medium text-muted-foreground mb-3 block">
               Typ pojazdu:
             </label>
             <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
           </div>
 
-          {/* Current Prices Bar */}
-          <CurrentPricesBar prices={prices} vehicleType={vehicleType} />
+          {/* Current Prices Bar - Hidden on mobile (shown at top) */}
+          <div className="hidden lg:block">
+            <CurrentPricesBar prices={prices} vehicleType={vehicleType} />
+          </div>
 
           {/* Parameters Card */}
           <div className="bg-card border border-border rounded-2xl p-5">
@@ -280,9 +303,9 @@ export const FuelCalculator = () => {
 
             {vehicleType === 'fuel' ? (
               /* Fuel Vehicle Parameters */
-              <div className="grid sm:grid-cols-3 gap-4">
-                {/* Fuel Type */}
-                <div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Fuel Type - Hidden on mobile (shown at top) */}
+                <div className="hidden lg:block">
                   <FuelTypeSelect value={fuelType} onChange={setFuelType} />
                 </div>
 
@@ -421,7 +444,7 @@ export const FuelCalculator = () => {
       </div>
 
       {/* Info Boxes */}
-      <InfoBoxes prices={prices} />
+      <InfoBoxes />
     </div>
   );
 };
