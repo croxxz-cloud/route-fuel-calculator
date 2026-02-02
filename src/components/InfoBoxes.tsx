@@ -1,34 +1,8 @@
-import { TrendingUp, Calculator, Database, Zap } from 'lucide-react';
-import { FuelPrices } from '@/hooks/useFuelPrices';
+import { Calculator, Database, Zap } from 'lucide-react';
 
-interface InfoBoxesProps {
-  prices: FuelPrices;
-}
-
-export const InfoBoxes = ({ prices }: InfoBoxesProps) => {
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('pl-PL', {
-      month: 'long',
-      year: 'numeric'
-    });
-  };
-
+export const InfoBoxes = () => {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-10">
-      <div className="bg-card border border-border rounded-2xl p-5">
-        <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-primary" />
-          Ceny paliw – {formatDate(prices.lastUpdated)}
-        </h3>
-        <ul className="space-y-2 text-sm text-muted-foreground">
-          <li><strong className="text-success">Pb95:</strong> {prices.pb95.toFixed(2)} zł/L</li>
-          <li><strong className="text-success">Pb98:</strong> {prices.pb98.toFixed(2)} zł/L</li>
-          <li><strong className="text-success">Diesel:</strong> {prices.diesel.toFixed(2)} zł/L</li>
-          <li><strong className="text-success">LPG:</strong> {prices.lpg.toFixed(2)} zł/L</li>
-        </ul>
-      </div>
-
+    <div className="grid gap-4 md:grid-cols-3 mt-10">
       <div className="bg-card border border-border rounded-2xl p-5">
         <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <Zap className="w-4 h-4 text-success" />
