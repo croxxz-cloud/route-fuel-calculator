@@ -4,9 +4,35 @@ import { Input } from '@/components/ui/input';
 interface TollCostsInputProps {
   value: string;
   onChange: (value: string) => void;
+  compact?: boolean;
 }
 
-export const TollCostsInput = ({ value, onChange }: TollCostsInputProps) => {
+export const TollCostsInput = ({ value, onChange, compact = false }: TollCostsInputProps) => {
+  if (compact) {
+    return (
+      <div className="pt-3 border-t border-border">
+        <div className="flex items-center gap-2 mb-2">
+          <Receipt className="w-4 h-4 text-primary" />
+          <span className="text-xs font-medium text-foreground">Opłaty drogowe (zł)</span>
+        </div>
+        <div className="relative">
+          <Input
+            type="number"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="0"
+            className="h-9 text-sm pr-10"
+            step="1"
+            min="0"
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+            zł
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-card border border-border rounded-2xl p-5">
       <div className="flex items-center gap-3 mb-3">

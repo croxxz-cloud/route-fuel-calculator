@@ -1,20 +1,8 @@
-import { Calculator, Database, Zap } from 'lucide-react';
+import { Calculator, Database } from 'lucide-react';
 
 export const InfoBoxes = () => {
   return (
-    <div className="grid gap-4 md:grid-cols-3 mt-10">
-      <div className="bg-card border border-border rounded-2xl p-5">
-        <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-          <Zap className="w-4 h-4 text-success" />
-          Auta elektryczne
-        </h3>
-        <ul className="space-y-2 text-sm text-muted-foreground">
-          <li><strong className="text-success">Stacje DC:</strong> ~1.00-2.00 zł/kWh</li>
-          <li><strong className="text-success">Ładowanie w domu:</strong> ~0.65 zł/kWh</li>
-          <li><strong className="text-success">Średnie zużycie:</strong> 15-25 kWh/100km</li>
-        </ul>
-      </div>
-
+    <div className="grid gap-4 md:grid-cols-2 mt-10">
       <div className="bg-card border border-border rounded-2xl p-5">
         <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <Calculator className="w-4 h-4 text-primary" />
@@ -35,7 +23,7 @@ export const InfoBoxes = () => {
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OpenStreetMap</a> – mapy</li>
           <li><a href="https://project-osrm.org" target="_blank" rel="noopener" className="hover:text-primary transition-colors">OSRM</a> – routing</li>
-          <li>Ceny orientacyjne</li>
+          <li>Źródło cen: e-petrol.pl</li>
         </ul>
       </div>
     </div>

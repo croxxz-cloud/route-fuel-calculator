@@ -16,13 +16,13 @@ export interface FuelPrices {
 // Średnie ceny paliw w Polsce - dane orientacyjne
 // Aktualizowane co tydzień (środa)
 const CURRENT_FUEL_PRICES: FuelPrices = {
-  pb95: 5.79,
-  pb98: 6.59,
-  diesel: 6.17,
-  lpg: 2.64,
-  electric: 0.85, // średnia cena za kWh na stacjach ładowania
-  lastUpdated: '2025-01-08', // Data ostatniej aktualizacji
-  source: 'ceny orientacyjne'
+  pb95: 5.89,
+  pb98: 6.69,
+  diesel: 6.29,
+  lpg: 2.69,
+  electric: 0.89, // średnia cena za kWh na stacjach ładowania
+  lastUpdated: '2026-02-01', // Data ostatniej aktualizacji
+  source: 'e-petrol.pl'
 };
 
 export const useFuelPrices = () => {
