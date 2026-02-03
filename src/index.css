@@ -53,7 +53,7 @@
     --sidebar-ring: 0 85% 45%;
   }
 
-  /* Orlen Theme - White & Red */
+  /* No dark mode - same as light */
   .dark {
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
