@@ -132,8 +132,13 @@ const RoutePage = () => {
           {route.hasTolls ? (
             <>
               <p className="text-muted-foreground mb-4">
-                Na trasie {route.from} – {route.to} znajdują się płatne odcinki:
+                Na trasie {route.from} – {route.to} mogą występować płatne odcinki (w zależności od wybranego wariantu):
               </p>
+              {route.description && (
+                <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg mb-4">
+                  💡 {route.description}
+                </p>
+              )}
               <div className="space-y-2">
                 {route.tollSections.map((toll, index) => (
                   <div 
@@ -145,7 +150,7 @@ const RoutePage = () => {
                   </div>
                 ))}
                 <div className="flex items-center justify-between bg-primary/10 border border-primary/30 rounded-lg p-3 mt-3">
-                  <span className="font-medium text-foreground">Suma opłat drogowych</span>
+                  <span className="font-medium text-foreground">Suma opłat drogowych (max)</span>
                   <span className="font-bold text-primary text-lg">{totalTollCost} zł</span>
                 </div>
               </div>
