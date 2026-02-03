@@ -273,10 +273,7 @@ export const FuelCalculator = () => {
             <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
           </div>
 
-          {/* Mobile: Popularne trasy - moved lower */}
-          <div className="lg:hidden">
-            {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
-          </div>
+          {/* Mobile: Popularne trasy - MOVED to after results */}
         </div>
 
         {/* Right Column - Parameters & Results */}
@@ -433,11 +430,16 @@ export const FuelCalculator = () => {
             ) : null}
           </div>
 
-          {/* Desktop: Example Routes */}
+          {/* Example Routes - Desktop and Mobile after results */}
           <div className="hidden lg:block">
             {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
           </div>
         </div>
+      </div>
+
+      {/* Mobile: Popularne trasy - after everything */}
+      <div className="lg:hidden mt-4">
+        {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
       </div>
 
       {/* Info Boxes - without EV section on mobile handled via component */}
