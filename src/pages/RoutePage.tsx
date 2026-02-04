@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { getRouteBySlug, routesData } from '@/data/routesData';
 import { MapPin, ArrowRight, Clock, Fuel, AlertTriangle, Calculator, Route, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { formatTravelTimeFromDistanceKm } from '@/lib/travelTime';
 
 const RoutePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -109,7 +110,9 @@ const RoutePage = () => {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-primary" />
-                      <span className="text-foreground font-medium">{variant.time}</span>
+                      <span className="text-foreground font-medium">
+                        {formatTravelTimeFromDistanceKm(variant.distance, 90)}
+                      </span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Fuel className="w-4 h-4 text-primary" />

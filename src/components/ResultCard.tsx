@@ -1,6 +1,7 @@
 import { Car, Fuel, Banknote, RotateCcw, Zap, Battery, Receipt, Clock } from 'lucide-react';
 import { PassengerSplit } from './PassengerSplit';
 import { VehicleType } from '@/hooks/useFuelPrices';
+import { formatDuration, formatTravelTimeFromDistanceKm } from '@/lib/travelTime';
 
 interface ResultCardProps {
   cost: number;
@@ -11,18 +12,9 @@ interface ResultCardProps {
   vehicleType: VehicleType;
   isRoundTrip: boolean;
   tollCosts: number;
+  /** Realny czas z API (sekundy). Jeśli brak, pokażemy szacunek z dystansu. */
+  durationSeconds?: number;
 }
-
-const formatTravelTime = (distance: number): string => {
-  // Average speed assumption: 80 km/h for highways/mixed roads
-  const avgSpeed = 80;
-  const hours = distance / avgSpeed;
-  const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
-  if (h === 0) return `${m} min`;
-  if (m === 0) return `${h} godz.`;
-  return `${h} godz. ${m} min`;
-};
 
 const fuelLabels: Record<string, string> = {
   pb95: 'Pb95',
@@ -39,11 +31,15 @@ export const ResultCard = ({
   fuelType,
   vehicleType,
   isRoundTrip,
-  tollCosts
+  tollCosts,
+  durationSeconds,
 }: ResultCardProps) => {
   const energyAmount = (distance / 100) * consumption;
   const isElectric = vehicleType === 'electric';
   const energyCost = cost - tollCosts;
+  const travelTimeLabel = durationSeconds
+    ? formatDuration(durationSeconds)
+    : formatTravelTimeFromDistanceKm(distance, 90);
 
   return (
     <div className={`result-glow rounded-xl p-6 animate-scale-in ${
@@ -91,7 +87,7 @@ export const ResultCard = ({
             <span className="text-xs text-muted-foreground">Czas przejazdu</span>
           </div>
           <p className="font-semibold text-foreground">
-            {formatTravelTime(distance)}
+            {travelTimeLabel}
           </p>
           <p className="text-[10px] text-muted-foreground">bez postojów</p>
         </div>
