@@ -88,17 +88,22 @@ async function prerenderRoute(browser: puppeteer.Browser, route: string, baseUrl
     timeout: 30000 
   });
 
+  // Wait for main content container to be present
+  await page.waitForSelector('main', { timeout: 10000 }).catch(() => {
+    console.log(`  ⚠️ Warning: <main> element not found for ${route}`);
+  });
+
   // Wait for react-helmet to update the head
   await page.waitForFunction(() => {
-    // Check if helmet has added meta tags
     const helmet = document.querySelector('[data-rh="true"]');
-    return helmet !== null || document.title !== '';
+    const hasTitle = document.title !== '' && document.title !== 'Vite + React + TS';
+    return helmet !== null || hasTitle;
   }, { timeout: 10000 }).catch(() => {
     console.log(`  ⚠️ Warning: Helmet tags might not be fully loaded for ${route}`);
   });
 
-  // Additional wait for dynamic content
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Wait for any dynamic content to settle
+  await page.waitForNetworkIdle({ timeout: 5000 }).catch(() => {});
 
   // Get the full HTML
   const html = await page.content();
