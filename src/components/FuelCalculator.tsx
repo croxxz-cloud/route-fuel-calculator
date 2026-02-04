@@ -68,22 +68,46 @@ export const FuelCalculator = () => {
     }
   }, [fuelType, vehicleType, prices]);
 
+  // OpenRouteService API Key - get yours free at https://openrouteservice.org/dev/#/signup
+  const ORS_API_KEY = ''; // TODO: Wklej tutaj swój klucz API z openrouteservice.org
+
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
+
+    if (!ORS_API_KEY) {
+      console.warn('OpenRouteService API key not configured. Using fallback OSRM.');
+      // Fallback to OSRM demo (only for testing)
+      setIsCalculatingDistance(true);
+      try {
+        const response = await fetch(
+          `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
+        );
+        const data = await response.json();
+        if (data.routes && data.routes.length > 0) {
+          const distanceInKm = data.routes[0].distance / 1000;
+          setAutoDistance(Math.round(distanceInKm * 10) / 10);
+        }
+      } catch (error) {
+        console.error('Error fetching distance:', error);
+      } finally {
+        setIsCalculatingDistance(false);
+      }
+      return;
+    }
 
     setIsCalculatingDistance(true);
     try {
       const response = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
+        `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordsA.lon},${coordsA.lat}&end=${coordsB.lon},${coordsB.lat}`
       );
       const data = await response.json();
       
-      if (data.routes && data.routes.length > 0) {
-        const distanceInKm = data.routes[0].distance / 1000;
+      if (data.features && data.features.length > 0) {
+        const distanceInKm = data.features[0].properties.segments[0].distance / 1000;
         setAutoDistance(Math.round(distanceInKm * 10) / 10);
       }
     } catch (error) {
-      console.error('Error fetching distance:', error);
+      console.error('Error fetching distance from OpenRouteService:', error);
     } finally {
       setIsCalculatingDistance(false);
     }
