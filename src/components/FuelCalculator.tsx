@@ -40,6 +40,7 @@ export const FuelCalculator = () => {
   const [coordsA, setCoordsA] = useState<Coordinates | null>(null);
   const [coordsB, setCoordsB] = useState<Coordinates | null>(null);
   const [autoDistance, setAutoDistance] = useState<number | null>(null);
+  const [autoDurationSeconds, setAutoDurationSeconds] = useState<number | null>(null);
   const [manualDistance, setManualDistance] = useState('');
   const [roundTrip, setRoundTrip] = useState(false);
   const [fuelType, setFuelType] = useState<FuelType>('pb95');
@@ -58,7 +59,12 @@ export const FuelCalculator = () => {
     ? (parseFloat(manualDistance) || null)
     : autoDistance;
 
+  const durationSeconds = mode === 'route' ? autoDurationSeconds : null;
+
   const effectiveDistance = distance ? (roundTrip ? distance * 2 : distance) : null;
+  const effectiveDurationSeconds = durationSeconds
+    ? (roundTrip ? durationSeconds * 2 : durationSeconds)
+    : null;
 
   useEffect(() => {
     if (vehicleType === 'fuel') {
@@ -86,6 +92,9 @@ export const FuelCalculator = () => {
         if (data.routes && data.routes.length > 0) {
           const distanceInKm = data.routes[0].distance / 1000;
           setAutoDistance(Math.round(distanceInKm * 10) / 10);
+          if (typeof data.routes[0].duration === 'number') {
+            setAutoDurationSeconds(data.routes[0].duration);
+          }
         }
       } catch (error) {
         console.error('Error fetching distance:', error);
@@ -105,6 +114,11 @@ export const FuelCalculator = () => {
       if (data.features && data.features.length > 0) {
         const distanceInKm = data.features[0].properties.segments[0].distance / 1000;
         setAutoDistance(Math.round(distanceInKm * 10) / 10);
+
+        const duration = data.features?.[0]?.properties?.segments?.[0]?.duration;
+        if (typeof duration === 'number') {
+          setAutoDurationSeconds(duration);
+        }
       }
     } catch (error) {
       console.error('Error fetching distance from OpenRouteService:', error);
@@ -155,6 +169,7 @@ export const FuelCalculator = () => {
     setPointB(to);
     setCoordsA(null);
     setCoordsB(null);
+    setAutoDurationSeconds(null);
   };
 
   const handleCalculate = () => {
@@ -436,6 +451,7 @@ export const FuelCalculator = () => {
                   vehicleType={vehicleType}
                   isRoundTrip={roundTrip}
                   tollCosts={parseFloat(tollCosts) || 0}
+                  durationSeconds={effectiveDurationSeconds ?? undefined}
                 />
                 {vehicleType === 'fuel' && (
                   <FuelComparison 
