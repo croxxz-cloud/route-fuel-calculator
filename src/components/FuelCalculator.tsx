@@ -6,6 +6,7 @@ import { TollCostsInput } from './TollCostsInput';
 import { ConsumptionHelper } from './ConsumptionHelper';
 import { ResultCard } from './ResultCard';
 import { FuelComparison } from './FuelComparison';
+import { RouteDetails } from './RouteDetails';
 import { ExampleRoutes } from './ExampleRoutes';
 import { CalculatorModeSelector, CalculatorMode } from './CalculatorModeSelector';
 import { InfoBoxes } from './InfoBoxes';
@@ -452,11 +453,21 @@ export const FuelCalculator = () => {
                   isRoundTrip={roundTrip}
                   tollCosts={parseFloat(tollCosts) || 0}
                   durationSeconds={effectiveDurationSeconds ?? undefined}
+                  routeFrom={mode === 'route' ? pointA : undefined}
+                  routeTo={mode === 'route' ? pointB : undefined}
                 />
                 {vehicleType === 'fuel' && (
                   <FuelComparison 
                     distance={effectiveDistance} 
                     consumption={parseFloat(fuelConsumption) || 7}
+                  />
+                )}
+                {mode === 'route' && pointA && pointB && vehicleType === 'fuel' && (
+                  <RouteDetails
+                    from={pointA}
+                    to={pointB}
+                    fuelConsumption={parseFloat(fuelConsumption) || 7}
+                    fuelPrice={parseFloat(fuelPrice) || 5.89}
                   />
                 )}
               </>
