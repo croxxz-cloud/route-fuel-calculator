@@ -9,13 +9,13 @@ interface CalculatorModeSelectorProps {
 
 export const CalculatorModeSelector = ({ mode, onChange }: CalculatorModeSelectorProps) => {
   return (
-    <div className="flex gap-2 p-1.5 bg-secondary/50 rounded-xl mb-6 border border-border">
+    <div className="grid grid-cols-2 gap-2 mb-6">
       <button
         onClick={() => onChange('route')}
-        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
           mode === 'route'
-            ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary ring-offset-2 ring-offset-background'
-            : 'text-muted-foreground hover:text-foreground hover:bg-background border border-transparent hover:border-border'
+            ? 'bg-primary text-primary-foreground shadow-lg'
+            : 'bg-background text-foreground border-2 border-border hover:border-primary/50 hover:shadow-sm'
         }`}
       >
         <Route className="w-4 h-4" />
@@ -23,10 +23,10 @@ export const CalculatorModeSelector = ({ mode, onChange }: CalculatorModeSelecto
       </button>
       <button
         onClick={() => onChange('manual')}
-        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
           mode === 'manual'
-            ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary ring-offset-2 ring-offset-background'
-            : 'text-muted-foreground hover:text-foreground hover:bg-background border border-transparent hover:border-border'
+            ? 'bg-primary text-primary-foreground shadow-lg'
+            : 'bg-background text-foreground border-2 border-border hover:border-primary/50 hover:shadow-sm'
         }`}
       >
         <Edit3 className="w-4 h-4" />

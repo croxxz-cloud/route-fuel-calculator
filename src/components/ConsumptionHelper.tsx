@@ -23,7 +23,7 @@ export const ConsumptionHelper = ({ onSelect }: ConsumptionHelperProps) => {
   return (
     <div className="mt-2">
       <Select onValueChange={onSelect}>
-        <SelectTrigger className="w-full h-9 text-xs bg-secondary border-border hover:bg-secondary/80 transition-colors">
+        <SelectTrigger className="w-full h-9 text-xs bg-background border border-border hover:border-primary/40 hover:bg-background transition-colors focus:ring-1 focus:ring-primary/30">
           <div className="flex items-center gap-2 text-muted-foreground">
             <HelpCircle className="h-3 w-3 flex-shrink-0" />
             <span className="truncate">Nie wiesz ile pali?</span>
