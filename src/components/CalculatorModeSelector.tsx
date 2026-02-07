@@ -14,8 +14,8 @@ export const CalculatorModeSelector = ({ mode, onChange }: CalculatorModeSelecto
         onClick={() => onChange('route')}
         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
           mode === 'route'
-            ? 'bg-primary text-primary-foreground shadow-lg ring-1 ring-primary/50'
-            : 'text-muted-foreground hover:text-foreground hover:bg-background'
+            ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary ring-offset-2 ring-offset-background'
+            : 'text-muted-foreground hover:text-foreground hover:bg-background border border-transparent hover:border-border'
         }`}
       >
         <Route className="w-4 h-4" />
@@ -25,8 +25,8 @@ export const CalculatorModeSelector = ({ mode, onChange }: CalculatorModeSelecto
         onClick={() => onChange('manual')}
         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
           mode === 'manual'
-            ? 'bg-primary text-primary-foreground shadow-lg ring-1 ring-primary/50'
-            : 'text-muted-foreground hover:text-foreground hover:bg-background'
+            ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary ring-offset-2 ring-offset-background'
+            : 'text-muted-foreground hover:text-foreground hover:bg-background border border-transparent hover:border-border'
         }`}
       >
         <Edit3 className="w-4 h-4" />

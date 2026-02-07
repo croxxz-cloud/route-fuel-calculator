@@ -206,8 +206,8 @@ export const FuelCalculator = () => {
       {/* Mobile: Top controls - Vehicle Type + Gas Station Prices */}
       <div className="lg:hidden space-y-3 mb-4">
         <div className="bg-card border border-border rounded-xl p-4">
-          <label className="text-xs font-medium text-muted-foreground mb-2 block">
-            Typ pojazdu:
+          <label className="text-xs font-bold text-foreground mb-2 block">
+            Wybierz typ pojazdu:
           </label>
           <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
         </div>
@@ -226,8 +226,8 @@ export const FuelCalculator = () => {
         <div className="space-y-3 lg:space-y-4">
           {/* Calculator Mode */}
           <div className="bg-card border border-border rounded-xl p-4">
-            <label className="text-xs font-medium text-muted-foreground mb-2 block">
-              Wybierz tryb:
+            <label className="text-xs font-bold text-foreground mb-2 block">
+              Wybierz tryb obliczeń:
             </label>
             <CalculatorModeSelector mode={mode} onChange={setMode} />
 
@@ -321,8 +321,8 @@ export const FuelCalculator = () => {
           {/* Desktop only: Vehicle Type + Gas Station Prices */}
           <div className="hidden lg:block space-y-3">
             <div className="bg-card border border-border rounded-xl p-4">
-              <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                Typ pojazdu:
+              <label className="text-xs font-bold text-foreground mb-2 block">
+                Wybierz typ pojazdu:
               </label>
               <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
             </div>
@@ -462,12 +462,12 @@ export const FuelCalculator = () => {
                     consumption={parseFloat(fuelConsumption) || 7}
                   />
                 )}
-                {mode === 'route' && pointA && pointB && vehicleType === 'fuel' && (
+                {mode === 'route' && pointA && pointB && (
                   <RouteDetails
                     from={pointA}
                     to={pointB}
-                    fuelConsumption={parseFloat(fuelConsumption) || 7}
-                    fuelPrice={parseFloat(fuelPrice) || 5.89}
+                    fuelConsumption={vehicleType === 'fuel' ? parseFloat(fuelConsumption) || 7 : parseFloat(electricConsumption) || 18}
+                    fuelPrice={vehicleType === 'fuel' ? parseFloat(fuelPrice) || 5.89 : parseFloat(electricPrice) || 0.89}
                   />
                 )}
               </>
