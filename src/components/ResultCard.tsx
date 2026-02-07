@@ -14,6 +14,9 @@ interface ResultCardProps {
   tollCosts: number;
   /** Realny czas z API (sekundy). Jeśli brak, pokażemy szacunek z dystansu. */
   durationSeconds?: number;
+  /** Nazwy punktów trasy A → B */
+  routeFrom?: string;
+  routeTo?: string;
 }
 
 const fuelLabels: Record<string, string> = {
@@ -33,6 +36,8 @@ export const ResultCard = ({
   isRoundTrip,
   tollCosts,
   durationSeconds,
+  routeFrom,
+  routeTo,
 }: ResultCardProps) => {
   const energyAmount = (distance / 100) * consumption;
   const isElectric = vehicleType === 'electric';
@@ -147,9 +152,17 @@ export const ResultCard = ({
       )}
 
       {/* Attribution */}
-      <p className="text-xs text-muted-foreground text-center border-t border-border/30 pt-3">
-        Obliczono na podstawie realnej trasy drogowej (OpenStreetMap)
-      </p>
+      <div className="text-center border-t border-border/30 pt-3">
+        {routeFrom && routeTo ? (
+          <p className="text-xs text-muted-foreground">
+            Na podstawie trasy: <strong className="text-foreground">{routeFrom}</strong> → <strong className="text-foreground">{routeTo}</strong>
+          </p>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            Obliczono na podstawie realnej trasy drogowej (OpenStreetMap)
+          </p>
+        )}
+      </div>
 
       {/* Passenger Split */}
       <PassengerSplit totalCost={cost} />

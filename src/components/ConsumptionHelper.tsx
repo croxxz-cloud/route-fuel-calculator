@@ -23,17 +23,22 @@ export const ConsumptionHelper = ({ onSelect }: ConsumptionHelperProps) => {
   return (
     <div className="mt-2">
       <Select onValueChange={onSelect}>
-        <SelectTrigger className="w-full h-9 text-xs bg-secondary/50 border-border/50">
+        <SelectTrigger className="w-full h-9 text-xs bg-secondary border-border hover:bg-secondary/80 transition-colors">
           <div className="flex items-center gap-2 text-muted-foreground">
-            <HelpCircle className="h-3 w-3" />
-            <span>Nie wiesz ile pali Twój samochód?</span>
+            <HelpCircle className="h-3 w-3 flex-shrink-0" />
+            <span className="truncate">Nie wiesz ile pali?</span>
           </div>
         </SelectTrigger>
-        <SelectContent className="bg-card border-border z-50">
+        <SelectContent 
+          className="bg-card border-border shadow-xl" 
+          style={{ zIndex: 100 }}
+          position="popper"
+          sideOffset={4}
+        >
           {carTypes.map((car) => (
-            <SelectItem key={car.value} value={car.value}>
-              <div className="flex flex-col">
-                <span>{car.label}</span>
+            <SelectItem key={car.value} value={car.value} className="cursor-pointer hover:bg-secondary">
+              <div className="flex flex-col py-0.5">
+                <span className="font-medium text-foreground">{car.label}</span>
                 <span className="text-xs text-muted-foreground">{car.description}</span>
               </div>
             </SelectItem>
