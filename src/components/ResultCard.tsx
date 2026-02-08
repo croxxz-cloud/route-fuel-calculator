@@ -1,6 +1,6 @@
-import { Car, Fuel, Banknote, RotateCcw, Zap, Battery, Receipt, Clock } from 'lucide-react';
+import { Car, Fuel, Banknote, RotateCcw, Zap, Battery, Receipt, Clock, CalendarDays, ArrowLeftRight } from 'lucide-react';
 import { PassengerSplit } from './PassengerSplit';
-import { VehicleType } from '@/hooks/useFuelPrices';
+import { VehicleType, getFuelPrices } from '@/hooks/useFuelPrices';
 import { formatDuration, formatTravelTimeFromDistanceKm } from '@/lib/travelTime';
 
 interface ResultCardProps {
@@ -45,6 +45,9 @@ export const ResultCard = ({
   const travelTimeLabel = durationSeconds
     ? formatDuration(durationSeconds)
     : formatTravelTimeFromDistanceKm(distance, 90);
+  const { lastUpdated } = getFuelPrices();
+  const priceDate = new Date(lastUpdated);
+  const priceDateLabel = priceDate.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
 
   return (
     <div className={`result-glow rounded-xl p-6 animate-scale-in ${
@@ -61,7 +64,7 @@ export const ResultCard = ({
             <Car className="w-6 h-6 text-primary" />
           )}
           <p className="text-muted-foreground">
-            {isRoundTrip ? 'Koszt przejazdu (tam i z powrotem)' : 'Koszt przejazdu'}
+            {isRoundTrip ? 'Koszt przejazdu (tam i z powrotem)' : 'Koszt przejazdu (w jedną stronę)'}
           </p>
         </div>
         <p className="text-4xl md:text-5xl font-bold gradient-text mb-1">
@@ -72,6 +75,27 @@ export const ResultCard = ({
             w tym opłaty drogowe: {tollCosts.toFixed(2)} zł
           </p>
         )}
+      </div>
+
+      {/* Trip type badge */}
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+          isRoundTrip
+            ? 'bg-primary/10 text-primary border border-primary/20'
+            : 'bg-muted text-muted-foreground border border-border'
+        }`}>
+          {isRoundTrip ? (
+            <>
+              <ArrowLeftRight className="w-3 h-3" />
+              W obie strony
+            </>
+          ) : (
+            <>
+              <Car className="w-3 h-3" />
+              W jedną stronę
+            </>
+          )}
+        </div>
       </div>
 
       {/* Details Grid */}
@@ -151,8 +175,8 @@ export const ResultCard = ({
         </div>
       )}
 
-      {/* Attribution */}
-      <div className="text-center border-t border-border/30 pt-3">
+      {/* Attribution + price date */}
+      <div className="text-center border-t border-border/30 pt-3 space-y-1">
         {routeFrom && routeTo ? (
           <p className="text-xs text-muted-foreground">
             Na podstawie trasy: <strong className="text-foreground">{routeFrom}</strong> → <strong className="text-foreground">{routeTo}</strong>
@@ -162,6 +186,10 @@ export const ResultCard = ({
             Obliczono na podstawie realnej trasy drogowej (OpenStreetMap)
           </p>
         )}
+        <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+          <CalendarDays className="w-3 h-3" />
+          <span>wg średnich cen {isElectric ? 'energii' : 'paliw'} – {priceDateLabel}</span>
+        </div>
       </div>
 
       {/* Passenger Split */}

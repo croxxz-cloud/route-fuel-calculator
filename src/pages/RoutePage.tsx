@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { getRouteBySlug, routesData } from '@/data/routesData';
-import { MapPin, ArrowRight, Clock, Fuel, AlertTriangle, Calculator, Route, ArrowLeft } from 'lucide-react';
+import { RouteVariantsTable } from '@/components/RouteVariantsTable';
+import { MapPin, ArrowRight, Clock, Fuel, AlertTriangle, Settings, Route, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatTravelTimeFromDistanceKm } from '@/lib/travelTime';
 
@@ -59,9 +60,9 @@ const RoutePage = () => {
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                {route.from} → {route.to}
+                Koszt przejazdu {route.from} – {route.to}
               </h1>
-              <p className="text-muted-foreground">Koszt przejazdu samochodem</p>
+              <p className="text-muted-foreground">Ile kosztuje przejazd samochodem?</p>
             </div>
           </div>
 
@@ -77,8 +78,8 @@ const RoutePage = () => {
 
           <Link to={`/?from=${encodeURIComponent(route.from)}&to=${encodeURIComponent(route.to)}`}>
             <Button className="w-full md:w-auto gap-2">
-              <Calculator className="w-4 h-4" />
-              Oblicz dokładny koszt
+              <Settings className="w-4 h-4" />
+              Dostosuj parametry i przelicz
             </Button>
           </Link>
         </div>
@@ -124,6 +125,17 @@ const RoutePage = () => {
             ))}
           </div>
         </div>
+
+        {/* Variants Comparison Table */}
+        {route.variants.length > 1 && (
+          <RouteVariantsTable
+            variants={route.variants}
+            hasTolls={route.hasTolls}
+            tollSections={route.tollSections}
+            defaultConsumption={route.defaultConsumption}
+            defaultFuelPrice={route.defaultFuelPrice}
+          />
+        )}
 
         {/* Toll Information */}
         <div className="bg-card border border-border rounded-2xl p-6 mb-6">
