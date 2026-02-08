@@ -8,20 +8,21 @@ export interface FuelPrices {
   pb98: number;
   diesel: number;
   lpg: number;
-  electric: number; // zł/kWh
+  electric: number; // zł/kWh (ładowanie domowe / AC)
+  electricDC: number; // zł/kWh (ładowanie szybkie DC na trasie)
   lastUpdated: string;
   source: string;
 }
 
 // Średnie ceny paliw w Polsce - dane orientacyjne
-// Aktualizowane co tydzień (środa)
 const CURRENT_FUEL_PRICES: FuelPrices = {
   pb95: 5.89,
   pb98: 6.69,
   diesel: 6.29,
   lpg: 2.69,
-  electric: 0.89, // średnia cena za kWh na stacjach ładowania
-  lastUpdated: '2026-02-01', // Data ostatniej aktualizacji
+  electric: 0.89,
+  electricDC: 2.09, // średnia cena DC fast charging na stacjach (Orlen Charge, GreenWay itp.)
+  lastUpdated: '2026-02-01',
   source: 'e-petrol.pl'
 };
 
@@ -29,9 +30,7 @@ export const useFuelPrices = () => {
   const [prices, setPrices] = useState<FuelPrices>(CURRENT_FUEL_PRICES);
   const [isLoading, setIsLoading] = useState(false);
 
-  // W przyszłości można tu dodać pobieranie z API
   useEffect(() => {
-    // Symulacja ładowania
     setIsLoading(true);
     const timer = setTimeout(() => {
       setPrices(CURRENT_FUEL_PRICES);

@@ -32,6 +32,9 @@ const ROUTES_TO_PRERENDER = [
   '/trasa/warszawa-berlin',
   '/trasa/krakow-wieden',
   '/trasa/wroclaw-drezno',
+  '/kontakt',
+  '/polityka-prywatnosci',
+  '/regulamin',
 ];
 
 // Simple static file server

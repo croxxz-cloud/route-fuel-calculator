@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LocationInput } from './LocationInput';
 import { FuelType } from './FuelTypeSelect';
 import { VehicleTypeSelector } from './VehicleTypeSelector';
@@ -57,7 +57,12 @@ export const FuelCalculator = () => {
   
   const { prices } = useFuelPrices();
 
-  const distance = mode === 'manual' 
+  const CONSUMPTION_MULTIPLIERS: Record<string, number> = {
+    pb95: 1.0, pb98: 1.0, diesel: 0.95, lpg: 1.2,
+  };
+  const prevFuelTypeRef = useRef(fuelType);
+
+  const distance = mode === 'manual'
     ? (parseFloat(manualDistance) || null)
     : autoDistance;
 
@@ -71,6 +76,15 @@ export const FuelCalculator = () => {
   useEffect(() => {
     if (vehicleType === 'fuel') {
       setFuelPrice(prices[fuelType].toFixed(2));
+      // Auto-adjust consumption based on fuel type multiplier
+      const prevMult = CONSUMPTION_MULTIPLIERS[prevFuelTypeRef.current] || 1;
+      const newMult = CONSUMPTION_MULTIPLIERS[fuelType] || 1;
+      if (prevFuelTypeRef.current !== fuelType) {
+        const current = parseFloat(fuelConsumption) || 7;
+        const base = current / prevMult;
+        setFuelConsumption((base * newMult).toFixed(1));
+      }
+      prevFuelTypeRef.current = fuelType;
     } else {
       setElectricPrice(prices.electric.toFixed(2));
     }
