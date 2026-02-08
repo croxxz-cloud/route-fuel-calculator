@@ -16,7 +16,7 @@ export const formatDuration = (seconds: number): string => {
  */
 export const estimateDurationSecondsFromDistanceKm = (
   distanceKm: number,
-  avgSpeedKmh = 90,
+  avgSpeedKmh = 80,
 ): number => {
   if (!Number.isFinite(distanceKm) || distanceKm <= 0) return 0;
   if (!Number.isFinite(avgSpeedKmh) || avgSpeedKmh <= 0) return 0;
@@ -25,7 +25,7 @@ export const estimateDurationSecondsFromDistanceKm = (
 
 export const formatTravelTimeFromDistanceKm = (
   distanceKm: number,
-  avgSpeedKmh = 90,
+  avgSpeedKmh = 80,
 ): string => {
   const seconds = estimateDurationSecondsFromDistanceKm(distanceKm, avgSpeedKmh);
   return formatDuration(seconds);

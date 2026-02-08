@@ -1,5 +1,11 @@
-import { Fuel, Zap, ArrowLeftRight } from 'lucide-react';
+import { Fuel, Zap, ArrowLeftRight, Info } from 'lucide-react';
 import { getFuelPrices } from '@/hooks/useFuelPrices';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface FuelVsElectricComparisonProps {
   distance: number;
@@ -24,9 +30,9 @@ export const FuelVsElectricComparison = ({
   const prices = getFuelPrices();
 
   const fuelCost = (distance / 100) * fuelConsumption * fuelPrice;
-  // Typowe EV: 18 kWh/100km, ładowanie DC
-  const evConsumption = 18;
-  const evPrice = prices.electric;
+  // Typowe EV na trasie: 20 kWh/100km (wyższe zużycie na autostradzie), ładowanie DC
+  const evConsumption = 20;
+  const evPrice = prices.electricDC;
   const evCost = (distance / 100) * evConsumption * evPrice;
 
   const diff = fuelCost - evCost;
@@ -39,6 +45,19 @@ export const FuelVsElectricComparison = ({
       <div className="flex items-center gap-2 mb-4">
         <ArrowLeftRight className="w-5 h-5 text-primary" />
         <h3 className="font-semibold text-foreground">Spalinowy vs elektryczny</h3>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-[280px] text-xs">
+              <p>
+                Porównanie zakłada ładowanie DC na trasie (~{evPrice} zł/kWh) i typowe zużycie EV 
+                na autostradzie ({evConsumption} kWh/100km). Ładowanie domowe jest tańsze (~0.65 zł/kWh).
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-3">
@@ -80,7 +99,7 @@ export const FuelVsElectricComparison = ({
       </div>
 
       <p className="text-[10px] text-muted-foreground mt-2">
-        EV: typowe 18 kWh/100km, ładowanie DC ({evPrice} zł/kWh)
+        EV: {evConsumption} kWh/100km na autostradzie, ładowanie szybkie DC ({evPrice} zł/kWh)
       </p>
     </div>
   );

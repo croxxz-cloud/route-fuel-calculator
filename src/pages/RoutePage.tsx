@@ -6,7 +6,6 @@ import { getRouteBySlug, routesData } from '@/data/routesData';
 import { RouteVariantsTable } from '@/components/RouteVariantsTable';
 import { MapPin, ArrowRight, Clock, Fuel, AlertTriangle, Settings, Route, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { formatTravelTimeFromDistanceKm } from '@/lib/travelTime';
 
 const RoutePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -112,7 +111,7 @@ const RoutePage = () => {
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-primary" />
                       <span className="text-foreground font-medium">
-                        {formatTravelTimeFromDistanceKm(variant.distance, 90)}
+                        {variant.time}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5">

@@ -2,6 +2,8 @@ import { FuelCalculator } from '@/components/FuelCalculator';
 import { FAQ } from '@/components/FAQ';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AboutSection } from '@/components/AboutSection';
+import { DrivingCostGuide } from '@/components/DrivingCostGuide';
 import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
@@ -20,9 +22,13 @@ const Index = () => {
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
         
-        {/* Content */}
         <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8 md:py-12">
           <FuelCalculator />
+
+          <DrivingCostGuide />
+
+          <AboutSection />
+
           <div id="faq">
             <FAQ />
           </div>
