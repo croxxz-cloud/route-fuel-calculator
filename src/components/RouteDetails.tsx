@@ -47,9 +47,13 @@ export const RouteDetails = ({ from, to, fuelConsumption, fuelPrice }: RouteDeta
       <div className="space-y-2">
         {route.variants.map((variant, i) => {
           const cost = ((variant.distance / 100) * fuelConsumption * fuelPrice);
-          const totalWithTolls = route.hasTolls 
-            ? cost + route.tollSections.reduce((sum, t) => sum + t.cost, 0) 
-            : cost;
+          // Only sum tolls assigned to this variant
+          let variantTolls = 0;
+          if (route.hasTolls && variant.tollIndices && variant.tollIndices.length > 0) {
+            variantTolls = variant.tollIndices.reduce((sum, idx) => {
+              return sum + (route.tollSections[idx]?.cost ?? 0);
+            }, 0);
+          }
 
           return (
             <div
@@ -59,7 +63,7 @@ export const RouteDetails = ({ from, to, fuelConsumption, fuelPrice }: RouteDeta
               <div className="flex items-start justify-between gap-2 mb-1.5">
                 <span className="text-sm font-medium text-foreground">{variant.name}</span>
                 <span className="text-sm font-bold text-primary whitespace-nowrap">
-                  ~{cost.toFixed(0)} zł
+                  ~{(cost + variantTolls).toFixed(0)} zł
                 </span>
               </div>
 
@@ -76,6 +80,18 @@ export const RouteDetails = ({ from, to, fuelConsumption, fuelPrice }: RouteDeta
                 <span className="font-medium">{variant.distance} km</span>
                 <span>•</span>
                 <span>{variant.time}</span>
+                {variantTolls > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="text-destructive font-medium">opłaty: {variantTolls} zł</span>
+                  </>
+                )}
+                {variantTolls === 0 && route.hasTolls && (
+                  <>
+                    <span>•</span>
+                    <span className="text-success font-medium">bezpłatna</span>
+                  </>
+                )}
               </div>
             </div>
           );

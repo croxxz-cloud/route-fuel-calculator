@@ -6,7 +6,7 @@ import { TollCostsInput } from './TollCostsInput';
 import { ConsumptionHelper } from './ConsumptionHelper';
 import { ResultCard } from './ResultCard';
 import { FuelComparison } from './FuelComparison';
-import { FuelVsElectricComparison } from './FuelVsElectricComparison';
+
 import { RouteDetails } from './RouteDetails';
 import { ExampleRoutes } from './ExampleRoutes';
 import { CalculatorModeSelector, CalculatorMode } from './CalculatorModeSelector';
@@ -376,7 +376,7 @@ export const FuelCalculator = () => {
                       min="0"
                     />
                   </div>
-                  <ConsumptionHelper onSelect={setFuelConsumption} />
+                  <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
                 </div>
 
                 {/* Fuel Price */}
@@ -476,12 +476,6 @@ export const FuelCalculator = () => {
                     <FuelComparison 
                       distance={effectiveDistance} 
                       consumption={parseFloat(fuelConsumption) || 7}
-                    />
-                    <FuelVsElectricComparison
-                      distance={effectiveDistance}
-                      fuelConsumption={parseFloat(fuelConsumption) || 7}
-                      fuelPrice={parseFloat(fuelPrice) || 5.89}
-                      fuelType={fuelType}
                     />
                   </>
                 )}

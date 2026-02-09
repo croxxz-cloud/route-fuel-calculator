@@ -4,6 +4,8 @@ export interface RouteVariant {
   distance: number;
   time: string;
   avgCost: number;
+  /** Indices into parent tollSections that apply to this variant */
+  tollIndices?: number[];
 }
 
 export interface TollSection {
@@ -39,6 +41,7 @@ export const routesData: RouteData[] = [
         distance: 295,
         time: '3 godz. 25 min',
         avgCost: 122,
+        tollIndices: [],
       },
       {
         name: 'Trasa przez Łódź i Katowice (A1/A4)',
@@ -46,13 +49,14 @@ export const routesData: RouteData[] = [
         distance: 370,
         time: '3 godz. 45 min',
         avgCost: 170,
+        tollIndices: [0],
       },
     ],
     hasTolls: true,
     tollSections: [
       { name: 'A4 Katowice–Kraków (Stalexport, tylko wariant przez Łódź)', cost: 17 },
     ],
-    description: 'Trasa S7 jest bezpłatna. A1/A4 przez Katowice jest szybsza, ale dłuższa i z opłatą za A4.',
+    description: 'Trasa S7 jest bezpłatna i najkrótsza (295 km). Wariant przez Łódź i Katowice (A1/A4) jest dłuższy (370 km), wolniejszy i z opłatą za A4 Katowice–Kraków.',
   },
   {
     from: 'Gdańsk',
@@ -68,6 +72,7 @@ export const routesData: RouteData[] = [
         distance: 340,
         time: '3 godz. 50 min',
         avgCost: 140,
+        tollIndices: [],
       },
       {
         name: 'Trasa A1 przez Toruń i Łódź',
@@ -75,13 +80,14 @@ export const routesData: RouteData[] = [
         distance: 475,
         time: '4 godz. 40 min',
         avgCost: 229,
+        tollIndices: [0],
       },
     ],
     hasTolls: true,
     tollSections: [
       { name: 'A1 Gdańsk–Toruń (AmberOne, tylko wariant przez A1)', cost: 33 },
     ],
-    description: 'S7 jest bezpłatna i najkrótsza. Wariant przez A1/Łódź jest znacznie dłuższy (475 km vs 340 km) i droższy.',
+    description: 'S7 jest bezpłatna i najkrótsza (340 km). Wariant przez A1/Łódź jest znacznie dłuższy (475 km), wolniejszy i droższy.',
   },
   {
     from: 'Wrocław',
@@ -97,6 +103,7 @@ export const routesData: RouteData[] = [
         distance: 180,
         time: '2 godz.',
         avgCost: 74,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
@@ -116,6 +123,7 @@ export const routesData: RouteData[] = [
         distance: 200,
         time: '1 godz. 50 min',
         avgCost: 82,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
@@ -135,6 +143,7 @@ export const routesData: RouteData[] = [
         distance: 310,
         time: '3 godz.',
         avgCost: 178,
+        tollIndices: [0],
       },
     ],
     hasTolls: true,
@@ -157,6 +166,7 @@ export const routesData: RouteData[] = [
         distance: 340,
         time: '4 godz. 15 min',
         avgCost: 140,
+        tollIndices: [],
       },
       {
         name: 'Trasa przez Kielce (bezpłatna)',
@@ -164,6 +174,7 @@ export const routesData: RouteData[] = [
         distance: 290,
         time: '3 godz. 40 min',
         avgCost: 120,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
@@ -183,6 +194,7 @@ export const routesData: RouteData[] = [
         distance: 360,
         time: '3 godz. 35 min',
         avgCost: 148,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
@@ -202,6 +214,7 @@ export const routesData: RouteData[] = [
         distance: 200,
         time: '2 godz. 10 min',
         avgCost: 82,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
@@ -221,6 +234,7 @@ export const routesData: RouteData[] = [
         distance: 540,
         time: '5 godz. 30 min',
         avgCost: 295,
+        tollIndices: [0, 1],
       },
     ],
     hasTolls: true,
@@ -244,6 +258,7 @@ export const routesData: RouteData[] = [
         distance: 570,
         time: '5 godz. 40 min',
         avgCost: 321,
+        tollIndices: [0, 1],
       },
     ],
     hasTolls: true,
@@ -267,6 +282,7 @@ export const routesData: RouteData[] = [
         distance: 440,
         time: '4 godz. 50 min',
         avgCost: 303,
+        tollIndices: [0, 1, 2],
       },
     ],
     hasTolls: true,
@@ -291,6 +307,7 @@ export const routesData: RouteData[] = [
         distance: 300,
         time: '3 godz. 15 min',
         avgCost: 124,
+        tollIndices: [],
       },
     ],
     hasTolls: false,
