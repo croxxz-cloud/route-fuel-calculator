@@ -6,20 +6,46 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { HelpCircle } from 'lucide-react';
+import { FuelType } from './FuelTypeSelect';
 
 interface ConsumptionHelperProps {
   onSelect: (value: string) => void;
+  fuelType?: FuelType;
 }
 
-const carTypes = [
-  { value: '5.5', label: 'Małe auto', description: '5-6 L/100km' },
-  { value: '6.5', label: 'Kompakt', description: '6-7 L/100km' },
-  { value: '7.5', label: 'Sedan / Hatchback', description: '7-8 L/100km' },
-  { value: '9', label: 'SUV', description: '8-10 L/100km' },
-  { value: '11', label: 'Duże SUV / Van', description: '10-12 L/100km' },
+/**
+ * Base consumption values are for Pb95/Pb98.
+ * Diesel typically uses ~5% less, LPG ~20% more.
+ */
+const CONSUMPTION_MULTIPLIERS: Record<string, number> = {
+  pb95: 1.0,
+  pb98: 1.0,
+  diesel: 0.95,
+  lpg: 1.2,
+};
+
+const baseCarTypes = [
+  { base: 5.5, label: 'Małe auto' },
+  { base: 6.5, label: 'Kompakt' },
+  { base: 7.5, label: 'Sedan / Hatchback' },
+  { base: 9, label: 'SUV' },
+  { base: 11, label: 'Duże SUV / Van' },
 ];
 
-export const ConsumptionHelper = ({ onSelect }: ConsumptionHelperProps) => {
+export const ConsumptionHelper = ({ onSelect, fuelType = 'pb95' }: ConsumptionHelperProps) => {
+  const multiplier = CONSUMPTION_MULTIPLIERS[fuelType] ?? 1;
+
+  const carTypes = baseCarTypes.map((car) => {
+    const adjusted = +(car.base * multiplier).toFixed(1);
+    const rangeLow = +(adjusted - 0.5).toFixed(1);
+    const rangeHigh = +(adjusted + 0.5).toFixed(1);
+    return {
+      value: adjusted.toString(),
+      label: car.label,
+      description: `${rangeLow}-${rangeHigh} L/100km`,
+    };
+  });
+
   return (
     <div className="mt-2">
       <Select onValueChange={onSelect}>

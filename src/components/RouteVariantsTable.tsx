@@ -23,8 +23,6 @@ export const RouteVariantsTable = ({
   defaultConsumption,
   defaultFuelPrice,
 }: RouteVariantsTableProps) => {
-  const totalTollCost = tollSections.reduce((sum, t) => sum + t.cost, 0);
-
   return (
     <div className="bg-card border border-border rounded-2xl p-6 mb-6">
       <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -46,8 +44,15 @@ export const RouteVariantsTable = ({
           <TableBody>
             {variants.map((variant, i) => {
               const fuelCost = (variant.distance / 100) * defaultConsumption * defaultFuelPrice;
-              // Assign tolls only if variant name suggests it's on a toll route
-              const tollCost = hasTolls ? totalTollCost : 0;
+
+              // Only sum tolls that apply to this specific variant
+              let tollCost = 0;
+              if (hasTolls && variant.tollIndices && variant.tollIndices.length > 0) {
+                tollCost = variant.tollIndices.reduce((sum, idx) => {
+                  return sum + (tollSections[idx]?.cost ?? 0);
+                }, 0);
+              }
+
               const total = fuelCost + tollCost;
 
               return (
