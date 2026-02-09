@@ -69,7 +69,7 @@ export const GasStationPrices = ({
             Średnie ceny paliw ({formatDate(prices.lastUpdated)})
           </span>
         </div>
-        <span className="text-[10px] text-muted-foreground">Źródło: e-petrol.pl</span>
+        <span className="text-[10px] text-muted-foreground">luty 2026</span>
       </div>
       
       <div className="grid grid-cols-4 gap-2">

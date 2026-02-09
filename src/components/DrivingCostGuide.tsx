@@ -9,73 +9,72 @@ export const DrivingCostGuide = () => {
 
       <div className="text-muted-foreground space-y-4 leading-relaxed text-sm">
         <p>
-          Koszt przejazdu samochodem zależy przede wszystkim od trzech czynników:{' '}
-          <strong className="text-foreground">dystansu</strong>,{' '}
-          <strong className="text-foreground">spalania pojazdu</strong> oraz{' '}
-          <strong className="text-foreground">aktualnej ceny paliwa</strong>.
-          Wzór jest prosty: (dystans / 100) × spalanie × cena za litr. Na przykład trasa o długości
-          300 km samochodem spalającym 7 L/100km przy cenie benzyny 5,89 zł/L to koszt ok.
-          124 zł za samo paliwo.
+          Planowanie budżetu na podróż samochodem sprowadza się do trzech rzeczy:{' '}
+          <strong className="text-foreground">ile kilometrów jedziesz</strong>,{' '}
+          <strong className="text-foreground">ile pali Twój samochód</strong> i{' '}
+          <strong className="text-foreground">ile kosztuje paliwo</strong>.
+          Wzór jest prosty: dzielisz dystans przez 100, mnożysz przez spalanie i cenę litra.
+          Przykładowo — 300 km autem palącym 7 litrów na setkę przy benzynie za 5,89 zł to mniej
+          więcej 124 zł za samo paliwo.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
           <div className="bg-secondary/40 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Route className="w-4 h-4 text-primary" />
-              <h3 className="font-semibold text-foreground text-sm">Dystans</h3>
+              <h3 className="font-semibold text-foreground text-sm">Dystans i trasa</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Najkrótsza trasa nie zawsze jest najtańsza. Drogi ekspresowe i autostrady
-              pozwalają jechać oszczędniej przy stałej prędkości, ale mogą wiązać się
-              z opłatami drogowymi.
+              Najkrótsza trasa nie zawsze jest najtańsza. Autostrady pozwalają jechać oszczędniej
+              dzięki stałej prędkości, ale na niektórych odcinkach zapłacisz za przejazd.
+              Warto sprawdzić oba warianty.
             </p>
           </div>
 
           <div className="bg-secondary/40 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Gauge className="w-4 h-4 text-primary" />
-              <h3 className="font-semibold text-foreground text-sm">Spalanie</h3>
+              <h3 className="font-semibold text-foreground text-sm">Spalanie auta</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Średnie spalanie zależy od typu pojazdu, stylu jazdy i prędkości.
-              Jazda 90–110 km/h na autostradzie jest optymalnym kompromisem
-              między czasem a zużyciem paliwa.
+              Ile Twój samochód faktycznie pali, zależy od prędkości, stylu jazdy i tego, ile wiezie.
+              Na autostradzie przy 90–110 km/h spalanie jest najniższe. Powyżej 130 km/h rośnie
+              zauważalnie.
             </p>
           </div>
 
           <div className="bg-secondary/40 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <TrendingDown className="w-4 h-4 text-primary" />
-              <h3 className="font-semibold text-foreground text-sm">Oszczędności</h3>
+              <h3 className="font-semibold text-foreground text-sm">Rodzaj paliwa</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              LPG kosztuje ok. 2,69 zł/L, ale spalanie jest wyższe o ~20%.
-              Diesel jest droższy od Pb95, ale silniki wysokoprężne palą o ~5% mniej.
-              Porównaj koszty w naszym kalkulatorze.
+              LPG kosztuje o połowę mniej za litr niż benzyna, ale auto pali go o ok. 20% więcej.
+              Diesel jest droższy od Pb95, ale silnik diesla zużywa ok. 5% mniej paliwa.
+              Nasz kalkulator uwzględnia te różnice automatycznie.
             </p>
           </div>
         </div>
 
         <h3 className="text-base font-semibold text-foreground mt-6">
-          Opłaty drogowe w Polsce – co warto wiedzieć?
+          Które autostrady w Polsce są płatne?
         </h3>
         <p>
-          W Polsce płatne odcinki autostrad dotyczą głównie A1 (Gdańsk–Toruń), A2 (odcinki koncesyjne
-          między Nowym Tomyślem a Strykowem) oraz A4 Katowice–Kraków (Stalexport). Pozostałe drogi
-          ekspresowe (S-ki) i autostrady rządowe są bezpłatne dla samochodów osobowych.
-          Przy planowaniu podróży za granicę pamiętaj o winietach – w Czechach i Austrii obowiązują
-          e-winiety, które można kupić online.
+          W Polsce za przejazd samochodem osobowym zapłacisz na trzech odcinkach: A1 między Gdańskiem
+          a Toruniem (AmberOne), A2 na odcinkach koncesyjnych między Nowym Tomyślem a Strykowem,
+          oraz A4 między Katowicami a Krakowem (Stalexport). Pozostałe autostrady i wszystkie drogi
+          ekspresowe (S-ki) są bezpłatne. Jeśli jedziesz za granicę — w Czechach i Austrii potrzebujesz
+          e-winiety, którą kupisz online przed wjazdem na autostradę.
         </p>
 
         <h3 className="text-base font-semibold text-foreground mt-6">
-          Spalinowy czy elektryczny – co się bardziej opłaca?
+          Czy warto tankować LPG na długą trasę?
         </h3>
         <p>
-          Na krótkich trasach miejskich samochód elektryczny jest zdecydowanie tańszy w eksploatacji,
-          szczególnie przy ładowaniu domowym (~0,65 zł/kWh). Na długich trasach autostradowych
-          różnica się zmniejsza – ładowanie DC kosztuje średnio 2,09 zł/kWh, a zużycie energii
-          na autostradzie rośnie do ok. 20 kWh/100km. Skorzystaj z naszego porównania „Spalinowy
-          vs elektryczny", aby zobaczyć różnicę dla konkretnej trasy.
+          Na trasach powyżej 200 km LPG wychodzi zdecydowanie taniej niż benzyna — mimo wyższego
+          spalania o ok. 20%, cena litra jest o ponad połowę niższa. Na trasie Warszawa–Kraków (295 km)
+          różnica może sięgać 40–50 zł. Jedyny minus to mniejsza sieć stacji LPG na autostradach,
+          więc warto sprawdzić dostępność po drodze.
         </p>
       </div>
     </section>
