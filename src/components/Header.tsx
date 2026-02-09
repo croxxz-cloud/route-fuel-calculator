@@ -3,10 +3,10 @@ import logo from '@/assets/trasomat-logo.webp';
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="z-50 bg-background border-b border-border">
+      <nav className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="Trasomat.pl" className="h-9 w-auto" />
+          <img src={logo} alt="Trasomat.pl" className="h-14 w-auto" />
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-3">
