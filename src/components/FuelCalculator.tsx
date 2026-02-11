@@ -233,8 +233,8 @@ export const FuelCalculator = () => {
               onClick={() => setMode('route')}
               className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 mode === 'route'
-                  ? 'bg-primary text-primary-foreground shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/30'
+                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
               }`}
             >
               <ArrowRight className="w-4 h-4" />
@@ -244,8 +244,8 @@ export const FuelCalculator = () => {
               onClick={() => setMode('manual')}
               className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 mode === 'manual'
-                  ? 'bg-primary text-primary-foreground shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/30'
+                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
               }`}
             >
               Własny dystans
@@ -314,8 +314,8 @@ export const FuelCalculator = () => {
               onClick={() => setVehicleType('fuel')}
               className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 vehicleType === 'fuel'
-                  ? 'bg-foreground text-background shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-foreground text-background shadow-md ring-2 ring-foreground/30'
+                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
               }`}
             >
               <Car className="w-4 h-4" />
@@ -325,8 +325,8 @@ export const FuelCalculator = () => {
               onClick={() => setVehicleType('electric')}
               className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 vehicleType === 'electric'
-                  ? 'bg-foreground text-background shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-foreground text-background shadow-md ring-2 ring-foreground/30'
+                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
               }`}
             >
               <Zap className="w-4 h-4" />
