@@ -31,7 +31,7 @@ export const GasStationPrices = ({
 
   if (vehicleType === 'electric') {
     return (
-      <div className="bg-card border-2 border-primary/20 rounded-xl p-4">
+      <div>
         <div className="flex items-center gap-2 mb-3">
           <TrendingUp className="w-4 h-4 text-primary" />
           <span className="text-xs font-medium text-muted-foreground">
@@ -61,7 +61,7 @@ export const GasStationPrices = ({
   }
 
   return (
-    <div className="bg-card border-2 border-primary/20 rounded-xl p-4">
+    <div>
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-primary" />
