@@ -247,95 +247,85 @@ export const FuelCalculator = () => {
         <CalculatorModeSelector mode={mode} onChange={setMode} />
       </div>
 
-      {/* Main Calculator Grid */}
-      <div className="grid lg:grid-cols-[340px_1fr] gap-4 lg:gap-6">
-        {/* Left Column - Route/Distance */}
-        <div className="space-y-3 lg:space-y-4">
-          <div className="bg-card border border-border rounded-xl p-4">
-            {mode === 'route' ? (
-              <div className="space-y-3 mt-3">
-                <LocationInput
-                  label="Punkt startowy (A)"
-                  value={pointA}
-                  onChange={setPointA}
-                  onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
-                  placeholder="np. Warszawa"
-                />
-
-                <div className="flex justify-center">
-                  <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center">
-                    <ArrowRight className="w-3 h-3 text-primary rotate-90" />
-                  </div>
-                </div>
-
-                <LocationInput
-                  label="Punkt docelowy (B)"
-                  value={pointB}
-                  onChange={setPointB}
-                  onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
-                  placeholder="np. Kraków"
-                />
-
-                {(isCalculatingDistance || autoDistance !== null) && (
-                  <div className="bg-input rounded-lg p-3 border border-border">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Car className="w-4 h-4 text-primary" />
-                        <span className="text-xs text-muted-foreground">Dystans</span>
-                      </div>
-                      {isCalculatingDistance ? (
-                        <Loader2 className="w-4 h-4 text-primary animate-spin" />
-                      ) : (
-                        <span className="text-sm font-bold text-foreground">
-                          {autoDistance} km
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-muted-foreground mb-2">
-                  Dystans (km)
-                </label>
-                <div className="relative">
-                  <Car className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                  <Input
-                    type="number"
-                    value={manualDistance}
-                    onChange={(e) => setManualDistance(e.target.value)}
-                    placeholder="Wpisz dystans"
-                    className="pl-10 h-10"
-                    min="0"
-                  />
+      {/* Route/Distance inputs - full width above grid */}
+      <div className="bg-card border border-border rounded-xl p-4 mb-4">
+        {mode === 'route' ? (
+          <div className="space-y-3">
+            <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
+              <LocationInput
+                label="Punkt startowy (A)"
+                value={pointA}
+                onChange={setPointA}
+                onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
+                placeholder="np. Warszawa"
+              />
+              <div className="flex justify-center md:pb-2">
+                <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center">
+                  <ArrowRight className="w-3 h-3 text-primary md:rotate-0 rotate-90" />
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* Round Trip + Tolls - Combined compact */}
-          <div className="bg-card border border-border rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <RotateCcw className="w-4 h-4 text-primary" />
-                <span className="text-xs font-medium text-foreground">W obie strony</span>
-              </div>
-              <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
+              <LocationInput
+                label="Punkt docelowy (B)"
+                value={pointB}
+                onChange={setPointB}
+                onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
+                placeholder="np. Kraków"
+              />
             </div>
-            
-            {roundTrip && distance && (
-              <div className="text-center py-1 border-t border-border">
-                <span className="text-xs text-muted-foreground">Razem: </span>
-                <span className="text-primary font-bold text-sm">{effectiveDistance} km</span>
+
+            {(isCalculatingDistance || autoDistance !== null) && (
+              <div className="bg-input rounded-lg p-3 border border-border max-w-xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Car className="w-4 h-4 text-primary" />
+                    <span className="text-xs text-muted-foreground">Dystans</span>
+                  </div>
+                  {isCalculatingDistance ? (
+                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                  ) : (
+                    <span className="text-sm font-bold text-foreground">
+                      {autoDistance} km
+                    </span>
+                  )}
+                </div>
               </div>
             )}
-
-            <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
           </div>
+        ) : (
+          <div className="max-w-xs">
+            <label className="block text-xs font-medium text-muted-foreground mb-2">
+              Dystans (km)
+            </label>
+            <div className="relative">
+              <Car className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+              <Input
+                type="number"
+                value={manualDistance}
+                onChange={(e) => setManualDistance(e.target.value)}
+                placeholder="Wpisz dystans"
+                className="pl-10 h-10"
+                min="0"
+              />
+            </div>
+          </div>
+        )}
 
-          {/* Mobile: Popularne trasy - MOVED to after results */}
+        {/* Compact extras: round trip + tolls */}
+        <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-border">
+          <div className="flex items-center gap-2">
+            <RotateCcw className="w-3.5 h-3.5 text-primary" />
+            <span className="text-xs font-medium text-foreground">W obie strony</span>
+            <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
+            {roundTrip && distance && (
+              <span className="text-xs text-primary font-semibold">({effectiveDistance} km)</span>
+            )}
+          </div>
+          <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
         </div>
+      </div>
+
+      {/* Main Calculator Grid */}
+      <div className="grid lg:grid-cols-2 gap-4 lg:gap-6">
 
         {/* Right Column - Parameters & Results */}
         <div className="space-y-3 lg:space-y-4">
