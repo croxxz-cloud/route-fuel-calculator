@@ -225,10 +225,13 @@ export const FuelCalculator = () => {
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
       <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
 
-        {/* ── Row 1: Combined mode + vehicle type ── */}
+        {/* ── Step 1: Wybierz tryb ── */}
         <div className="p-4 md:p-5 border-b border-border">
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Mode */}
+          <div className="flex items-center gap-2 mb-2.5">
+            <span className="text-xs font-bold text-primary bg-primary/10 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">1</span>
+            <span className="text-sm font-semibold text-foreground">Wybierz tryb</span>
+          </div>
+          <div className="flex gap-2">
             <button
               onClick={() => setMode('route')}
               className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
@@ -250,9 +253,16 @@ export const FuelCalculator = () => {
             >
               Własny dystans
             </button>
+          </div>
+        </div>
 
-            <div className="w-px h-6 bg-border mx-1 hidden md:block" />
-
+        {/* ── Step 2: Typ pojazdu ── */}
+        <div className="p-4 md:p-5 border-b border-border">
+          <div className="flex items-center gap-2 mb-2.5">
+            <span className="text-xs font-bold text-primary bg-primary/10 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">2</span>
+            <span className="text-sm font-semibold text-foreground">Typ pojazdu</span>
+          </div>
+          <div className="flex gap-2">
             <button
               onClick={() => setVehicleType('fuel')}
               className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
