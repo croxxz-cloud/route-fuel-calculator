@@ -14,16 +14,31 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-// Import route slugs directly from the data file
-import { routesData } from '../src/data/routesData';
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distPath = join(__dirname, '..', 'dist');
 
-// Build routes list dynamically from routesData + static pages
+// Hardcoded route slugs (avoids importing .ts file which Node can't handle)
+const ROUTE_SLUGS = [
+  'warszawa-krakow',
+  'gdansk-warszawa',
+  'wroclaw-poznan',
+  'katowice-lodz',
+  'poznan-warszawa',
+  'lublin-krakow',
+  'szczecin-gdansk',
+  'bialystok-warszawa',
+  'krakow-praga',
+  'warszawa-berlin',
+  'krakow-wieden',
+  'wroclaw-drezno',
+  'krakow-katowice',
+  'poznan-wroclaw',
+  'warszawa-gdansk',
+];
+
 const ROUTES_TO_PRERENDER = [
   '/',
-  ...routesData.map(r => `/trasa/${r.slug}`),
+  ...ROUTE_SLUGS.map(s => `/trasa/${s}`),
   '/kontakt',
   '/polityka-prywatnosci',
   '/regulamin',
