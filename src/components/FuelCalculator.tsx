@@ -226,26 +226,26 @@ export const FuelCalculator = () => {
       <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
 
         {/* ── Step 1: Wybierz tryb ── */}
-        <div className="p-4 md:p-5 border-b border-border">
-          <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-xs font-bold text-primary bg-primary/10 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">1</span>
-            <span className="text-sm font-semibold text-foreground">Wybierz tryb</span>
+        <div className="p-5 md:p-6 border-b border-border">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-sm font-bold text-primary-foreground bg-primary rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">1</span>
+            <span className="text-base font-semibold text-foreground">Wybierz tryb</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             <button
               onClick={() => setMode('route')}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
                 mode === 'route'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
               }`}
             >
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
               Trasa A → B
             </button>
             <button
               onClick={() => setMode('manual')}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
                 mode === 'manual'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
@@ -257,32 +257,32 @@ export const FuelCalculator = () => {
         </div>
 
         {/* ── Step 2: Typ pojazdu ── */}
-        <div className="p-4 md:p-5 border-b border-border">
-          <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-xs font-bold text-primary bg-primary/10 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">2</span>
-            <span className="text-sm font-semibold text-foreground">Typ pojazdu</span>
+        <div className="p-5 md:p-6 border-b border-border">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-sm font-bold text-primary-foreground bg-primary rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">2</span>
+            <span className="text-base font-semibold text-foreground">Typ pojazdu</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             <button
               onClick={() => setVehicleType('fuel')}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
                 vehicleType === 'fuel'
                   ? 'bg-foreground text-background shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Car className="w-4 h-4" />
+              <Car className="w-5 h-5" />
               Spalinowy
             </button>
             <button
               onClick={() => setVehicleType('electric')}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
                 vehicleType === 'electric'
                   ? 'bg-foreground text-background shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Zap className="w-4 h-4" />
+              <Zap className="w-5 h-5" />
               Elektryczny
             </button>
           </div>
