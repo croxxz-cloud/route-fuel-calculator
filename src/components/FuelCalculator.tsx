@@ -223,29 +223,26 @@ export const FuelCalculator = () => {
       </div>
 
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
-      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6 max-w-2xl mx-auto">
 
-        {/* ── Step 1: Wybierz tryb ── */}
-        <div className="p-5 md:p-6 border-b border-border">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-sm font-bold text-primary-foreground bg-primary rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">1</span>
-            <span className="text-base font-semibold text-foreground">Wybierz tryb</span>
-          </div>
-          <div className="flex gap-2 justify-center">
+        {/* ── Wybierz tryb + route/distance ── */}
+        <div className="p-4 md:p-5 border-b border-border">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Wybierz tryb</span>
+          <div className="flex gap-2 justify-center mb-4">
             <button
               onClick={() => setMode('route')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 mode === 'route'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
               }`}
             >
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
               Trasa A → B
             </button>
             <button
               onClick={() => setMode('manual')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 mode === 'manual'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
@@ -254,44 +251,10 @@ export const FuelCalculator = () => {
               Własny dystans
             </button>
           </div>
-        </div>
 
-        {/* ── Step 2: Typ pojazdu ── */}
-        <div className="p-5 md:p-6 border-b border-border">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-sm font-bold text-primary-foreground bg-primary rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">2</span>
-            <span className="text-base font-semibold text-foreground">Typ pojazdu</span>
-          </div>
-          <div className="flex gap-2 justify-center">
-            <button
-              onClick={() => setVehicleType('fuel')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
-                vehicleType === 'fuel'
-                  ? 'bg-foreground text-background shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Car className="w-5 h-5" />
-              Spalinowy
-            </button>
-            <button
-              onClick={() => setVehicleType('electric')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-all ${
-                vehicleType === 'electric'
-                  ? 'bg-foreground text-background shadow-md'
-                  : 'bg-muted text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Zap className="w-5 h-5" />
-              Elektryczny
-            </button>
-          </div>
-        </div>
-
-        {/* ── Row 2: Route / Distance ── */}
-        <div className="p-4 md:p-6 border-b border-border">
+          {/* Route / Distance inline */}
           {mode === 'route' ? (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
                 <LocationInput
                   label="Skąd"
@@ -315,7 +278,7 @@ export const FuelCalculator = () => {
               </div>
 
               {(isCalculatingDistance || autoDistance !== null) && (
-                <div className="flex items-center justify-center gap-3 py-3 bg-primary/5 rounded-xl">
+                <div className="flex items-center justify-center gap-3 py-2.5 bg-primary/5 rounded-xl">
                   <Car className="w-5 h-5 text-primary" />
                   {isCalculatingDistance ? (
                     <Loader2 className="w-5 h-5 text-primary animate-spin" />
@@ -335,7 +298,7 @@ export const FuelCalculator = () => {
                 value={manualDistance}
                 onChange={(e) => setManualDistance(e.target.value)}
                 placeholder="Wpisz dystans"
-                className="h-11 text-base max-w-[200px] text-center"
+                className="h-11 text-base max-w-[180px] text-center border-foreground/30 bg-background text-foreground"
                 min="0"
               />
               <span className="text-sm text-muted-foreground font-medium">km</span>
@@ -343,12 +306,40 @@ export const FuelCalculator = () => {
           )}
         </div>
 
-        {/* ── Row 3: Fuel/Energy config — stacked vertically, centered ── */}
-        <div className="p-4 md:p-6 border-b border-border">
-          <div className="max-w-md mx-auto space-y-4">
+        {/* ── Typ pojazdu ── */}
+        <div className="p-4 md:p-5 border-b border-border">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Typ pojazdu</span>
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => setVehicleType('fuel')}
+              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                vehicleType === 'fuel'
+                  ? 'bg-foreground text-background shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Car className="w-4 h-4" />
+              Spalinowy
+            </button>
+            <button
+              onClick={() => setVehicleType('electric')}
+              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                vehicleType === 'electric'
+                  ? 'bg-foreground text-background shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Zap className="w-4 h-4" />
+              Elektryczny
+            </button>
+          </div>
+        </div>
+
+        {/* ── Fuel/Energy config ── */}
+        <div className="p-4 md:p-5 border-b border-border">
+          <div className="max-w-sm mx-auto space-y-3">
             {vehicleType === 'fuel' ? (
               <>
-                {/* Fuel type tiles */}
                 <GasStationPrices 
                   prices={prices} 
                   vehicleType={vehicleType}
@@ -358,7 +349,7 @@ export const FuelCalculator = () => {
 
                 {/* Consumption */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center justify-between mb-1">
                     <label className="text-sm font-medium text-foreground">Spalanie</label>
                     <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
                   </div>
@@ -369,21 +360,21 @@ export const FuelCalculator = () => {
                       value={fuelConsumption}
                       onChange={(e) => setFuelConsumption(e.target.value)}
                       placeholder="7.0"
-                      className="pl-10 pr-20 h-11"
+                      className="pl-10 pr-20 h-10 border-foreground/30 bg-background text-foreground"
                       step="0.1"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">L/100km</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">L/100km</span>
                   </div>
                 </div>
 
                 {/* Fuel price */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center justify-between mb-1">
                     <label className="text-sm font-medium text-foreground">Cena paliwa</label>
                     <span className="text-[11px] text-muted-foreground">lub wpisz własną</span>
                   </div>
-                  <div className={`relative transition-all duration-500 rounded-lg ${
+                  <div className={`relative transition-all duration-500 rounded-md ${
                     fuelPriceHighlight 
                       ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
                       : ''
@@ -394,11 +385,11 @@ export const FuelCalculator = () => {
                       value={fuelPrice}
                       onChange={(e) => setFuelPrice(e.target.value)}
                       placeholder="5.89"
-                      className="pl-10 pr-14 h-11"
+                      className="pl-10 pr-14 h-10 border-foreground/30 bg-background text-foreground"
                       step="0.01"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł/L</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">zł/L</span>
                   </div>
                 </div>
               </>
@@ -412,7 +403,7 @@ export const FuelCalculator = () => {
                 />
 
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Zużycie energii</label>
+                  <label className="text-sm font-medium text-foreground mb-1 block">Zużycie energii</label>
                   <div className="relative">
                     <Battery className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
                     <Input
@@ -420,17 +411,17 @@ export const FuelCalculator = () => {
                       value={electricConsumption}
                       onChange={(e) => setElectricConsumption(e.target.value)}
                       placeholder="18"
-                      className="pl-10 pr-24 h-11"
+                      className="pl-10 pr-24 h-10 border-foreground/30 bg-background text-foreground"
                       step="0.1"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">kWh/100km</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">kWh/100km</span>
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-1">Typowo 15-25 kWh/100km</p>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Cena prądu</label>
+                  <label className="text-sm font-medium text-foreground mb-1 block">Cena prądu</label>
                   <div className="relative">
                     <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
                     <Input
@@ -438,11 +429,11 @@ export const FuelCalculator = () => {
                       value={electricPrice}
                       onChange={(e) => setElectricPrice(e.target.value)}
                       placeholder="0.89"
-                      className="pl-10 pr-16 h-11"
+                      className="pl-10 pr-16 h-10 border-foreground/30 bg-background text-foreground"
                       step="0.01"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł/kWh</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">zł/kWh</span>
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2 zł, dom: ~0.65 zł</p>
                 </div>
