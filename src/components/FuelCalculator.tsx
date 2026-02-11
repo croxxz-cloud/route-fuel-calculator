@@ -247,7 +247,7 @@ export const FuelCalculator = () => {
         <CalculatorModeSelector mode={mode} onChange={setMode} />
       </div>
 
-      {/* Route/Distance inputs - full width above grid */}
+      {/* Route/Distance inputs - full width */}
       <div className="bg-card border border-border rounded-xl p-4 mb-4">
         {mode === 'route' ? (
           <div className="space-y-3">
@@ -309,28 +309,14 @@ export const FuelCalculator = () => {
             </div>
           </div>
         )}
-
-        {/* Compact extras: round trip + tolls */}
-        <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-border">
-          <div className="flex items-center gap-2">
-            <RotateCcw className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-medium text-foreground">W obie strony</span>
-            <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
-            {roundTrip && distance && (
-              <span className="text-xs text-primary font-semibold">({effectiveDistance} km)</span>
-            )}
-          </div>
-          <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
-        </div>
       </div>
 
-      {/* Main Calculator Grid */}
-      <div className="grid lg:grid-cols-2 gap-4 lg:gap-6">
-
-        {/* Right Column - Parameters & Results */}
+      {/* Main grid: left = params, right = sidebar extras */}
+      <div className="grid lg:grid-cols-[1fr_260px] gap-4 lg:gap-5">
+        {/* Left Column - Main flow */}
         <div className="space-y-3 lg:space-y-4">
-          {/* Desktop only: Vehicle Type + Gas Station Prices */}
-          <div className="hidden lg:block space-y-3">
+          {/* Mobile: Vehicle Type + Gas Station Prices */}
+          <div className="lg:hidden space-y-3">
             <div className="bg-card border border-border rounded-xl p-4">
               <label className="text-xs font-bold text-foreground mb-2 block">
                 Wybierz typ pojazdu:
@@ -346,7 +332,24 @@ export const FuelCalculator = () => {
             />
           </div>
 
-          {/* Parameters Card - Fuel + Consumption combined */}
+          {/* Desktop: Vehicle Type + Fuel Prices */}
+          <div className="hidden lg:grid lg:grid-cols-2 gap-4">
+            <div className="bg-card border border-border rounded-xl p-4">
+              <label className="text-xs font-bold text-foreground mb-2 block">
+                Wybierz typ pojazdu:
+              </label>
+              <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
+            </div>
+            
+            <GasStationPrices 
+              prices={prices} 
+              vehicleType={vehicleType}
+              selectedFuel={fuelType}
+              onFuelSelect={setFuelType}
+            />
+          </div>
+
+          {/* Parameters Card */}
           <div className="bg-card border border-border rounded-xl p-4">
             <div className="flex items-center gap-2 mb-3">
               <Calculator className="w-4 h-4 text-primary" />
@@ -470,12 +473,10 @@ export const FuelCalculator = () => {
                   routeTo={mode === 'route' ? pointB : undefined}
                 />
                 {vehicleType === 'fuel' && (
-                  <>
-                    <FuelComparison 
-                      distance={effectiveDistance} 
-                      consumption={parseFloat(fuelConsumption) || 7}
-                    />
-                  </>
+                  <FuelComparison 
+                    distance={effectiveDistance} 
+                    consumption={parseFloat(fuelConsumption) || 7}
+                  />
                 )}
                 {mode === 'route' && pointA && pointB && (
                   <RouteDetails
@@ -496,19 +497,38 @@ export const FuelCalculator = () => {
             ) : null}
           </div>
 
-          {/* Example Routes - Desktop and Mobile after results */}
-          <div className="hidden lg:block">
-            {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
+          {/* Example Routes */}
+          {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
+        </div>
+
+        {/* Right Sidebar - Extras */}
+        <div className="space-y-3 lg:sticky lg:top-4 lg:self-start">
+          {/* Round Trip */}
+          <div className="bg-card border border-border rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <RotateCcw className="w-4 h-4 text-primary" />
+                <span className="text-xs font-bold text-foreground">W obie strony</span>
+              </div>
+              <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
+            </div>
+            {roundTrip && distance && (
+              <div className="text-center py-1.5 mt-2 border-t border-border">
+                <span className="text-xs text-muted-foreground">Łącznie: </span>
+                <span className="text-primary font-bold text-sm">{effectiveDistance} km</span>
+              </div>
+            )}
           </div>
+
+          {/* Toll Costs */}
+          <div className="bg-card border border-border rounded-xl p-4">
+            <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
+          </div>
+
+          {/* Passenger Split - future feature placeholder */}
         </div>
       </div>
 
-      {/* Mobile: Popularne trasy - after everything */}
-      <div className="lg:hidden mt-4">
-        {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
-      </div>
-
-      {/* Info Boxes - without EV section on mobile handled via component */}
       <InfoBoxes />
     </div>
   );
