@@ -71,6 +71,13 @@ export const ConsumptionHelper = ({ onSelect, fuelType = 'pb95' }: ConsumptionHe
           ))}
         </SelectContent>
       </Select>
+
+      {/* Static content for SEO - hidden visually */}
+      <ul className="sr-only" aria-hidden="true">
+        {carTypes.map((car) => (
+          <li key={car.value}>{car.label}: {car.description}</li>
+        ))}
+      </ul>
     </div>
   );
 };

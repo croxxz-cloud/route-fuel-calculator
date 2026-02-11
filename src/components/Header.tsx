@@ -54,7 +54,7 @@ export const Header = () => {
           {routesData.map((route) => (
             <li key={route.slug}>
               <Link to={`/trasa/${route.slug}`}>
-                Koszt przejazdu {route.from} – {route.to} ({route.distance} km)
+                {route.from} – {route.to} ({route.distance} km)
               </Link>
             </li>
           ))}
