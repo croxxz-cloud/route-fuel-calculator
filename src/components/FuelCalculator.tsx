@@ -207,7 +207,7 @@ export const FuelCalculator = () => {
   const canCalculate = effectiveDistance !== null && cost !== null;
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full text-primary text-sm font-semibold mb-3">
