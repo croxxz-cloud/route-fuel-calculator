@@ -208,216 +208,189 @@ export const FuelCalculator = () => {
 
   return (
     <div className="w-full">
-      {/* Header Section */}
+      {/* Header */}
       <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full text-primary text-sm font-semibold mb-3">
           <Sparkles className="w-4 h-4" />
           <span>Aktualizacja: Luty 2026</span>
         </div>
-        <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2 flex items-center justify-center gap-3 flex-wrap">
-          <span>Kalkulator Kosztów Przejazdu</span>
-          <span className="text-xl md:text-2xl">{vehicleType === 'electric' ? '⚡' : '🚗'}</span>
+        <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
+          Kalkulator Kosztów Przejazdu {vehicleType === 'electric' ? '⚡' : '🚗'}
         </h1>
         <p className="text-sm text-muted-foreground max-w-xl mx-auto">
           Oblicz ile zapłacisz za {vehicleType === 'electric' ? 'energię' : 'paliwo'} na trasie.
         </p>
       </div>
 
-      {/* Mobile: Top controls - Vehicle Type + Gas Station Prices */}
-      <div className="lg:hidden space-y-3 mb-4">
-        <div className="bg-card border border-border rounded-xl p-4">
-          <label className="text-xs font-bold text-foreground mb-2 block">
-            Wybierz typ pojazdu:
-          </label>
-          <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
+      {/* ═══ MAIN CALCULATOR CARD ═══ */}
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
+
+        {/* ── Section 1: Mode selector ── */}
+        <div className="p-4 md:p-6 border-b border-border">
+          <CalculatorModeSelector mode={mode} onChange={setMode} />
         </div>
-        
-        <GasStationPrices 
-          prices={prices} 
-          vehicleType={vehicleType}
-          selectedFuel={fuelType}
-          onFuelSelect={setFuelType}
-        />
-      </div>
 
-      {/* Calculator Mode - full width above grid */}
-      <div className="bg-card border border-border rounded-xl p-4 mb-4">
-        <label className="text-xs font-bold text-foreground mb-2 block">
-          Wybierz tryb obliczeń:
-        </label>
-        <CalculatorModeSelector mode={mode} onChange={setMode} />
-      </div>
-
-      {/* Route/Distance inputs - full width */}
-      <div className="bg-card border border-border rounded-xl p-4 md:p-5 mb-4">
-        {mode === 'route' ? (
-          <div className="space-y-3">
-            <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
-              <LocationInput
-                label="Punkt startowy (A)"
-                value={pointA}
-                onChange={setPointA}
-                onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
-                placeholder="np. Warszawa"
-              />
-              <div className="flex justify-center md:pb-2">
-                <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center">
-                  <ArrowRight className="w-3 h-3 text-primary md:rotate-0 rotate-90" />
+        {/* ── Section 2: Route / Distance ── */}
+        <div className="p-4 md:p-6 border-b border-border">
+          {mode === 'route' ? (
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
+                <LocationInput
+                  label="Skąd"
+                  value={pointA}
+                  onChange={setPointA}
+                  onLocationSelect={(lat, lon) => setCoordsA({ lat, lon })}
+                  placeholder="np. Warszawa"
+                />
+                <div className="flex justify-center md:pb-2">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <ArrowRight className="w-4 h-4 text-primary md:rotate-0 rotate-90" />
+                  </div>
                 </div>
+                <LocationInput
+                  label="Dokąd"
+                  value={pointB}
+                  onChange={setPointB}
+                  onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
+                  placeholder="np. Kraków"
+                />
               </div>
-              <LocationInput
-                label="Punkt docelowy (B)"
-                value={pointB}
-                onChange={setPointB}
-                onLocationSelect={(lat, lon) => setCoordsB({ lat, lon })}
-                placeholder="np. Kraków"
-              />
-            </div>
 
-            {(isCalculatingDistance || autoDistance !== null) && (
-              <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              {(isCalculatingDistance || autoDistance !== null) && (
+                <div className="flex items-center justify-center gap-3 py-3 bg-primary/5 rounded-xl">
                   <Car className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Wyznaczony dystans:</span>
+                  {isCalculatingDistance ? (
+                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                  ) : (
+                    <span className="text-xl font-bold text-foreground">
+                      {autoDistance} km
+                    </span>
+                  )}
                 </div>
-                {isCalculatingDistance ? (
-                  <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                ) : (
-                  <span className="text-2xl font-bold text-foreground">
-                    {autoDistance} <span className="text-base font-medium text-muted-foreground">km</span>
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-2">
-              Dystans (km)
-            </label>
-            <div className="relative max-w-sm">
-              <Car className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 max-w-sm">
+              <Car className="w-5 h-5 text-primary flex-shrink-0" />
               <Input
                 type="number"
                 value={manualDistance}
                 onChange={(e) => setManualDistance(e.target.value)}
-                placeholder="Wpisz dystans"
-                className="pl-10 h-10"
+                placeholder="Wpisz dystans w km"
+                className="h-11 text-base"
                 min="0"
               />
+              <span className="text-sm text-muted-foreground font-medium">km</span>
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Vehicle Type - full width */}
-      <div className="bg-card border border-border rounded-xl p-4 mb-4">
-        <label className="text-xs font-bold text-foreground mb-2 block">
-          Wybierz typ pojazdu:
-        </label>
-        <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
-      </div>
-
-      {/* Fuel Selection - centered, compact */}
-      <div className="flex justify-center mb-4">
-        <div className="w-full max-w-lg">
-          <GasStationPrices 
-            prices={prices} 
-            vehicleType={vehicleType}
-            selectedFuel={fuelType}
-            onFuelSelect={setFuelType}
-          />
+          )}
         </div>
-      </div>
 
-      {/* Parameters - consumption + price side by side */}
-      <div className="bg-card border border-border rounded-xl p-4 md:p-5 mb-4">
-        {vehicleType === 'fuel' ? (
-          <div className="grid grid-cols-2 gap-4 max-w-md">
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                Spalanie (L/100km)
-              </label>
-              <div className="relative">
-                <Fuel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                <Input
-                  type="number"
-                  value={fuelConsumption}
-                  onChange={(e) => setFuelConsumption(e.target.value)}
-                  placeholder="7.0"
-                  className="pl-10 h-10 text-sm"
-                  step="0.1"
-                  min="0"
-                />
-              </div>
-              <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">
-                Cena paliwa (zł/L)
-              </label>
-              <p className="text-[10px] text-primary/70 mb-0.5">lub wpisz własną</p>
-              <div className={`relative transition-all duration-500 rounded-lg ${
-                fuelPriceHighlight 
-                  ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
-                  : ''
-              }`}>
-                <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                <Input
-                  type="number"
-                  value={fuelPrice}
-                  onChange={(e) => setFuelPrice(e.target.value)}
-                  placeholder="5.89"
-                  className="pl-10 h-10 text-sm"
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 max-w-md">
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                Zużycie (kWh/100km)
-              </label>
-              <div className="relative">
-                <Battery className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
-                <Input
-                  type="number"
-                  value={electricConsumption}
-                  onChange={(e) => setElectricConsumption(e.target.value)}
-                  placeholder="18"
-                  className="pl-10 h-10 text-sm"
-                  step="0.1"
-                  min="0"
-                />
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-1">15-25 kWh typowo</p>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                Cena (zł/kWh)
-              </label>
-              <div className="relative">
-                <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
-                <Input
-                  type="number"
-                  value={electricPrice}
-                  onChange={(e) => setElectricPrice(e.target.value)}
-                  placeholder="0.89"
-                  className="pl-10 h-10 text-sm"
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2zł, dom: ~0.65zł</p>
-            </div>
-          </div>
-        )}
+        {/* ── Section 3: Vehicle type ── */}
+        <div className="p-4 md:px-6 border-b border-border">
+          <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
+        </div>
 
-        {/* Extras row */}
-        <div className="flex flex-wrap items-center gap-6 mt-4 pt-4 border-t border-border">
+        {/* ── Section 4: Fuel selection ── */}
+        <div className="p-4 md:px-6 border-b border-border">
+          <div className="max-w-md mx-auto">
+            <GasStationPrices 
+              prices={prices} 
+              vehicleType={vehicleType}
+              selectedFuel={fuelType}
+              onFuelSelect={setFuelType}
+            />
+          </div>
+        </div>
+
+        {/* ── Section 5: Parameters ── */}
+        <div className="p-4 md:p-6 border-b border-border">
+          {vehicleType === 'fuel' ? (
+            <div className="grid grid-cols-2 gap-4 max-w-sm">
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+                  Spalanie (L/100km)
+                </label>
+                <div className="relative">
+                  <Fuel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                  <Input
+                    type="number"
+                    value={fuelConsumption}
+                    onChange={(e) => setFuelConsumption(e.target.value)}
+                    placeholder="7.0"
+                    className="pl-10 h-10 text-sm"
+                    step="0.1"
+                    min="0"
+                  />
+                </div>
+                <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">
+                  Cena paliwa (zł/L)
+                </label>
+                <p className="text-[10px] text-primary/70 mb-0.5">lub wpisz własną</p>
+                <div className={`relative transition-all duration-500 rounded-lg ${
+                  fuelPriceHighlight 
+                    ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
+                    : ''
+                }`}>
+                  <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                  <Input
+                    type="number"
+                    value={fuelPrice}
+                    onChange={(e) => setFuelPrice(e.target.value)}
+                    placeholder="5.89"
+                    className="pl-10 h-10 text-sm"
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 max-w-sm">
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+                  Zużycie (kWh/100km)
+                </label>
+                <div className="relative">
+                  <Battery className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
+                  <Input
+                    type="number"
+                    value={electricConsumption}
+                    onChange={(e) => setElectricConsumption(e.target.value)}
+                    placeholder="18"
+                    className="pl-10 h-10 text-sm"
+                    step="0.1"
+                    min="0"
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">15-25 kWh typowo</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+                  Cena (zł/kWh)
+                </label>
+                <div className="relative">
+                  <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
+                  <Input
+                    type="number"
+                    value={electricPrice}
+                    onChange={(e) => setElectricPrice(e.target.value)}
+                    placeholder="0.89"
+                    className="pl-10 h-10 text-sm"
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2zł, dom: ~0.65zł</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── Section 6: Options (round trip + tolls) ── */}
+        <div className="px-4 md:px-6 py-3 border-b border-border bg-muted/30 flex flex-wrap items-center gap-x-8 gap-y-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
             <span className="text-sm text-foreground">W obie strony?</span>
@@ -427,35 +400,37 @@ export const FuelCalculator = () => {
           </label>
 
           <div className="flex items-center gap-2">
-            <Receipt className="w-4 h-4 text-primary" />
-            <span className="text-sm text-foreground">Opłaty drogowe:</span>
-            <div className="relative w-24">
+            <Receipt className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">Opłaty drogowe</span>
+            <div className="relative w-20">
               <Input
                 type="number"
                 value={tollCosts}
                 onChange={(e) => setTollCosts(e.target.value)}
                 placeholder="0"
-                className="h-8 text-sm pr-8"
+                className="h-8 text-sm pr-7"
                 step="1"
                 min="0"
               />
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł</span>
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">zł</span>
             </div>
           </div>
         </div>
+
+        {/* ── Section 7: CTA Button ── */}
+        <div className="p-4 md:p-6">
+          <Button
+            onClick={handleCalculate}
+            disabled={!canCalculate}
+            className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl transition-all hover:shadow-2xl active:scale-[0.99]"
+          >
+            <Calculator className="w-6 h-6 mr-2" />
+            Policz koszt trasy
+          </Button>
+        </div>
       </div>
 
-      {/* BIG Calculate Button */}
-      <Button
-        onClick={handleCalculate}
-        disabled={!canCalculate}
-        className="w-full mb-6 h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl"
-      >
-        <Calculator className="w-6 h-6 mr-2" />
-        Policz koszt trasy
-      </Button>
-
-      {/* Results Section - full width */}
+      {/* ═══ RESULTS ═══ */}
       <div id="results-section">
         {showResults && cost !== null && effectiveDistance !== null ? (
           <>
@@ -497,7 +472,7 @@ export const FuelCalculator = () => {
         ) : null}
       </div>
 
-      {/* Example Routes - full width */}
+      {/* Example Routes */}
       {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
 
       <InfoBoxes />
