@@ -314,6 +314,88 @@ export const routesData: RouteData[] = [
     tollSections: [],
     description: 'A4 od Wrocławia do granicy jest bezpłatna dla samochodów osobowych. Autostrady w Niemczech również bezpłatne.',
   },
+  {
+    from: 'Kraków',
+    to: 'Katowice',
+    slug: 'krakow-katowice',
+    distance: 80,
+    defaultConsumption: 7,
+    defaultFuelPrice: 5.89,
+    variants: [
+      {
+        name: 'Trasa A4 (z opłatą)',
+        via: ['Chrzanów', 'Mysłowice'],
+        distance: 80,
+        time: '1 godz. 5 min',
+        avgCost: 50,
+        tollIndices: [0],
+      },
+      {
+        name: 'Trasa DK94 (bezpłatna)',
+        via: ['Trzebinia', 'Jaworzno'],
+        distance: 85,
+        time: '1 godz. 30 min',
+        avgCost: 35,
+        tollIndices: [],
+      },
+    ],
+    hasTolls: true,
+    tollSections: [
+      { name: 'A4 Kraków–Katowice (Stalexport)', cost: 17 },
+    ],
+    description: 'A4 jest najszybsza, ale płatna (17 zł). DK94 jest bezpłatna, lecz wolniejsza.',
+  },
+  {
+    from: 'Poznań',
+    to: 'Wrocław',
+    slug: 'poznan-wroclaw',
+    distance: 180,
+    defaultConsumption: 7,
+    defaultFuelPrice: 5.89,
+    variants: [
+      {
+        name: 'Trasa S5 (bezpłatna)',
+        via: ['Leszno', 'Rawicz'],
+        distance: 180,
+        time: '2 godz.',
+        avgCost: 74,
+        tollIndices: [],
+      },
+    ],
+    hasTolls: false,
+    tollSections: [],
+  },
+  {
+    from: 'Warszawa',
+    to: 'Gdańsk',
+    slug: 'warszawa-gdansk',
+    distance: 340,
+    defaultConsumption: 7,
+    defaultFuelPrice: 5.89,
+    variants: [
+      {
+        name: 'Trasa S7 (bezpłatna)',
+        via: ['Płońsk', 'Elbląg'],
+        distance: 340,
+        time: '3 godz. 50 min',
+        avgCost: 140,
+        tollIndices: [],
+      },
+      {
+        name: 'Trasa A1 przez Łódź i Toruń',
+        via: ['Stryków', 'Łódź', 'Toruń'],
+        distance: 475,
+        time: '4 godz. 40 min',
+        avgCost: 229,
+        tollIndices: [0],
+      },
+    ],
+    hasTolls: true,
+    tollSections: [
+      { name: 'A1 Gdańsk–Toruń (AmberOne, tylko wariant przez A1)', cost: 33 },
+    ],
+    description: 'S7 jest bezpłatna i najkrótsza (340 km). Wariant przez A1/Łódź jest dłuższy (475 km), wolniejszy i droższy.',
+  },
 ];
 
 export const getRouteBySlug = (slug: string): RouteData | undefined => {

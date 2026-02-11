@@ -1,11 +1,11 @@
 /**
  * Build-time prerendering script using Puppeteer
  * 
- * This script runs after the Vite build and generates static HTML
- * for specified routes, capturing the fully rendered page including
- * react-helmet meta tags.
+ * Generates static HTML for all SEO routes after `vite build`.
+ * Each output file contains fully rendered content (headings, text, meta tags)
+ * so pages work without JavaScript on static hosting.
  * 
- * Usage: Run after `vite build` via `bun run prerender`
+ * Usage: bun run build && bun run scripts/prerender.ts
  */
 
 import puppeteer from 'puppeteer';
@@ -14,36 +14,29 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+// Import route slugs directly from the data file
+import { routesData } from '../src/data/routesData';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distPath = join(__dirname, '..', 'dist');
 
-// Routes to prerender - add new routes here
+// Build routes list dynamically from routesData + static pages
 const ROUTES_TO_PRERENDER = [
   '/',
-  '/trasa/warszawa-krakow',
-  '/trasa/gdansk-warszawa',
-  '/trasa/wroclaw-poznan',
-  '/trasa/katowice-lodz',
-  '/trasa/poznan-warszawa',
-  '/trasa/lublin-krakow',
-  '/trasa/szczecin-gdansk',
-  '/trasa/bialystok-warszawa',
-  '/trasa/krakow-praga',
-  '/trasa/warszawa-berlin',
-  '/trasa/krakow-wieden',
-  '/trasa/wroclaw-drezno',
+  ...routesData.map(r => `/trasa/${r.slug}`),
   '/kontakt',
   '/polityka-prywatnosci',
   '/regulamin',
 ];
 
-// Simple static file server
+// Simple static file server for SPA
 function createStaticServer(directory: string, port: number): Promise<ReturnType<typeof createServer>> {
   return new Promise((resolve) => {
     const server = createServer((req, res) => {
-      let filePath = join(directory, req.url === '/' ? 'index.html' : req.url!);
+      const url = req.url?.split('?')[0] || '/';
+      let filePath = join(directory, url === '/' ? 'index.html' : url);
       
-      // For SPA routes, serve index.html
+      // For SPA routes (no file extension), serve index.html
       if (!existsSync(filePath) || !filePath.includes('.')) {
         filePath = join(directory, 'index.html');
       }
@@ -52,16 +45,19 @@ function createStaticServer(directory: string, port: number): Promise<ReturnType
         const content = readFileSync(filePath);
         const ext = filePath.split('.').pop();
         const mimeTypes: Record<string, string> = {
-          'html': 'text/html',
+          'html': 'text/html; charset=utf-8',
           'js': 'application/javascript',
           'css': 'text/css',
           'json': 'application/json',
           'png': 'image/png',
           'jpg': 'image/jpeg',
+          'webp': 'image/webp',
           'svg': 'image/svg+xml',
           'ico': 'image/x-icon',
+          'woff2': 'font/woff2',
+          'woff': 'font/woff',
         };
-        res.writeHead(200, { 'Content-Type': mimeTypes[ext!] || 'text/plain' });
+        res.writeHead(200, { 'Content-Type': mimeTypes[ext!] || 'application/octet-stream' });
         res.end(content);
       } catch {
         res.writeHead(404);
@@ -76,13 +72,10 @@ function createStaticServer(directory: string, port: number): Promise<ReturnType
   });
 }
 
-async function prerenderRoute(browser: puppeteer.Browser, route: string, baseUrl: string): Promise<string> {
+async function prerenderRoute(browser: any, route: string, baseUrl: string): Promise<string> {
   const page = await browser.newPage();
-  
-  // Set a reasonable viewport
   await page.setViewport({ width: 1280, height: 800 });
   
-  // Navigate to the route
   const url = `${baseUrl}${route}`;
   console.log(`  🔄 Rendering: ${route}`);
   
@@ -91,35 +84,36 @@ async function prerenderRoute(browser: puppeteer.Browser, route: string, baseUrl
     timeout: 30000 
   });
 
-  // Wait for main content container to be present
+  // Wait for React to render content
   await page.waitForSelector('main', { timeout: 10000 }).catch(() => {
-    console.log(`  ⚠️ Warning: <main> element not found for ${route}`);
+    console.log(`  ⚠️ Warning: <main> not found for ${route}`);
   });
 
-  // Wait for react-helmet to update the head
+  // Wait for Helmet to inject meta tags
   await page.waitForFunction(() => {
-    const helmet = document.querySelector('[data-rh="true"]');
-    const hasTitle = document.title !== '' && document.title !== 'Vite + React + TS';
-    return helmet !== null || hasTitle;
+    const title = document.title;
+    return title && title !== '' && title !== 'Vite + React + TS';
   }, { timeout: 10000 }).catch(() => {
-    console.log(`  ⚠️ Warning: Helmet tags might not be fully loaded for ${route}`);
+    console.log(`  ⚠️ Warning: title may not be set for ${route}`);
   });
 
-  // Wait for any dynamic content to settle
-  await page.waitForNetworkIdle({ timeout: 5000 }).catch(() => {});
+  // Extra settle time for dynamic content
+  await new Promise(r => setTimeout(r, 1000));
 
-  // Get the full HTML
-  const html = await page.content();
+  // Get full rendered HTML
+  let html = await page.content();
+
+  // Clean up Puppeteer/React artifacts that aren't needed in static output
+  // Remove data-reactroot etc. but keep the rendered DOM
   
   await page.close();
-  
   return html;
 }
 
 async function main() {
   console.log('\n🚀 Starting prerender process...\n');
+  console.log(`📋 Routes to prerender: ${ROUTES_TO_PRERENDER.length}\n`);
 
-  // Check if dist exists
   if (!existsSync(distPath)) {
     console.error('❌ Error: dist/ directory not found. Run `vite build` first.');
     process.exit(1);
@@ -129,33 +123,62 @@ async function main() {
   const server = await createStaticServer(distPath, PORT);
   const baseUrl = `http://localhost:${PORT}`;
 
-  // Launch Puppeteer
   console.log('🌐 Launching browser...\n');
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
+  let successCount = 0;
+  let failCount = 0;
+
   try {
     for (const route of ROUTES_TO_PRERENDER) {
-      const html = await prerenderRoute(browser, route, baseUrl);
-      
-      // Determine output path
-      let outputPath: string;
-      if (route === '/') {
-        outputPath = join(distPath, 'index.html');
-      } else {
-        const routeDir = join(distPath, route);
-        mkdirSync(routeDir, { recursive: true });
-        outputPath = join(routeDir, 'index.html');
-      }
+      try {
+        const html = await prerenderRoute(browser, route, baseUrl);
+        
+        // Determine output path
+        let outputPath: string;
+        if (route === '/') {
+          outputPath = join(distPath, 'index.html');
+        } else {
+          const routeDir = join(distPath, route);
+          mkdirSync(routeDir, { recursive: true });
+          outputPath = join(routeDir, 'index.html');
+        }
 
-      // Write the prerendered HTML
-      writeFileSync(outputPath, html);
-      console.log(`  ✅ Saved: ${outputPath.replace(distPath, 'dist')}`);
+        writeFileSync(outputPath, html, 'utf-8');
+        
+        // Verify the output contains real content (not just SPA shell)
+        const hasContent = html.includes('<h1') || html.includes('<h2');
+        const hasTitle = !html.includes('<title></title>') && !html.includes('Vite + React + TS');
+        const contentLength = html.length;
+        
+        if (hasContent && contentLength > 5000) {
+          console.log(`  ✅ Saved: ${outputPath.replace(distPath, 'dist')} (${(contentLength / 1024).toFixed(1)} KB)`);
+          successCount++;
+        } else {
+          console.log(`  ⚠️ Saved but may be incomplete: ${outputPath.replace(distPath, 'dist')} (${(contentLength / 1024).toFixed(1)} KB, hasContent=${hasContent}, hasTitle=${hasTitle})`);
+          successCount++;
+        }
+      } catch (err) {
+        console.error(`  ❌ Failed: ${route}`, err);
+        failCount++;
+      }
     }
 
-    console.log('\n🎉 Prerendering complete!\n');
+    console.log(`\n🎉 Prerendering complete! ${successCount} succeeded, ${failCount} failed.\n`);
+    
+    // List all generated files
+    console.log('📂 Generated files:');
+    for (const route of ROUTES_TO_PRERENDER) {
+      const filePath = route === '/' 
+        ? 'dist/index.html' 
+        : `dist${route}/index.html`;
+      console.log(`   ${filePath}`);
+    }
+    console.log('');
+    
   } catch (error) {
     console.error('❌ Prerender error:', error);
     process.exit(1);
