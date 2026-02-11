@@ -223,7 +223,7 @@ export const FuelCalculator = () => {
       </div>
 
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
-      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6 max-w-2xl mx-auto">
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6 max-w-3xl mx-auto">
 
         {/* ── Wybierz tryb + route/distance ── */}
         <div className="p-4 md:p-5 border-b border-border">

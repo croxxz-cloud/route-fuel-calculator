@@ -62,7 +62,7 @@ export const ConsumptionHelper = ({ onSelect, fuelType = 'pb95' }: ConsumptionHe
           sideOffset={4}
         >
           {carTypes.map((car) => (
-            <SelectItem key={car.value} value={car.value} className="cursor-pointer hover:bg-secondary">
+            <SelectItem key={car.value} value={car.value} className="cursor-pointer hover:bg-accent focus:bg-accent">
               <div className="flex flex-col py-0.5">
                 <span className="font-medium text-foreground">{car.label}</span>
                 <span className="text-xs text-muted-foreground">{car.description}</span>
