@@ -225,12 +225,60 @@ export const FuelCalculator = () => {
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
       <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
 
-        {/* ── Section 1: Mode selector ── */}
-        <div className="p-4 md:p-6 border-b border-border">
-          <CalculatorModeSelector mode={mode} onChange={setMode} />
+        {/* ── Row 1: Combined mode + vehicle type ── */}
+        <div className="p-4 md:p-5 border-b border-border">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Mode */}
+            <button
+              onClick={() => setMode('route')}
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                mode === 'route'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <ArrowRight className="w-4 h-4" />
+              Trasa A → B
+            </button>
+            <button
+              onClick={() => setMode('manual')}
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                mode === 'manual'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Własny dystans
+            </button>
+
+            <div className="w-px h-6 bg-border mx-1 hidden md:block" />
+
+            <button
+              onClick={() => setVehicleType('fuel')}
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                vehicleType === 'fuel'
+                  ? 'bg-foreground text-background shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Car className="w-4 h-4" />
+              Spalinowy
+            </button>
+            <button
+              onClick={() => setVehicleType('electric')}
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                vehicleType === 'electric'
+                  ? 'bg-foreground text-background shadow-md'
+                  : 'bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Zap className="w-4 h-4" />
+              Elektryczny
+            </button>
+          </div>
         </div>
 
-        {/* ── Section 2: Route / Distance ── */}
+        {/* ── Row 2: Route / Distance ── */}
         <div className="p-4 md:p-6 border-b border-border">
           {mode === 'route' ? (
             <div className="space-y-4">
@@ -270,14 +318,14 @@ export const FuelCalculator = () => {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3 max-w-sm">
+            <div className="flex items-center justify-center gap-3">
               <Car className="w-5 h-5 text-primary flex-shrink-0" />
               <Input
                 type="number"
                 value={manualDistance}
                 onChange={(e) => setManualDistance(e.target.value)}
-                placeholder="Wpisz dystans w km"
-                className="h-11 text-base"
+                placeholder="Wpisz dystans"
+                className="h-11 text-base max-w-[200px] text-center"
                 min="0"
               />
               <span className="text-sm text-muted-foreground font-medium">km</span>
@@ -285,112 +333,116 @@ export const FuelCalculator = () => {
           )}
         </div>
 
-        {/* ── Section 3: Vehicle type ── */}
-        <div className="p-4 md:px-6 border-b border-border">
-          <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
-        </div>
+        {/* ── Row 3: Fuel/Energy config — stacked vertically, centered ── */}
+        <div className="p-4 md:p-6 border-b border-border">
+          <div className="max-w-md mx-auto space-y-4">
+            {vehicleType === 'fuel' ? (
+              <>
+                {/* Fuel type tiles */}
+                <GasStationPrices 
+                  prices={prices} 
+                  vehicleType={vehicleType}
+                  selectedFuel={fuelType}
+                  onFuelSelect={setFuelType}
+                />
 
-        {/* ── Section 4: Fuel selection ── */}
-        <div className="p-4 md:px-6 border-b border-border">
-          <div className="max-w-md mx-auto">
-            <GasStationPrices 
-              prices={prices} 
-              vehicleType={vehicleType}
-              selectedFuel={fuelType}
-              onFuelSelect={setFuelType}
-            />
+                {/* Consumption */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-sm font-medium text-foreground">Spalanie</label>
+                    <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
+                  </div>
+                  <div className="relative">
+                    <Fuel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                    <Input
+                      type="number"
+                      value={fuelConsumption}
+                      onChange={(e) => setFuelConsumption(e.target.value)}
+                      placeholder="7.0"
+                      className="pl-10 pr-20 h-11"
+                      step="0.1"
+                      min="0"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">L/100km</span>
+                  </div>
+                </div>
+
+                {/* Fuel price */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-sm font-medium text-foreground">Cena paliwa</label>
+                    <span className="text-[11px] text-muted-foreground">lub wpisz własną</span>
+                  </div>
+                  <div className={`relative transition-all duration-500 rounded-lg ${
+                    fuelPriceHighlight 
+                      ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
+                      : ''
+                  }`}>
+                    <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                    <Input
+                      type="number"
+                      value={fuelPrice}
+                      onChange={(e) => setFuelPrice(e.target.value)}
+                      placeholder="5.89"
+                      className="pl-10 pr-14 h-11"
+                      step="0.01"
+                      min="0"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł/L</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <GasStationPrices 
+                  prices={prices} 
+                  vehicleType={vehicleType}
+                  selectedFuel={fuelType}
+                  onFuelSelect={setFuelType}
+                />
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Zużycie energii</label>
+                  <div className="relative">
+                    <Battery className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
+                    <Input
+                      type="number"
+                      value={electricConsumption}
+                      onChange={(e) => setElectricConsumption(e.target.value)}
+                      placeholder="18"
+                      className="pl-10 pr-24 h-11"
+                      step="0.1"
+                      min="0"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">kWh/100km</span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Typowo 15-25 kWh/100km</p>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Cena prądu</label>
+                  <div className="relative">
+                    <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
+                    <Input
+                      type="number"
+                      value={electricPrice}
+                      onChange={(e) => setElectricPrice(e.target.value)}
+                      placeholder="0.89"
+                      className="pl-10 pr-16 h-11"
+                      step="0.01"
+                      min="0"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł/kWh</span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2 zł, dom: ~0.65 zł</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* ── Section 5: Parameters ── */}
-        <div className="p-4 md:p-6 border-b border-border">
-          {vehicleType === 'fuel' ? (
-            <div className="grid grid-cols-2 gap-4 max-w-sm">
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Spalanie (L/100km)
-                </label>
-                <div className="relative">
-                  <Fuel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                  <Input
-                    type="number"
-                    value={fuelConsumption}
-                    onChange={(e) => setFuelConsumption(e.target.value)}
-                    placeholder="7.0"
-                    className="pl-10 h-10 text-sm"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-                <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">
-                  Cena paliwa (zł/L)
-                </label>
-                <p className="text-[10px] text-primary/70 mb-0.5">lub wpisz własną</p>
-                <div className={`relative transition-all duration-500 rounded-lg ${
-                  fuelPriceHighlight 
-                    ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
-                    : ''
-                }`}>
-                  <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                  <Input
-                    type="number"
-                    value={fuelPrice}
-                    onChange={(e) => setFuelPrice(e.target.value)}
-                    placeholder="5.89"
-                    className="pl-10 h-10 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-4 max-w-sm">
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Zużycie (kWh/100km)
-                </label>
-                <div className="relative">
-                  <Battery className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
-                  <Input
-                    type="number"
-                    value={electricConsumption}
-                    onChange={(e) => setElectricConsumption(e.target.value)}
-                    placeholder="18"
-                    className="pl-10 h-10 text-sm"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-                <p className="text-[10px] text-muted-foreground mt-1">15-25 kWh typowo</p>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                  Cena (zł/kWh)
-                </label>
-                <div className="relative">
-                  <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-success" />
-                  <Input
-                    type="number"
-                    value={electricPrice}
-                    onChange={(e) => setElectricPrice(e.target.value)}
-                    placeholder="0.89"
-                    className="pl-10 h-10 text-sm"
-                    step="0.01"
-                    min="0"
-                  />
-                </div>
-                <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2zł, dom: ~0.65zł</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ── Section 6: Options (round trip + tolls) ── */}
-        <div className="px-4 md:px-6 py-3 border-b border-border bg-muted/30 flex flex-wrap items-center gap-x-8 gap-y-2">
+        {/* ── Row 4: Options bar ── */}
+        <div className="px-4 md:px-6 py-3 border-b border-border bg-muted/30 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
             <span className="text-sm text-foreground">W obie strony?</span>
@@ -417,14 +469,14 @@ export const FuelCalculator = () => {
           </div>
         </div>
 
-        {/* ── Section 7: CTA Button ── */}
-        <div className="p-4 md:p-6">
+        {/* ── Row 5: CTA ── */}
+        <div className="p-5 md:p-8">
           <Button
             onClick={handleCalculate}
             disabled={!canCalculate}
-            className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl transition-all hover:shadow-2xl active:scale-[0.99]"
+            className="w-full h-16 text-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-2xl transition-all hover:shadow-2xl active:scale-[0.99]"
           >
-            <Calculator className="w-6 h-6 mr-2" />
+            <Calculator className="w-7 h-7 mr-3" />
             Policz koszt trasy
           </Button>
         </div>
