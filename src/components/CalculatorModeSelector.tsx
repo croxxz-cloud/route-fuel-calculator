@@ -9,7 +9,7 @@ interface CalculatorModeSelectorProps {
 
 export const CalculatorModeSelector = ({ mode, onChange }: CalculatorModeSelectorProps) => {
   return (
-    <div className="grid grid-cols-2 gap-2 mb-6">
+    <div className="grid grid-cols-2 gap-2">
       <button
         onClick={() => onChange('route')}
         className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${

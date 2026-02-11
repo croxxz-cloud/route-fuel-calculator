@@ -54,6 +54,7 @@ export const FuelCalculator = () => {
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
   const [cost, setCost] = useState<number | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [fuelPriceHighlight, setFuelPriceHighlight] = useState(false);
   
   const { prices } = useFuelPrices();
 
@@ -76,6 +77,9 @@ export const FuelCalculator = () => {
   useEffect(() => {
     if (vehicleType === 'fuel') {
       setFuelPrice(prices[fuelType].toFixed(2));
+      // Flash highlight on fuel price field
+      setFuelPriceHighlight(true);
+      setTimeout(() => setFuelPriceHighlight(false), 500);
       // Auto-adjust consumption based on fuel type multiplier
       const prevMult = CONSUMPTION_MULTIPLIERS[prevFuelTypeRef.current] || 1;
       const newMult = CONSUMPTION_MULTIPLIERS[fuelType] || 1;
@@ -239,7 +243,7 @@ export const FuelCalculator = () => {
       <div className="grid lg:grid-cols-[340px_1fr] gap-4 lg:gap-6">
         {/* Left Column - Route/Distance */}
         <div className="space-y-3 lg:space-y-4">
-          {/* Calculator Mode */}
+          {/* Calculator Mode - LEFT COLUMN on mobile, but we move it above right on desktop via order */}
           <div className="bg-card border border-border rounded-xl p-4">
             <label className="text-xs font-bold text-foreground mb-2 block">
               Wybierz tryb obliczeń:
@@ -381,10 +385,15 @@ export const FuelCalculator = () => {
 
                 {/* Fuel Price */}
                 <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">
                     Cena paliwa (zł/L)
                   </label>
-                  <div className="relative">
+                  <p className="text-[10px] text-primary/70 mb-1.5">lub wpisz własną cenę</p>
+                  <div className={`relative transition-all duration-500 rounded-lg ${
+                    fuelPriceHighlight 
+                      ? 'ring-2 ring-primary shadow-[0_0_12px_hsl(var(--primary)/0.3)]' 
+                      : ''
+                  }`}>
                     <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                     <Input
                       type="number"
@@ -396,9 +405,6 @@ export const FuelCalculator = () => {
                       min="0"
                     />
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">
-                    Możesz wpisać własną cenę
-                  </p>
                 </div>
               </div>
             ) : (
