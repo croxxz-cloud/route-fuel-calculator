@@ -26,7 +26,8 @@ import {
   Calculator,
   Sparkles,
   Zap,
-  Battery
+  Battery,
+  Receipt
 } from 'lucide-react';
 
 interface Coordinates {
@@ -248,7 +249,7 @@ export const FuelCalculator = () => {
       </div>
 
       {/* Route/Distance inputs - full width */}
-      <div className="bg-card border border-border rounded-xl p-4 mb-4">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-5 mb-4">
         {mode === 'route' ? (
           <div className="space-y-3">
             <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
@@ -274,29 +275,27 @@ export const FuelCalculator = () => {
             </div>
 
             {(isCalculatingDistance || autoDistance !== null) && (
-              <div className="bg-input rounded-lg p-3 border border-border max-w-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Car className="w-4 h-4 text-primary" />
-                    <span className="text-xs text-muted-foreground">Dystans</span>
-                  </div>
-                  {isCalculatingDistance ? (
-                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
-                  ) : (
-                    <span className="text-sm font-bold text-foreground">
-                      {autoDistance} km
-                    </span>
-                  )}
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Car className="w-5 h-5 text-primary" />
+                  <span className="text-sm text-muted-foreground">Wyznaczony dystans:</span>
                 </div>
+                {isCalculatingDistance ? (
+                  <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                ) : (
+                  <span className="text-2xl font-bold text-foreground">
+                    {autoDistance} <span className="text-base font-medium text-muted-foreground">km</span>
+                  </span>
+                )}
               </div>
             )}
           </div>
         ) : (
-          <div className="max-w-xs">
+          <div>
             <label className="block text-xs font-medium text-muted-foreground mb-2">
               Dystans (km)
             </label>
-            <div className="relative">
+            <div className="relative max-w-sm">
               <Car className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
               <Input
                 type="number"
@@ -319,26 +318,22 @@ export const FuelCalculator = () => {
         <VehicleTypeSelector value={vehicleType} onChange={setVehicleType} />
       </div>
 
-      {/* Fuel Selection - full width */}
-      <div className="mb-4">
-        <GasStationPrices 
-          prices={prices} 
-          vehicleType={vehicleType}
-          selectedFuel={fuelType}
-          onFuelSelect={setFuelType}
-        />
+      {/* Fuel Selection - centered, compact */}
+      <div className="flex justify-center mb-4">
+        <div className="w-full max-w-lg">
+          <GasStationPrices 
+            prices={prices} 
+            vehicleType={vehicleType}
+            selectedFuel={fuelType}
+            onFuelSelect={setFuelType}
+          />
+        </div>
       </div>
 
-      {/* Parameters + extras in one row */}
-      <div className="bg-card border border-border rounded-xl p-4 mb-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Calculator className="w-4 h-4 text-primary" />
-          <h2 className="font-semibold text-sm text-foreground">Parametry</h2>
-        </div>
-
+      {/* Parameters - consumption + price side by side */}
+      <div className="bg-card border border-border rounded-xl p-4 md:p-5 mb-4">
         {vehicleType === 'fuel' ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {/* Consumption */}
+          <div className="grid grid-cols-2 gap-4 max-w-md">
             <div>
               <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Spalanie (L/100km)
@@ -357,8 +352,6 @@ export const FuelCalculator = () => {
               </div>
               <ConsumptionHelper onSelect={setFuelConsumption} fuelType={fuelType} />
             </div>
-
-            {/* Fuel Price */}
             <div>
               <label className="block text-xs font-medium text-muted-foreground mb-1">
                 Cena paliwa (zł/L)
@@ -381,29 +374,9 @@ export const FuelCalculator = () => {
                 />
               </div>
             </div>
-
-            {/* Round trip */}
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                Opcje trasy
-              </label>
-              <div className="flex items-center gap-2 h-10 px-3 bg-input border border-border rounded-lg">
-                <RotateCcw className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <span className="text-xs text-foreground whitespace-nowrap">W obie strony</span>
-                <Switch checked={roundTrip} onCheckedChange={setRoundTrip} className="ml-auto" />
-              </div>
-              {roundTrip && distance && (
-                <p className="text-[10px] text-primary font-semibold mt-1">Łącznie: {effectiveDistance} km</p>
-              )}
-            </div>
-
-            {/* Tolls */}
-            <div>
-              <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
-            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 gap-4 max-w-md">
             <div>
               <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Zużycie (kWh/100km)
@@ -422,7 +395,6 @@ export const FuelCalculator = () => {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">15-25 kWh typowo</p>
             </div>
-
             <div>
               <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Cena (zł/kWh)
@@ -441,39 +413,47 @@ export const FuelCalculator = () => {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2zł, dom: ~0.65zł</p>
             </div>
-
-            {/* Round trip */}
-            <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                Opcje trasy
-              </label>
-              <div className="flex items-center gap-2 h-10 px-3 bg-input border border-border rounded-lg">
-                <RotateCcw className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <span className="text-xs text-foreground whitespace-nowrap">W obie strony</span>
-                <Switch checked={roundTrip} onCheckedChange={setRoundTrip} className="ml-auto" />
-              </div>
-              {roundTrip && distance && (
-                <p className="text-[10px] text-primary font-semibold mt-1">Łącznie: {effectiveDistance} km</p>
-              )}
-            </div>
-
-            {/* Tolls */}
-            <div>
-              <TollCostsInput value={tollCosts} onChange={setTollCosts} compact />
-            </div>
           </div>
         )}
 
-        {/* Calculate Button */}
-        <Button
-          onClick={handleCalculate}
-          disabled={!canCalculate}
-          className="w-full mt-4 h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
-        >
-          <Calculator className="w-5 h-5 mr-2" />
-          Policz koszt trasy
-        </Button>
+        {/* Extras row */}
+        <div className="flex flex-wrap items-center gap-6 mt-4 pt-4 border-t border-border">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <Switch checked={roundTrip} onCheckedChange={setRoundTrip} />
+            <span className="text-sm text-foreground">W obie strony?</span>
+            {roundTrip && distance && (
+              <span className="text-xs text-primary font-semibold">({effectiveDistance} km)</span>
+            )}
+          </label>
+
+          <div className="flex items-center gap-2">
+            <Receipt className="w-4 h-4 text-primary" />
+            <span className="text-sm text-foreground">Opłaty drogowe:</span>
+            <div className="relative w-24">
+              <Input
+                type="number"
+                value={tollCosts}
+                onChange={(e) => setTollCosts(e.target.value)}
+                placeholder="0"
+                className="h-8 text-sm pr-8"
+                step="1"
+                min="0"
+              />
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">zł</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* BIG Calculate Button */}
+      <Button
+        onClick={handleCalculate}
+        disabled={!canCalculate}
+        className="w-full mb-6 h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl"
+      >
+        <Calculator className="w-6 h-6 mr-2" />
+        Policz koszt trasy
+      </Button>
 
       {/* Results Section - full width */}
       <div id="results-section">
