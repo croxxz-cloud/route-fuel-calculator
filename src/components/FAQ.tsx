@@ -58,6 +58,16 @@ export const FAQ = () => {
         ))}
       </Accordion>
 
+      {/* Static FAQ content for SEO - visible in prerendered HTML, hidden visually */}
+      <div className="sr-only" aria-hidden="true">
+        {faqItems.map((item, index) => (
+          <div key={index}>
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </div>
+        ))}
+      </div>
+
       {/* FAQ Schema for SEO */}
       <script
         type="application/ld+json"
