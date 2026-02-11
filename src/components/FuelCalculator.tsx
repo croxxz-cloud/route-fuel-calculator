@@ -223,7 +223,7 @@ export const FuelCalculator = () => {
       </div>
 
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
-      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6 max-w-2xl mx-auto">
 
         {/* ── Wybierz tryb + route/distance ── */}
         <div className="p-4 md:p-5 border-b border-border">
@@ -231,7 +231,7 @@ export const FuelCalculator = () => {
           <div className="flex gap-2 justify-center mb-4">
             <button
               onClick={() => setMode('route')}
-              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 mode === 'route'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
@@ -242,7 +242,7 @@ export const FuelCalculator = () => {
             </button>
             <button
               onClick={() => setMode('manual')}
-              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 mode === 'manual'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
@@ -312,7 +312,7 @@ export const FuelCalculator = () => {
           <div className="flex gap-2 justify-center">
             <button
               onClick={() => setVehicleType('fuel')}
-              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 vehicleType === 'fuel'
                   ? 'bg-foreground text-background shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
@@ -323,7 +323,7 @@ export const FuelCalculator = () => {
             </button>
             <button
               onClick={() => setVehicleType('electric')}
-              className={`flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
                 vehicleType === 'electric'
                   ? 'bg-foreground text-background shadow-md'
                   : 'bg-muted text-muted-foreground hover:text-foreground'
