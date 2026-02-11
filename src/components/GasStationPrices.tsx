@@ -65,11 +65,11 @@ export const GasStationPrices = ({
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-muted-foreground">
-            Średnie ceny paliw ({formatDate(prices.lastUpdated)})
+          <span className="text-xs font-bold text-foreground">
+            Wybierz paliwo (kliknij)
           </span>
         </div>
-        <span className="text-[10px] text-muted-foreground">luty 2026</span>
+        <span className="text-[10px] text-muted-foreground">{formatDate(prices.lastUpdated)}</span>
       </div>
       
       <div className="grid grid-cols-4 gap-2">
@@ -83,12 +83,19 @@ export const GasStationPrices = ({
               key={fuel}
               type="button"
               onClick={() => onFuelSelect?.(fuel)}
-              className={`relative flex flex-col items-center p-2 rounded-lg transition-all border-2 ${
+              className={`relative flex flex-col items-center p-2 rounded-lg transition-all cursor-pointer border-2 ${
                 isSelected 
-                  ? 'border-primary bg-primary/5 scale-105 shadow-md' 
-                  : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                  ? 'border-primary bg-primary/10 scale-105 shadow-lg ring-2 ring-primary/30' 
+                  : 'border-border hover:border-primary/50 hover:bg-muted/50 hover:shadow-md hover:scale-[1.02]'
               }`}
             >
+              {/* Selected indicator */}
+              {isSelected && (
+                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary-foreground text-[8px] font-bold">✓</span>
+                </div>
+              )}
+              
               {/* Fuel label badge */}
               <div className={`${bgColor} text-white text-[10px] font-bold px-2 py-0.5 rounded mb-1.5`}>
                 {short}
@@ -106,10 +113,6 @@ export const GasStationPrices = ({
           );
         })}
       </div>
-      
-      <p className="text-[10px] text-muted-foreground text-center mt-3">
-        Kliknij cenę aby wybrać rodzaj paliwa
-      </p>
     </div>
   );
 };
