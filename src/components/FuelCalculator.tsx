@@ -231,23 +231,25 @@ export const FuelCalculator = () => {
           <div className="flex gap-2 justify-center mb-4">
             <button
               onClick={() => setMode('route')}
-              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+              className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
                 mode === 'route'
-                  ? 'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/30'
-                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary/40'
+                  : 'bg-background text-foreground/70 border-2 border-foreground/20 hover:border-foreground/40 hover:text-foreground hover:shadow-sm'
               }`}
             >
+              {mode === 'route' && <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-background rounded-full flex items-center justify-center"><span className="text-[8px] text-primary-foreground">✓</span></span>}
               <ArrowRight className="w-4 h-4" />
               Trasa A → B
             </button>
             <button
               onClick={() => setMode('manual')}
-              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+              className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
                 mode === 'manual'
-                  ? 'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/30'
-                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-primary/40'
+                  : 'bg-background text-foreground/70 border-2 border-foreground/20 hover:border-foreground/40 hover:text-foreground hover:shadow-sm'
               }`}
             >
+              {mode === 'manual' && <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-background rounded-full flex items-center justify-center"><span className="text-[8px] text-primary-foreground">✓</span></span>}
               Własny dystans
             </button>
           </div>
@@ -312,23 +314,25 @@ export const FuelCalculator = () => {
           <div className="flex gap-2 justify-center">
             <button
               onClick={() => setVehicleType('fuel')}
-              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+              className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
                 vehicleType === 'fuel'
-                  ? 'bg-foreground text-background shadow-md ring-2 ring-foreground/30'
-                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
+                  ? 'bg-foreground text-background shadow-lg ring-2 ring-foreground/30'
+                  : 'bg-background text-foreground/70 border-2 border-foreground/20 hover:border-foreground/40 hover:text-foreground hover:shadow-sm'
               }`}
             >
+              {vehicleType === 'fuel' && <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-background rounded-full flex items-center justify-center"><span className="text-[8px] text-primary-foreground">✓</span></span>}
               <Car className="w-4 h-4" />
               Spalinowy
             </button>
             <button
               onClick={() => setVehicleType('electric')}
-              className={`flex-1 max-w-[200px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+              className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
                 vehicleType === 'electric'
-                  ? 'bg-foreground text-background shadow-md ring-2 ring-foreground/30'
-                  : 'bg-muted text-muted-foreground border-2 border-border hover:border-foreground/30 hover:text-foreground'
+                  ? 'bg-foreground text-background shadow-lg ring-2 ring-foreground/30'
+                  : 'bg-background text-foreground/70 border-2 border-foreground/20 hover:border-foreground/40 hover:text-foreground hover:shadow-sm'
               }`}
             >
+              {vehicleType === 'electric' && <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary border-2 border-background rounded-full flex items-center justify-center"><span className="text-[8px] text-primary-foreground">✓</span></span>}
               <Zap className="w-4 h-4" />
               Elektryczny
             </button>
