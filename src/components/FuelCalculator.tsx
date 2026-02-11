@@ -239,17 +239,19 @@ export const FuelCalculator = () => {
         />
       </div>
 
+      {/* Calculator Mode - full width above grid */}
+      <div className="bg-card border border-border rounded-xl p-4 mb-4">
+        <label className="text-xs font-bold text-foreground mb-2 block">
+          Wybierz tryb obliczeń:
+        </label>
+        <CalculatorModeSelector mode={mode} onChange={setMode} />
+      </div>
+
       {/* Main Calculator Grid */}
       <div className="grid lg:grid-cols-[340px_1fr] gap-4 lg:gap-6">
         {/* Left Column - Route/Distance */}
         <div className="space-y-3 lg:space-y-4">
-          {/* Calculator Mode - LEFT COLUMN on mobile, but we move it above right on desktop via order */}
           <div className="bg-card border border-border rounded-xl p-4">
-            <label className="text-xs font-bold text-foreground mb-2 block">
-              Wybierz tryb obliczeń:
-            </label>
-            <CalculatorModeSelector mode={mode} onChange={setMode} />
-
             {mode === 'route' ? (
               <div className="space-y-3 mt-3">
                 <LocationInput
