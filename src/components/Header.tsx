@@ -47,6 +47,22 @@ export const Header = () => {
           )}
         </div>
       </nav>
+
+      {/* Static SEO nav - visible in prerendered HTML, hidden visually */}
+      <nav aria-label="Popularne trasy" className="sr-only">
+        <ul>
+          {routesData.map((route) => (
+            <li key={route.slug}>
+              <Link to={`/trasa/${route.slug}`}>
+                Koszt przejazdu {route.from} – {route.to} ({route.distance} km)
+              </Link>
+            </li>
+          ))}
+          <li><Link to="/kontakt">Kontakt</Link></li>
+          <li><Link to="/polityka-prywatnosci">Polityka prywatności</Link></li>
+          <li><Link to="/regulamin">Regulamin</Link></li>
+        </ul>
+      </nav>
     </header>
   );
 };
