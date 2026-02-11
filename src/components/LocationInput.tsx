@@ -97,7 +97,7 @@ export const LocationInput = ({
           value={value}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="pl-12 pr-10"
+          className="pl-12 pr-10 h-11 border-foreground/30 bg-background text-foreground"
           onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
         />
         {isLoading && (

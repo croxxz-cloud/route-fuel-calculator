@@ -223,7 +223,7 @@ export const FuelCalculator = () => {
       </div>
 
       {/* ═══ MAIN CALCULATOR CARD ═══ */}
-      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6 max-w-3xl mx-auto">
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden mb-6">
 
         {/* ── Wybierz tryb + route/distance ── */}
         <div className="p-4 md:p-5 border-b border-border">
@@ -337,7 +337,7 @@ export const FuelCalculator = () => {
 
         {/* ── Fuel/Energy config ── */}
         <div className="p-4 md:p-5 border-b border-border">
-          <div className="max-w-sm mx-auto space-y-3">
+          <div className="max-w-md mx-auto space-y-3">
             {vehicleType === 'fuel' ? (
               <>
                 <GasStationPrices 
