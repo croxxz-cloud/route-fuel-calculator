@@ -9,15 +9,15 @@ export const Header = () => {
 
   return (
     <header className="z-50 bg-background border-b border-border">
-      <nav className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="Trasomat.pl" className="h-14 w-auto" />
+      <nav className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between gap-2">
+        <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
+          <img src={logo} alt="Trasomat.pl" className="h-10 sm:h-14 md:h-16 w-auto" />
         </Link>
 
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <button
             onClick={() => setOpen(!open)}
-            className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-lg hover:bg-secondary/50"
+            className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-2 sm:px-3 py-2 rounded-lg hover:bg-secondary/50"
           >
             <MapPin className="w-4 h-4" />
             Popularne trasy
