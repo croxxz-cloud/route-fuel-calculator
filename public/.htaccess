@@ -1,3 +1,9 @@
+# Block third-party scripts and local network access
+<IfModule mod_headers.c>
+  Header set Permissions-Policy "local-fonts=(), bluetooth=(), serial=(), usb=(), hid=()"
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://nominatim.openstreetmap.org https://api.openrouteservice.org https://*.e-petrol.pl;"
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
