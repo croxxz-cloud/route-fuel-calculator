@@ -1,7 +1,35 @@
-# Block third-party scripts and local network access
+# ============================================
+# SECURITY HEADERS
+# ============================================
 <IfModule mod_headers.c>
-  Header set Permissions-Policy "local-fonts=(), bluetooth=(), serial=(), usb=(), hid=()"
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://nominatim.openstreetmap.org https://api.openrouteservice.org https://*.e-petrol.pl;"
+  # Content Security Policy - strict whitelist of allowed sources
+  Header set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://nominatim.openstreetmap.org https://api.openrouteservice.org https://router.project-osrm.org; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+
+  # Block all dangerous browser features
+  Header set Permissions-Policy "local-fonts=(), bluetooth=(), serial=(), usb=(), hid=(), camera=(), microphone=(), geolocation=(), payment=(), autoplay=(), fullscreen=(self), display-capture=(), document-domain=(), encrypted-media=(), interest-cohort=()"
+
+  # Prevent clickjacking
+  Header set X-Frame-Options "DENY"
+
+  # Prevent MIME-type sniffing
+  Header set X-Content-Type-Options "nosniff"
+
+  # Enable XSS filter
+  Header set X-XSS-Protection "1; mode=block"
+
+  # Control referrer information
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Force HTTPS
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # Block Private Network Access (Chrome PNA - the prompt you saw)
+  Header set Access-Control-Allow-Private-Network "false"
+
+  # Prevent cross-origin attacks
+  Header set Cross-Origin-Opener-Policy "same-origin"
+  Header set Cross-Origin-Embedder-Policy "credentialless"
+  Header set Cross-Origin-Resource-Policy "same-origin"
 </IfModule>
 
 <IfModule mod_rewrite.c>
