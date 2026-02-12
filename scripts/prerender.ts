@@ -139,9 +139,30 @@ async function main() {
   const baseUrl = `http://localhost:${PORT}`;
 
   console.log('🌐 Launching browser...\n');
+  
+  // Try to find Chrome executable - Puppeteer bundled first, then system Chrome
+  const possiblePaths = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+  ];
+  
+  let executablePath: string | undefined;
+  for (const p of possiblePaths) {
+    if (existsSync(p)) {
+      executablePath = p;
+      console.log(`  📍 Using system browser: ${p}`);
+      break;
+    }
+  }
+
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    ...(executablePath ? { executablePath } : {}),
   });
 
   let successCount = 0;
