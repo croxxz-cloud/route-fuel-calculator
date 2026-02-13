@@ -11,7 +11,7 @@ export const Header = () => {
     <header className="z-50 bg-background border-b border-border">
       <nav className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between gap-2">
         <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
-          <img src={logo} alt="Trasomat.pl" className="h-10 sm:h-14 md:h-16 w-auto" />
+          <img src={logo} alt="Trasomat.pl – kalkulator kosztów przejazdu" className="h-10 sm:h-14 md:h-16 w-auto" width={368} height={98} />
         </Link>
 
         <div className="relative flex-shrink-0">

@@ -5,28 +5,58 @@ import { Footer } from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Mail, Send, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Mail, Send, CheckCircle, ArrowLeft, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const WEB3FORMS_KEY = 'fa071a5b-fc9d-4041-9eb2-b29f4d1c6e8d';
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const mailtoBody = `Imię: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0A${encodeURIComponent(message)}`;
-    const mailtoSubject = encodeURIComponent(subject || 'Wiadomość z Kalkulatora Paliwa');
-    window.location.href = `mailto:kontakt@kalkulatorpaliwa.pl?subject=${mailtoSubject}&body=${mailtoBody}`;
-    setSent(true);
+    setStatus('sending');
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          name: name.trim(),
+          email: email.trim(),
+          subject: subject.trim() || 'Wiadomość z Trasomat.pl',
+          message: message.trim(),
+          from_name: 'Trasomat.pl',
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setStatus('success');
+        setName('');
+        setEmail('');
+        setSubject('');
+        setMessage('');
+      } else {
+        throw new Error(data.message || 'Wystąpił błąd');
+      }
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err instanceof Error ? err.message : 'Nie udało się wysłać wiadomości. Spróbuj ponownie.');
+    }
   };
 
   return (
     <>
       <Helmet>
-        <title>Kontakt | Kalkulator Paliwa</title>
+        <title>Kontakt | Trasomat.pl</title>
         <meta name="description" content="Skontaktuj się z nami. Masz pytanie, sugestię lub znalazłeś błąd? Napisz do nas." />
       </Helmet>
 
@@ -53,14 +83,14 @@ const Contact = () => {
               </div>
             </div>
 
-            {sent ? (
+            {status === 'success' ? (
               <div className="text-center py-12">
-                <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+                <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-foreground mb-2">Dziękujemy!</h2>
                 <p className="text-muted-foreground mb-6">
-                  Twoja wiadomość została przygotowana w programie pocztowym. Wyślij ją, a odpowiemy najszybciej jak to możliwe.
+                  Twoja wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.
                 </p>
-                <Button variant="outline" onClick={() => setSent(false)}>
+                <Button variant="outline" onClick={() => setStatus('idle')}>
                   Wyślij kolejną wiadomość
                 </Button>
               </div>
@@ -68,10 +98,11 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                    <label htmlFor="contact-name" className="block text-sm font-medium text-foreground mb-1.5">
                       Imię i nazwisko
                     </label>
                     <Input
+                      id="contact-name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Jan Kowalski"
@@ -80,10 +111,11 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                    <label htmlFor="contact-email" className="block text-sm font-medium text-foreground mb-1.5">
                       Adres e-mail
                     </label>
                     <Input
+                      id="contact-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -95,10 +127,11 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1.5">
+                  <label htmlFor="contact-subject" className="block text-sm font-medium text-foreground mb-1.5">
                     Temat
                   </label>
                   <Input
+                    id="contact-subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="Np. Błąd w kalkulatorze, Propozycja funkcji..."
@@ -107,10 +140,11 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1.5">
+                  <label htmlFor="contact-message" className="block text-sm font-medium text-foreground mb-1.5">
                     Wiadomość
                   </label>
                   <Textarea
+                    id="contact-message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Opisz swoje pytanie lub sugestię..."
@@ -123,9 +157,26 @@ const Contact = () => {
                   </p>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold gap-2">
-                  <Send className="w-4 h-4" />
-                  Wyślij wiadomość
+                {status === 'error' && (
+                  <p className="text-sm text-destructive text-center">{errorMsg}</p>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full h-12 text-base font-semibold gap-2"
+                  disabled={status === 'sending'}
+                >
+                  {status === 'sending' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Wysyłanie...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Wyślij wiadomość
+                    </>
+                  )}
                 </Button>
               </form>
             )}
