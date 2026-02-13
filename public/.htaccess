@@ -3,7 +3,7 @@
 # ============================================
 <IfModule mod_headers.c>
   # Content Security Policy - strict whitelist of allowed sources
-  Header set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://nominatim.openstreetmap.org https://api.openrouteservice.org https://router.project-osrm.org; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
+  Header set Content-Security-Policy "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://nominatim.openstreetmap.org https://api.openrouteservice.org https://router.project-osrm.org https://api.web3forms.com; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
 
   # Block all dangerous browser features
   Header set Permissions-Policy "local-fonts=(), bluetooth=(), serial=(), usb=(), hid=(), camera=(), microphone=(), geolocation=(), payment=(), autoplay=(), fullscreen=(self), display-capture=(), document-domain=(), encrypted-media=(), interest-cohort=()"

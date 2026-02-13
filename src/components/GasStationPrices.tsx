@@ -9,10 +9,10 @@ interface GasStationPricesProps {
 }
 
 const fuelLabels: Record<FuelType, { short: string; bgColor: string }> = {
-  pb95: { short: 'Pb95', bgColor: 'bg-emerald-600' },
-  pb98: { short: 'Pb98', bgColor: 'bg-blue-600' },
-  diesel: { short: 'ON', bgColor: 'bg-amber-600' },
-  lpg: { short: 'LPG', bgColor: 'bg-purple-600' },
+  pb95: { short: 'Pb95', bgColor: 'bg-emerald-700' },
+  pb98: { short: 'Pb98', bgColor: 'bg-blue-700' },
+  diesel: { short: 'ON', bgColor: 'bg-amber-700' },
+  lpg: { short: 'LPG', bgColor: 'bg-purple-700' },
 };
 
 export const GasStationPrices = ({ 
@@ -97,18 +97,18 @@ export const GasStationPrices = ({
               )}
               
               {/* Fuel label badge */}
-              <div className={`${bgColor} text-white text-[10px] font-bold px-2 py-0.5 rounded mb-1.5`}>
+              <div className={`${bgColor} text-white text-xs font-bold px-2 py-0.5 rounded mb-1.5`}>
                 {short}
               </div>
               
               {/* Price display - LED style */}
               <div className="bg-zinc-900 px-2 py-1 rounded border border-zinc-700">
-                <span className="font-mono text-base font-bold text-amber-400">
+                <span className="font-mono text-base font-bold text-amber-300">
                   {price.toFixed(2)}
                 </span>
               </div>
               
-              <span className="text-[9px] text-muted-foreground mt-1">zł/l</span>
+              <span className="text-xs text-muted-foreground mt-1">zł/l</span>
             </button>
           );
         })}
