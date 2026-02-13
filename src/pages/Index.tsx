@@ -16,7 +16,7 @@ const Index = () => {
           content="Darmowy kalkulator kosztów przejazdu. Oblicz ile zapłacisz za paliwo na trasie samochodem. Pb95, Pb98, Diesel, LPG. Aktualne ceny i realne trasy." 
         />
         <meta name="keywords" content="kalkulator paliwa, koszt przejazdu, kalkulator trasy, spalanie, diesel, lpg, pb95, kalkulator benzyny" />
-        <link rel="canonical" href="/" />
+        <link rel="canonical" href="https://trasomat.pl/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
