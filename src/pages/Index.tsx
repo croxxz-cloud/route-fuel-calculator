@@ -17,6 +17,38 @@ const Index = () => {
         />
         <meta name="keywords" content="kalkulator paliwa, koszt przejazdu, kalkulator trasy, spalanie, diesel, lpg, pb95, kalkulator benzyny" />
         <link rel="canonical" href="/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Kalkulator Kosztów Przejazdu – Trasomat",
+          "url": "https://trasomat.pl/",
+          "applicationCategory": "TravelApplication",
+          "applicationSubCategory": "Route Planning & Fuel/Energy Cost Calculator",
+          "operatingSystem": "Web",
+          "description": "Internetowy kalkulator kosztów przejazdu samochodem spalinowym i elektrycznym. Oblicza koszt paliwa lub energii na trasie A–B albo dla podanego dystansu, uwzględnia spalanie (l/100 km) lub zużycie energii (kWh/100 km), ceny paliw (Pb95, Pb98, ON, LPG) lub energii elektrycznej, przejazd w obie strony oraz opłaty drogowe.",
+          "inLanguage": "pl-PL",
+          "browserRequirements": "Wymaga przeglądarki internetowej z włączoną obsługą JavaScript",
+          "featureList": [
+            "Obliczanie kosztu przejazdu między miastami (Trasa A–B)",
+            "Kalkulacja dla własnego dystansu (km)",
+            "Obsługa pojazdów spalinowych i elektrycznych",
+            "Obsługa paliw: Pb95, Pb98, ON, LPG",
+            "Kalkulacja kosztu energii elektrycznej (kWh/100 km)",
+            "Możliwość podania własnej ceny paliwa lub energii",
+            "Opcja przejazdu w obie strony",
+            "Uwzględnianie opłat drogowych"
+          ],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "PLN"
+          },
+          "provider": {
+            "@type": "Organization",
+            "name": "Trasomat",
+            "url": "https://trasomat.pl/"
+          }
+        })}</script>
       </Helmet>
       
       <div className="min-h-screen bg-background flex flex-col">
