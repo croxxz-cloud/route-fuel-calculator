@@ -368,7 +368,7 @@ export const FuelCalculator = () => {
                       step="0.1"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">L/100km</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">L/100km</span>
                   </div>
                 </div>
 
@@ -393,7 +393,7 @@ export const FuelCalculator = () => {
                       step="0.01"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">zł/L</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">zł/L</span>
                   </div>
                 </div>
               </>
@@ -419,9 +419,9 @@ export const FuelCalculator = () => {
                       step="0.1"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">kWh/100km</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">kWh/100km</span>
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">Typowo 15-25 kWh/100km</p>
+                  <p className="text-xs text-muted-foreground mt-1">Typowo 15-25 kWh/100km</p>
                 </div>
 
                 <div>
@@ -437,9 +437,9 @@ export const FuelCalculator = () => {
                       step="0.01"
                       min="0"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/60 font-medium">zł/kWh</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">zł/kWh</span>
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">DC: ~1-2 zł, dom: ~0.65 zł</p>
+                  <p className="text-xs text-muted-foreground mt-1">DC: ~1-2 zł, dom: ~0.65 zł</p>
                 </div>
               </>
             )}
