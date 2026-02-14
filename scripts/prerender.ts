@@ -113,15 +113,15 @@ function injectSeo(
     html = html.replace('</head>', `  <link rel="canonical" href="${opts.canonical}" />\n  </head>`);
   }
 
-  // Add sr-only style for prerendered content (prevents FOUC, keeps SEO)
-  if (!html.includes('.prerender-seo')) {
-    html = html.replace('</head>', `  <style>.prerender-seo{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>\n  </head>`);
+  // Add sr-only style for static content (prevents FOUC while keeping crawlable content)
+  if (!html.includes('.noscript-fallback')) {
+    html = html.replace('</head>', `  <style>.noscript-fallback{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>\n  </head>`);
   }
 
   // Inject body HTML into <div id="root"> (visible to crawlers before JS loads)
   html = html.replace(
     '<div id="root"></div>',
-    `<div id="root"><div class="prerender-seo">${opts.bodyHtml}</div></div>`
+    `<div id="root"><div class="noscript-fallback">${opts.bodyHtml}</div></div>`
   );
 
   // Add JSON-LD scripts before </body>
