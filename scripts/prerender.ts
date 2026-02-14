@@ -153,7 +153,73 @@ function buildHomePage(shell: string): string {
 <main>
   <h1>Kalkulator Kosztów Przejazdu 2026: Oblicz Koszt Paliwa na Trasie</h1>
   <p>Darmowy kalkulator kosztów przejazdu samochodem. Oblicz ile zapłacisz za paliwo na trasie. Pb95, Pb98, Diesel, LPG. Aktualne ceny i realne trasy.</p>
-  
+
+  <section aria-label="Kalkulator kosztów przejazdu">
+    <h2>Kalkulator paliwa online</h2>
+    <form aria-label="Oblicz koszt przejazdu">
+      <fieldset>
+        <legend>Tryb kalkulacji</legend>
+        <label><input type="radio" name="mode" value="route" checked /> Trasa A → B (automatycznie wyznacz dystans)</label>
+        <label><input type="radio" name="mode" value="distance" /> Własny dystans (podaj kilometry ręcznie)</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Punkty trasy</legend>
+        <label>Skąd: <input type="text" placeholder="np. Warszawa" /></label>
+        <label>Dokąd: <input type="text" placeholder="np. Kraków" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Typ pojazdu</legend>
+        <label><input type="radio" name="vehicle" value="fuel" checked /> Samochód spalinowy</label>
+        <label><input type="radio" name="vehicle" value="electric" /> Samochód elektryczny</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Rodzaj paliwa</legend>
+        <label><input type="radio" name="fuel" value="pb95" checked /> Pb95</label>
+        <label><input type="radio" name="fuel" value="pb98" /> Pb98</label>
+        <label><input type="radio" name="fuel" value="diesel" /> Diesel (ON)</label>
+        <label><input type="radio" name="fuel" value="lpg" /> LPG</label>
+      </fieldset>
+
+      <label>Spalanie (l/100 km): <input type="number" value="7" min="1" max="30" step="0.1" /></label>
+      <label>Cena paliwa (zł/l): <input type="number" value="5.89" min="0.5" max="15" step="0.01" /></label>
+
+      <fieldset>
+        <legend>Opcje dodatkowe</legend>
+        <label><input type="checkbox" name="roundtrip" /> Przejazd w obie strony (podwaja dystans)</label>
+        <label>Opłaty drogowe (zł): <input type="number" value="0" min="0" step="1" /></label>
+        <label>Podziel koszt na pasażerów: <input type="number" value="1" min="1" max="20" /></label>
+      </fieldset>
+
+      <button type="submit">Policz koszt trasy</button>
+    </form>
+
+    <div aria-label="Przykładowy wynik kalkulacji">
+      <h3>Wynik kalkulacji</h3>
+      <ul>
+        <li>Koszt przejazdu: obliczany automatycznie w zł</li>
+        <li>Dystans trasy: na podstawie realnej trasy drogowej (OpenStreetMap)</li>
+        <li>Szacowany czas przejazdu</li>
+        <li>Zużycie paliwa w litrach lub energii w kWh</li>
+        <li>Porównanie kosztów: Pb95 vs Pb98 vs Diesel vs LPG</li>
+        <li>Porównanie: samochód spalinowy vs elektryczny</li>
+      </ul>
+    </div>
+
+    <h3>Aktualne średnie ceny paliw w Polsce (luty 2026)</h3>
+    <table>
+      <thead><tr><th>Paliwo</th><th>Cena za litr</th></tr></thead>
+      <tbody>
+        <tr><td>Pb95</td><td>5,89 zł/l</td></tr>
+        <tr><td>Pb98</td><td>6,58 zł/l</td></tr>
+        <tr><td>Diesel (ON)</td><td>5,82 zł/l</td></tr>
+        <tr><td>LPG</td><td>2,62 zł/l</td></tr>
+      </tbody>
+    </table>
+  </section>
+
   <section>
     <h2>Jak obliczyć koszt przejazdu samochodem?</h2>
     <p>Planowanie budżetu na podróż samochodem sprowadza się do trzech rzeczy: ile kilometrów jedziesz, ile pali Twój samochód i ile kosztuje paliwo. Wzór jest prosty: dzielisz dystans przez 100, mnożysz przez spalanie i cenę litra.</p>
