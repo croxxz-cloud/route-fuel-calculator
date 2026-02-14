@@ -113,11 +113,16 @@ function injectSeo(
     html = html.replace('</head>', `  <link rel="canonical" href="${opts.canonical}" />\n  </head>`);
   }
 
+  // Add base styles for static shell — matches app's font/colors to minimize layout shift
+  if (!html.includes('.static-shell')) {
+    html = html.replace('</head>', `  <style>.static-shell{font-family:Inter,system-ui,sans-serif;color:hsl(0 0% 10%);max-width:72rem;margin:0 auto;padding:1rem 1rem 2rem;line-height:1.6}.static-shell h1{font-size:1.75rem;font-weight:700;margin:0.5rem 0}.static-shell h2{font-size:1.25rem;font-weight:600;margin:1.5rem 0 0.5rem}.static-shell h3{font-size:1rem;font-weight:600;margin:1rem 0 0.25rem}.static-shell p{margin:0.25rem 0;color:hsl(0 0% 38%)}.static-shell a{color:hsl(0 85% 45%);text-decoration:none}.static-shell nav ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:0.5rem}.static-shell table{width:100%;border-collapse:collapse;margin:0.5rem 0}.static-shell th,.static-shell td{text-align:left;padding:0.35rem 0.75rem;border-bottom:1px solid hsl(0 0% 88%)}.static-shell footer{margin-top:2rem;padding-top:1rem;border-top:1px solid hsl(0 0% 88%);font-size:0.85rem;color:hsl(0 0% 38%)}</style>\n  </head>`);
+  }
+
   // Inject static HTML into <div id="root"> — visible to users AND crawlers.
   // React's createRoot replaces this content once JS loads (SSG pattern).
   html = html.replace(
     '<div id="root"></div>',
-    `<div id="root">${opts.bodyHtml}</div>`
+    `<div id="root"><div class="static-shell">${opts.bodyHtml}</div></div>`
   );
 
   // Add JSON-LD scripts before </body>
