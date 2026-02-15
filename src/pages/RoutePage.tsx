@@ -53,25 +53,24 @@ const RoutePage = () => {
 
         {/* Hero Section */}
         <div className="bg-card border border-border rounded-2xl p-6 md:p-8 mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Route className="w-6 h-6 text-primary" />
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <Route className="w-5 h-5 md:w-6 md:h-6 text-primary" />
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground break-words">
                 Koszt przejazdu {route.from} – {route.to}
               </h1>
-              <p className="text-muted-foreground">Ile kosztuje przejazd samochodem?</p>
+              <p className="text-sm md:text-base text-muted-foreground">Ile kosztuje przejazd samochodem?</p>
             </div>
           </div>
 
-          <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6">
-            <p className="text-lg text-foreground leading-relaxed">
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
+            <p className="text-base md:text-lg text-foreground leading-relaxed">
               Szacunkowy koszt przejazdu na trasie <strong>{route.from} – {route.to}</strong> to{' '}
-              <span className="text-primary font-bold text-2xl">{estimatedCost} zł</span>{' '}
-              (przy cenie paliwa {route.defaultFuelPrice.toFixed(2)} zł za litr). 
-              Dystans wynosi <strong>{route.distance} km</strong>, przy średnim spalaniu 
-              na poziomie <strong>{route.defaultConsumption} L/100km</strong>.
+              <span className="text-primary font-bold text-xl md:text-2xl">{estimatedCost} zł</span>{' '}
+              (przy cenie paliwa {route.defaultFuelPrice.toFixed(2)} zł/l). 
+              Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>.
             </p>
           </div>
 
