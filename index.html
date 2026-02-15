@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
     <style>
-      /* Prevent CLS flash: smooth static-shell → React transition */
-      #root { opacity: 1; transition: opacity 0.15s ease-out; }
-      #root.hydrating { opacity: 0; }
+      /* CSS-only fade for static shell; React removes .static-shell naturally */
+      .static-shell { animation: shellFade 0.2s ease-out 0.05s both; }
+      @keyframes shellFade { from { opacity: .92; } to { opacity: 1; } }
     </style>
     
     <title>Kalkulator Kosztów Przejazdu 2026 - Oblicz Koszt Paliwa</title>
