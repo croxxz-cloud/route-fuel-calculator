@@ -18,6 +18,8 @@ export const TollCostsInput = ({ value, onChange, compact = false }: TollCostsIn
         <div className="relative">
           <Input
             type="number"
+            inputMode="decimal"
+            style={{ fontSize: '16px' }}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="0"
@@ -45,6 +47,8 @@ export const TollCostsInput = ({ value, onChange, compact = false }: TollCostsIn
       <div className="relative">
         <Input
           type="number"
+            inputMode="decimal"
+            style={{ fontSize: '16px' }}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="0"

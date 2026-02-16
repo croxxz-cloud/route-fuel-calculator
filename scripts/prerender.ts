@@ -253,7 +253,7 @@ function buildHomePage(shell: string): string {
   <section>
     <h2>O Serwisie</h2>
     <p>Kalkulator Paliwa to niezależne narzędzie stworzone z myślą o kierowcach planujących podróże po Polsce i Europie.</p>
-    <h3>Wiarygodne dane</h3><p>Ceny paliw opieramy na danych e-petrol.pl i aktualizujemy co tydzień.</p>
+    <h3>Wiarygodne dane</h3><p>Ceny paliw opieramy na aktualnych danych i aktualizujemy co tydzień.</p>
     <h3>Realne trasy</h3><p>Dystanse i czasy przejazdu bazują na OpenStreetMap i OpenRouteService.</p>
     <h3>Prywatność</h3><p>Nie zbieramy danych osobowych. Obliczenia wykonywane są bezpośrednio w Twojej przeglądarce.</p>
     <h3>Regularnie aktualizowane</h3><p>Ceny paliw, opłaty drogowe i winiety aktualizujemy regularnie.</p>
