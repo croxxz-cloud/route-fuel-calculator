@@ -26,9 +26,18 @@ const RoutePage = () => {
     );
   }
 
-  const fuelOnlyCost = ((route.distance / 100) * route.defaultConsumption * route.defaultFuelPrice);
+  // Calculate cost per variant to find min/max
+  const variantCosts = route.variants.map((variant) => {
+    const fuel = (variant.distance / 100) * route.defaultConsumption * route.defaultFuelPrice;
+    const toll = (route.hasTolls && variant.tollIndices && variant.tollIndices.length > 0)
+      ? variant.tollIndices.reduce((sum, idx) => sum + (route.tollSections[idx]?.cost ?? 0), 0)
+      : 0;
+    return { fuel, toll, total: fuel + toll };
+  });
+  const minCost = Math.min(...variantCosts.map(v => v.total));
+  const maxCost = Math.max(...variantCosts.map(v => v.total));
   const totalTollCost = route.tollSections.reduce((sum, toll) => sum + toll.cost, 0);
-  const estimatedCost = (fuelOnlyCost + totalTollCost).toFixed(0);
+  const hasRange = Math.abs(maxCost - minCost) > 1;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -36,7 +45,7 @@ const RoutePage = () => {
         <title>Koszt przejazdu {route.from} - {route.to} | Kalkulator Paliwa</title>
         <meta 
           name="description" 
-          content={`Oblicz koszt przejazdu na trasie ${route.from} - ${route.to}. Dystans ${route.distance} km. Szacunkowy koszt: ${estimatedCost} zł.`} 
+          content={`Oblicz koszt przejazdu na trasie ${route.from} - ${route.to}. Dystans ${route.distance} km. Szacunkowy koszt: od ${minCost.toFixed(0)} zł.`} 
         />
       </Helmet>
 
@@ -69,9 +78,18 @@ const RoutePage = () => {
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
             <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
               Szacunkowy koszt przejazdu na trasie <strong>{route.from} – {route.to}</strong> to{' '}
-              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">{estimatedCost} zł</span>{' '}
-              (paliwo: {fuelOnlyCost.toFixed(0)} zł{totalTollCost > 0 ? ` + opłaty drogowe: ${totalTollCost} zł` : ''}). 
-              Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>, cena paliwa: <strong>{route.defaultFuelPrice.toFixed(2)} zł/l</strong>.
+              {hasRange ? (
+                <>
+                  <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">{minCost.toFixed(0)}–{maxCost.toFixed(0)} zł</span>{' '}
+                  (w zależności od wybranego wariantu trasy).
+                </>
+              ) : (
+                <>
+                  <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">~{minCost.toFixed(0)} zł</span>.
+                </>
+              )}{' '}
+              Spalanie: <strong>{route.defaultConsumption} L/100km</strong>, cena paliwa: <strong>{route.defaultFuelPrice.toFixed(2)} zł/l</strong>.
+              {totalTollCost > 0 && <> Na niektórych wariantach mogą wystąpić opłaty drogowe (do {totalTollCost} zł).</>}
             </p>
           </div>
 
