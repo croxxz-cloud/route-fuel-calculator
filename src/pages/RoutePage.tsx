@@ -65,10 +65,10 @@ const RoutePage = () => {
             </div>
           </div>
 
-          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6 overflow-hidden">
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
             <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
-              Szacunkowy koszt przejazdu na trasie <strong className="whitespace-nowrap">{route.from} – {route.to}</strong> to{' '}
-              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl whitespace-nowrap">{estimatedCost} zł</span>{' '}
+              Szacunkowy koszt przejazdu na trasie <strong>{route.from} – {route.to}</strong> to{' '}
+              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">{estimatedCost} zł</span>{' '}
               (przy cenie paliwa {route.defaultFuelPrice.toFixed(2)} zł/l). 
               Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>.
             </p>
@@ -83,10 +83,10 @@ const RoutePage = () => {
         </div>
 
         {/* Route Variants */}
-        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6 overflow-hidden">
-          <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary" />
-            Do przejazdu możesz wybrać {route.variants.length} {route.variants.length === 1 ? 'trasę' : 'trasy'}:
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
+            <span className="break-words">Do przejazdu możesz wybrać {route.variants.length} {route.variants.length === 1 ? 'trasę' : 'trasy'}:</span>
           </h2>
 
           <div className="space-y-4">
