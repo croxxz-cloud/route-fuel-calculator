@@ -26,8 +26,9 @@ const RoutePage = () => {
     );
   }
 
-  const estimatedCost = ((route.distance / 100) * route.defaultConsumption * route.defaultFuelPrice).toFixed(0);
+  const fuelOnlyCost = ((route.distance / 100) * route.defaultConsumption * route.defaultFuelPrice);
   const totalTollCost = route.tollSections.reduce((sum, toll) => sum + toll.cost, 0);
+  const estimatedCost = (fuelOnlyCost + totalTollCost).toFixed(0);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -69,8 +70,8 @@ const RoutePage = () => {
             <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
               Szacunkowy koszt przejazdu na trasie <strong>{route.from} – {route.to}</strong> to{' '}
               <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">{estimatedCost} zł</span>{' '}
-              (przy cenie paliwa {route.defaultFuelPrice.toFixed(2)} zł/l). 
-              Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>.
+              (paliwo: {fuelOnlyCost.toFixed(0)} zł{totalTollCost > 0 ? ` + opłaty drogowe: ${totalTollCost} zł` : ''}). 
+              Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>, cena paliwa: <strong>{route.defaultFuelPrice.toFixed(2)} zł/l</strong>.
             </p>
           </div>
 
@@ -90,37 +91,53 @@ const RoutePage = () => {
           </h2>
 
           <div className="space-y-4">
-            {route.variants.map((variant, index) => (
-              <div 
-                key={index}
-                className="bg-muted/50 border border-border rounded-xl p-4"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                  <div>
-                    <h3 className="font-semibold text-foreground">{variant.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Przez: {variant.via.join(' → ')}
-                    </p>
+            {route.variants.map((variant, index) => {
+              const fuelCost = ((variant.distance / 100) * route.defaultConsumption * route.defaultFuelPrice).toFixed(0);
+              const tollCost = (route.hasTolls && variant.tollIndices && variant.tollIndices.length > 0)
+                ? variant.tollIndices.reduce((sum, idx) => sum + (route.tollSections[idx]?.cost ?? 0), 0)
+                : 0;
+              const totalCost = parseInt(fuelCost) + tollCost;
+
+              return (
+                <div 
+                  key={index}
+                  className="bg-muted/50 border border-border rounded-xl p-4"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-foreground">{variant.name}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Przez: {variant.via.join(' → ')}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 text-primary" />
+                        <span className="text-foreground font-medium">{variant.distance} km</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-4 h-4 text-primary" />
+                        <span className="text-foreground font-medium">{variant.time}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Fuel className="w-4 h-4 text-primary" />
+                        <span className="text-foreground font-medium">{fuelCost} zł</span>
+                      </div>
+                      {tollCost > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          <AlertTriangle className="w-4 h-4 text-amber-500" />
+                          <span className="text-foreground font-medium">+{tollCost} zł opłaty</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-4 text-sm">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-primary" />
-                      <span className="text-foreground font-medium">{variant.distance} km</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-primary" />
-                      <span className="text-foreground font-medium">
-                        {variant.time}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Fuel className="w-4 h-4 text-primary" />
-                      <span className="text-foreground font-medium">~{variant.avgCost} zł</span>
-                    </div>
+                  <div className="mt-2 text-right">
+                    <span className="text-sm text-muted-foreground">Łącznie: </span>
+                    <span className="font-bold text-primary">{totalCost} zł</span>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
