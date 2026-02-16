@@ -23,7 +23,7 @@ const CURRENT_FUEL_PRICES: FuelPrices = {
   electric: 0.89,
   electricDC: 2.09, // średnia cena DC fast charging na stacjach (Orlen Charge, GreenWay itp.)
   lastUpdated: '2026-02-01',
-  source: 'e-petrol.pl'
+  source: 'dane rynkowe'
 };
 
 export const useFuelPrices = () => {

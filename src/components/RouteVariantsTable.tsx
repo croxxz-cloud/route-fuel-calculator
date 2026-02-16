@@ -29,8 +29,8 @@ export const RouteVariantsTable = ({
         Porównanie wariantów
       </h2>
 
-      <div className="overflow-x-auto">
-        <Table>
+      <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+        <Table className="min-w-[500px]">
           <TableHeader>
             <TableRow>
               <TableHead>Trasa</TableHead>
@@ -57,7 +57,7 @@ export const RouteVariantsTable = ({
 
               return (
                 <TableRow key={i}>
-                  <TableCell className="font-medium max-w-[180px]">
+                  <TableCell className="font-medium max-w-[120px] sm:max-w-[180px]">
                     <div className="truncate">{variant.name}</div>
                     <div className="text-[10px] text-muted-foreground truncate">
                       {variant.via.join(' → ')}

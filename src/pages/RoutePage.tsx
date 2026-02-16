@@ -83,7 +83,7 @@ const RoutePage = () => {
         </div>
 
         {/* Route Variants */}
-        <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6 overflow-hidden">
           <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary" />
             Do przejazdu możesz wybrać {route.variants.length} {route.variants.length === 1 ? 'trasę' : 'trasy'}:
@@ -136,7 +136,7 @@ const RoutePage = () => {
         )}
 
         {/* Toll Information */}
-        <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6 overflow-hidden">
           <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-primary" />
             Opłaty drogowe
@@ -154,11 +154,11 @@ const RoutePage = () => {
               )}
               <div className="space-y-2">
                 {route.tollSections.map((toll, index) => (
-                  <div 
+                   <div 
                     key={index}
-                    className="flex items-center justify-between bg-muted/50 border border-border rounded-lg p-3"
+                    className="flex items-center justify-between gap-2 bg-muted/50 border border-border rounded-lg p-3"
                   >
-                    <span className="text-foreground">{toll.name}</span>
+                    <span className="text-foreground text-sm sm:text-base break-words min-w-0">{toll.name}</span>
                     <span className="font-semibold text-primary">{toll.cost} zł</span>
                   </div>
                 ))}

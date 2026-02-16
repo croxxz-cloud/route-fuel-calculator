@@ -18,7 +18,7 @@ export const AboutSection = () => {
           <div>
             <h3 className="font-semibold text-foreground text-sm">Wiarygodne dane</h3>
             <p className="text-xs text-muted-foreground">
-              Ceny paliw opieramy na danych e-petrol.pl i aktualizujemy co tydzień.
+              Ceny paliw opieramy na aktualnych danych i aktualizujemy co tydzień.
               Opłaty drogowe weryfikujemy z oficjalnymi cennikami operatorów.
             </p>
           </div>
