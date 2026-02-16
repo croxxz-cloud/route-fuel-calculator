@@ -79,6 +79,34 @@ export const LocationInput = ({
     }, 300);
   };
 
+  // Auto-geocode on blur if user typed but didn't select a suggestion
+  const handleBlur = () => {
+    // Small delay to allow suggestion click to fire first
+    setTimeout(() => {
+      if (value.length >= 3 && suggestions.length > 0 && showSuggestions) {
+        // Auto-select the first suggestion
+        handleSuggestionClick(suggestions[0]);
+      } else if (value.length >= 3 && suggestions.length === 0) {
+        // No suggestions loaded yet — trigger a search and auto-select
+        (async () => {
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(value)}&limit=1`,
+              { headers: { 'Accept-Language': 'pl,en' } }
+            );
+            const data = await response.json();
+            if (data.length > 0) {
+              onLocationSelect(parseFloat(data[0].lat), parseFloat(data[0].lon));
+            }
+          } catch (error) {
+            console.error('Auto-geocode failed:', error);
+          }
+        })();
+      }
+      setShowSuggestions(false);
+    }, 250);
+  };
+
   const handleSuggestionClick = (suggestion: Suggestion) => {
     onChange(suggestion.display_name);
     onLocationSelect(parseFloat(suggestion.lat), parseFloat(suggestion.lon));
@@ -96,6 +124,7 @@ export const LocationInput = ({
         <Input
           value={value}
           onChange={handleInputChange}
+          onBlur={handleBlur}
           placeholder={placeholder}
           className="pl-12 pr-10 h-11 border-foreground/30 bg-background text-foreground"
           onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
