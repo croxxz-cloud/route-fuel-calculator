@@ -52,7 +52,7 @@ const RoutePage = () => {
         </Link>
 
         {/* Hero Section */}
-        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 mb-6">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 md:p-8 mb-6 overflow-hidden">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
               <Route className="w-5 h-5 md:w-6 md:h-6 text-primary" />
@@ -65,10 +65,10 @@ const RoutePage = () => {
             </div>
           </div>
 
-          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
-            <p className="text-base md:text-lg text-foreground leading-relaxed">
-              Szacunkowy koszt przejazdu na trasie <strong>{route.from} – {route.to}</strong> to{' '}
-              <span className="text-primary font-bold text-xl md:text-2xl">{estimatedCost} zł</span>{' '}
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6 overflow-hidden">
+            <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
+              Szacunkowy koszt przejazdu na trasie <strong className="whitespace-nowrap">{route.from} – {route.to}</strong> to{' '}
+              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl whitespace-nowrap">{estimatedCost} zł</span>{' '}
               (przy cenie paliwa {route.defaultFuelPrice.toFixed(2)} zł/l). 
               Dystans: <strong>{route.distance} km</strong>, spalanie: <strong>{route.defaultConsumption} L/100km</strong>.
             </p>

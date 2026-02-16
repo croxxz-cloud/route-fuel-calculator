@@ -176,9 +176,23 @@ function buildHomePage(shell: string): string {
       </fieldset>
 
       <fieldset>
+        <legend>Tryb: Wpisz dystans</legend>
+        <p>Jeśli znasz dokładny dystans, możesz go wpisać ręcznie zamiast korzystać z automatycznego wyznaczania trasy. Idealne, gdy planujesz drogę po mapie lub znasz odległość z licznika.</p>
+        <label>Dystans (km): <input type="number" placeholder="np. 350" min="1" step="1" /></label>
+      </fieldset>
+
+      <fieldset>
         <legend>Typ pojazdu</legend>
         <label><input type="radio" name="vehicle" value="fuel" checked /> Samochód spalinowy</label>
         <label><input type="radio" name="vehicle" value="electric" /> Samochód elektryczny</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Tryb: Samochód elektryczny (EV)</legend>
+        <p>Kalkulator obsługuje również samochody elektryczne. Zamiast spalania w litrach na 100 km podajesz zużycie energii w kWh/100 km (typowo 15–25 kWh) oraz cenę prądu za kWh. Możesz porównać, czy przejazd autem elektrycznym jest tańszy niż spalinowym.</p>
+        <label>Zużycie energii (kWh/100km): <input type="number" value="18" min="5" max="50" step="0.1" /></label>
+        <label>Cena prądu (zł/kWh): <input type="number" value="0.89" min="0.1" max="5" step="0.01" /></label>
+        <p>Ceny orientacyjne: ładowarka DC (szybka): 1–2 zł/kWh, ładowanie w domu: ~0,65 zł/kWh.</p>
       </fieldset>
 
       <fieldset>
