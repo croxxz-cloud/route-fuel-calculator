@@ -51,7 +51,7 @@ const RoutePage = () => {
 
       <Header />
 
-      <main className="flex-1 max-w-4xl mx-auto px-4 py-8">
+      <main className="flex-1 max-w-4xl mx-auto px-4 py-8 w-full overflow-hidden">
         {/* Breadcrumb */}
         <Link 
           to="/" 
