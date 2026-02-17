@@ -228,7 +228,7 @@ export const FuelCalculator = () => {
         {/* ── Wybierz tryb + route/distance ── */}
         <div className="p-4 md:p-5 border-b border-border">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Wybierz tryb</span>
-          <div className="flex gap-2 justify-center mb-4">
+          <div className="flex gap-2 justify-center mb-2">
             <button
               onClick={() => setMode('route')}
               className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
@@ -253,6 +253,11 @@ export const FuelCalculator = () => {
               Własny dystans
             </button>
           </div>
+          <p className="text-xs text-muted-foreground text-center mb-4">
+            {mode === 'route' 
+              ? 'Wpisz skąd i dokąd — kalkulator automatycznie wyznaczy trasę drogową i dystans.' 
+              : 'Wpisz dystans ręcznie, jeśli znasz odległość z licznika lub planujesz trasę po mapie.'}
+          </p>
 
           {/* Route / Distance inline */}
           {mode === 'route' ? (
@@ -293,22 +298,17 @@ export const FuelCalculator = () => {
               )}
             </div>
           ) : (
-            <div className="space-y-2">
-              <div className="flex items-center justify-center gap-3">
-                <Car className="w-5 h-5 text-primary flex-shrink-0" />
-                <Input
-                  type="number"
-                  value={manualDistance}
-                  onChange={(e) => setManualDistance(e.target.value)}
-                  placeholder="Wpisz dystans"
-                  className="h-11 text-base max-w-[180px] text-center border-foreground/30 bg-background text-foreground"
-                  min="0"
-                />
-                <span className="text-sm text-muted-foreground font-medium">km</span>
-              </div>
-              <p className="text-xs text-muted-foreground text-center">
-                Wpisz dystans ręcznie, jeśli znasz odległość z licznika lub planujesz trasę po mapie.
-              </p>
+            <div className="flex items-center justify-center gap-3">
+              <Car className="w-5 h-5 text-primary flex-shrink-0" />
+              <Input
+                type="number"
+                value={manualDistance}
+                onChange={(e) => setManualDistance(e.target.value)}
+                placeholder="Wpisz dystans"
+                className="h-11 text-base max-w-[180px] text-center border-foreground/30 bg-background text-foreground"
+                min="0"
+              />
+              <span className="text-sm text-muted-foreground font-medium">km</span>
             </div>
           )}
         </div>
@@ -316,6 +316,11 @@ export const FuelCalculator = () => {
         {/* ── Typ pojazdu ── */}
         <div className="p-4 md:p-5 border-b border-border">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Typ pojazdu</span>
+          <p className="text-xs text-muted-foreground text-center mb-2">
+            {vehicleType === 'fuel'
+              ? 'Pb95, Pb98, Diesel lub LPG — podaj spalanie w l/100 km i cenę za litr.'
+              : 'Podaj zużycie energii w kWh/100 km i cenę prądu za kWh.'}
+          </p>
           <div className="flex gap-2 justify-center">
             <button
               onClick={() => setVehicleType('fuel')}
