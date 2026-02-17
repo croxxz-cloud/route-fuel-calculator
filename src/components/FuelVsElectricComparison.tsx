@@ -52,8 +52,8 @@ export const FuelVsElectricComparison = ({
             </TooltipTrigger>
             <TooltipContent side="top" className="max-w-[280px] text-xs">
               <p>
-                Porównanie zakłada ładowanie DC na trasie (~{evPrice} zł/kWh) i typowe zużycie EV 
-                na autostradzie ({evConsumption} kWh/100km). Ładowanie domowe jest tańsze (~0.65 zł/kWh).
+                Porównanie zakłada ładowanie DC na trasie (ok. {evPrice} zł/kWh) i typowe zużycie EV 
+                na autostradzie ({evConsumption} kWh/100km). Ładowanie domowe jest tańsze (ok. 0.65 zł/kWh).
               </p>
             </TooltipContent>
           </Tooltip>

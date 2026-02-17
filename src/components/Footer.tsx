@@ -7,7 +7,7 @@ export const Footer = () => {
         <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground mb-4">
           <span>© 2026 Trasomat.pl</span>
           <span className="text-muted-foreground/40">|</span>
-          <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+          <Link to="/#faq" className="hover:text-foreground transition-colors">FAQ</Link>
           <span className="text-muted-foreground/40">|</span>
           <Link to="/kontakt" className="hover:text-foreground transition-colors">Kontakt</Link>
           <span className="text-muted-foreground/40">|</span>

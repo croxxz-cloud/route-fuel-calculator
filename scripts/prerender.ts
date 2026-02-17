@@ -192,11 +192,12 @@ function buildHomePage(shell: string): string {
         <p>Kalkulator obsługuje również samochody elektryczne. Zamiast spalania w litrach na 100 km podajesz zużycie energii w kWh/100 km (typowo 15–25 kWh) oraz cenę prądu za kWh. Możesz porównać, czy przejazd autem elektrycznym jest tańszy niż spalinowym.</p>
         <label>Zużycie energii (kWh/100km): <input type="number" value="18" min="5" max="50" step="0.1" /></label>
         <label>Cena prądu (zł/kWh): <input type="number" value="0.89" min="0.1" max="5" step="0.01" /></label>
-        <p>Ceny orientacyjne: ładowarka DC (szybka): 1–2 zł/kWh, ładowanie w domu: ~0,65 zł/kWh.</p>
+        <p>Ceny orientacyjne: ładowarka DC (szybka): 1–2 zł/kWh, ładowanie w domu: ok. 0,65 zł/kWh.</p>
       </fieldset>
 
       <fieldset>
-        <legend>Rodzaj paliwa</legend>
+        <legend>Tryb: Samochód spalinowy</legend>
+        <p>Kalkulator obsługuje cztery rodzaje paliw: Pb95, Pb98, Diesel (ON) i LPG. Dla każdego typu paliwa automatycznie dobierana jest aktualna średnia cena rynkowa. Spalanie na LPG jest wyższe o ok. 20% niż na benzynie, ale cena litra jest o ponad połowę niższa. Diesel zużywa ok. 5% mniej paliwa niż benzyna.</p>
         <label><input type="radio" name="fuel" value="pb95" checked /> Pb95</label>
         <label><input type="radio" name="fuel" value="pb98" /> Pb98</label>
         <label><input type="radio" name="fuel" value="diesel" /> Diesel (ON)</label>
@@ -220,7 +221,7 @@ function buildHomePage(shell: string): string {
       <h3>Wynik kalkulacji</h3>
       <ul>
         <li>Koszt przejazdu: obliczany automatycznie w zł</li>
-        <li>Dystans trasy: na podstawie realnej trasy drogowej (OpenStreetMap)</li>
+        <li>Dystans trasy: na podstawie realnej trasy drogowej</li>
         <li>Szacowany czas przejazdu</li>
         <li>Zużycie paliwa w litrach lub energii w kWh</li>
         <li>Porównanie kosztów: Pb95 vs Pb98 vs Diesel vs LPG</li>
@@ -254,7 +255,7 @@ function buildHomePage(shell: string): string {
     <h2>O Serwisie</h2>
     <p>Kalkulator Paliwa to niezależne narzędzie stworzone z myślą o kierowcach planujących podróże po Polsce i Europie.</p>
     <h3>Wiarygodne dane</h3><p>Ceny paliw opieramy na aktualnych danych i aktualizujemy co tydzień.</p>
-    <h3>Realne trasy</h3><p>Dystanse i czasy przejazdu bazują na OpenStreetMap i OpenRouteService.</p>
+    <h3>Realne trasy</h3><p>Dystanse i czasy przejazdu bazują na tych samych danych, z których korzystają nawigacje.</p>
     <h3>Prywatność</h3><p>Nie zbieramy danych osobowych. Obliczenia wykonywane są bezpośrednio w Twojej przeglądarce.</p>
     <h3>Regularnie aktualizowane</h3><p>Ceny paliw, opłaty drogowe i winiety aktualizujemy regularnie.</p>
   </section>
@@ -303,7 +304,7 @@ function buildRoutePage(shell: string, route: RouteData): string {
   const totalTollCost = route.tollSections.reduce((sum, t) => sum + t.cost, 0);
 
   const variantsHtml = route.variants.map(v =>
-    `<div><h3>${escapeHtml(v.name)}</h3><p>Przez: ${v.via.join(' → ')}</p><p>${v.distance} km | ${v.time} | ~${v.avgCost} zł</p></div>`
+    `<div><h3>${escapeHtml(v.name)}</h3><p>Przez: ${v.via.join(' → ')}</p><p>${v.distance} km | ${v.time} | około ${v.avgCost} zł</p></div>`
   ).join('');
 
   const tollsHtml = route.hasTolls
@@ -321,7 +322,7 @@ function buildRoutePage(shell: string, route: RouteData): string {
 <main>
   <nav aria-label="Breadcrumb"><a href="/">Kalkulator</a> › <span>${route.from} – ${route.to}</span></nav>
   <h1>Koszt przejazdu ${route.from} – ${route.to}</h1>
-  <p>Szacunkowy koszt przejazdu na trasie ${route.from} – ${route.to} to ${estimatedCost} zł (przy cenie paliwa ${route.defaultFuelPrice.toFixed(2)} zł za litr). Dystans wynosi ${route.distance} km, przy średnim spalaniu na poziomie ${route.defaultConsumption} L/100km.</p>
+  <p>Szacunkowy koszt przejazdu na trasie ${route.from} – ${route.to} to około ${estimatedCost} zł (przy cenie paliwa ${route.defaultFuelPrice.toFixed(2)} zł za litr). Dystans wynosi ${route.distance} km, przy średnim spalaniu na poziomie ${route.defaultConsumption} L/100km.</p>
   
   <section>
     <h2>Warianty trasy</h2>
