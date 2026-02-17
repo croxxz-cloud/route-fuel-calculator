@@ -1,11 +1,10 @@
 import { Fuel, Info } from 'lucide-react';
 import { getFuelPrices } from '@/hooks/useFuelPrices';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface FuelComparisonProps {
   distance: number;
@@ -55,19 +54,19 @@ export const FuelComparison = ({ distance, consumption }: FuelComparisonProps) =
       <div className="flex items-center gap-2 mb-4">
         <Fuel className="w-5 h-5 text-primary" />
         <h3 className="font-semibold text-foreground">Porównanie paliw</h3>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-            </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-[260px] text-xs">
-              <p>
-                Przyjęto typowe różnice spalania: Diesel –5%, LPG +20% względem benzyny.
-                Rzeczywiste spalanie zależy od pojazdu.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button type="button" className="text-muted-foreground hover:text-primary transition-colors">
+              <Info className="w-4 h-4 cursor-help" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent side="top" className="max-w-[260px] text-xs">
+            <p>
+              Przyjęto typowe różnice spalania: Diesel –5%, LPG +20% względem benzyny.
+              Rzeczywiste spalanie zależy od pojazdu.
+            </p>
+          </PopoverContent>
+        </Popover>
       </div>
       <p className="text-xs text-muted-foreground mb-4">
         Koszt tej trasy z różnymi paliwami (z uwzględnieniem typowych różnic spalania):
