@@ -24,12 +24,12 @@ export const RouteVariantsTable = ({
   defaultFuelPrice,
 }: RouteVariantsTableProps) => {
   return (
-    <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+    <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6 overflow-hidden">
       <h2 className="text-xl font-semibold text-foreground mb-4">
         Porównanie wariantów
       </h2>
 
-      <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+      <div className="overflow-x-auto">
         <Table className="min-w-[500px]">
           <TableHeader>
             <TableRow>

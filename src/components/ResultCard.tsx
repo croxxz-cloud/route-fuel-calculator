@@ -183,7 +183,7 @@ export const ResultCard = ({
           </p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Obliczono na podstawie realnej trasy drogowej (OpenStreetMap)
+            Obliczono na podstawie realnej trasy drogowej
           </p>
         )}
         <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">

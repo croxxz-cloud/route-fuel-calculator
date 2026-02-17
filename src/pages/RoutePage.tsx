@@ -63,27 +63,27 @@ const RoutePage = () => {
 
         {/* Hero Section */}
         <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 md:p-8 mb-6 overflow-hidden">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <Route className="w-5 h-5 md:w-6 md:h-6 text-primary" />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground break-words">
-                Koszt paliwa na trasie {route.from} – {route.to}
-              </h1>
+          <div className="mb-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Route className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+              </div>
               <p className="text-sm md:text-base text-muted-foreground">Ile zapłacisz za podróż?</p>
             </div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+              Koszt paliwa na trasie {route.from} – {route.to}
+            </h1>
           </div>
 
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
             <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
               Koszt paliwa na trasie <strong>{route.from} – {route.to}</strong> ({route.variants[0].distance} km) to{' '}
-              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">~{variantCosts[0].fuel.toFixed(0)} zł</span>{' '}
+              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">około {variantCosts[0].fuel.toFixed(0)} zł</span>{' '}
               (przy spalaniu {route.defaultConsumption} L/100km i cenie {route.defaultFuelPrice.toFixed(2)} zł/l).
             </p>
             {route.variants.length > 1 && (
               <p className="text-sm text-muted-foreground mt-3">
-                Alternatywna trasa ({route.variants[1].distance} km) to koszt ~{variantCosts[1].fuel.toFixed(0)} zł za paliwo.
+                Alternatywna trasa ({route.variants[1].distance} km) to koszt około {variantCosts[1].fuel.toFixed(0)} zł za paliwo.
                 {' '}Szczegóły poniżej.
               </p>
             )}
@@ -94,7 +94,7 @@ const RoutePage = () => {
             )}
           </div>
 
-          <Link to={`/?from=${encodeURIComponent(route.from)}&to=${encodeURIComponent(route.to)}`}>
+          <Link to="/">
             <Button className="w-full md:w-auto gap-2">
               <Settings className="w-4 h-4" />
               Dostosuj parametry i przelicz
@@ -103,7 +103,7 @@ const RoutePage = () => {
         </div>
 
         {/* Route Variants */}
-        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-6 overflow-hidden">
           <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
             <span className="break-words">Do przejazdu możesz wybrać {route.variants.length} {route.variants.length === 1 ? 'trasę' : 'trasy'}:</span>

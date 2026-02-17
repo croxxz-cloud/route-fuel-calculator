@@ -11,7 +11,7 @@ export const CurrentPricesBar = ({ prices, vehicleType }: CurrentPricesBarProps)
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('pl-PL', {
-      month: 'short',
+      month: 'long',
       year: 'numeric'
     });
   };
@@ -21,7 +21,7 @@ export const CurrentPricesBar = ({ prices, vehicleType }: CurrentPricesBarProps)
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <TrendingUp className="w-3.5 h-3.5 text-primary" />
-          <span>Średnie ceny ({formatDate(prices.lastUpdated)}):</span>
+          <span>Ostatnia aktualizacja cen: {formatDate(prices.lastUpdated)}</span>
         </div>
         
         {vehicleType === 'fuel' ? (
@@ -48,11 +48,11 @@ export const CurrentPricesBar = ({ prices, vehicleType }: CurrentPricesBarProps)
             <div className="flex items-center gap-1.5">
               <Zap className="w-3 h-3 text-success" />
               <span className="text-xs text-muted-foreground">Stacje DC:</span>
-              <span className="text-xs font-semibold text-success">~1.00-2.00 zł/kWh</span>
+              <span className="text-xs font-semibold text-success">ok. 1.00-2.00 zł/kWh</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-muted-foreground">Dom:</span>
-              <span className="text-xs font-semibold text-success">~0.65 zł/kWh</span>
+              <span className="text-xs font-semibold text-success">ok. 0.65 zł/kWh</span>
             </div>
           </div>
         )}

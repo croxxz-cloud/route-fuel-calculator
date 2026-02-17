@@ -31,8 +31,7 @@ export const AboutSection = () => {
           <div>
             <h3 className="font-semibold text-foreground text-sm">Realne trasy</h3>
             <p className="text-xs text-muted-foreground">
-              Dystanse i czasy przejazdu bazują na OpenStreetMap i OpenRouteService –
-              tych samych danych, z których korzystają nawigacje.
+              Dystanse i czasy przejazdu bazują na tych samych danych, z których korzystają nawigacje.
             </p>
           </div>
         </div>
