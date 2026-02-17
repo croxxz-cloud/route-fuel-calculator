@@ -44,7 +44,7 @@ export const GasStationPrices = ({
               <Zap className="w-4 h-4 text-primary" />
               <span className="text-xs font-medium text-muted-foreground">Stacje DC</span>
             </div>
-            <span className="text-lg font-bold text-primary">~1-2 zł</span>
+            <span className="text-lg font-bold text-primary">ok. 1-2 zł</span>
             <span className="text-xs text-muted-foreground">/kWh</span>
           </div>
           <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 text-center">
@@ -52,7 +52,7 @@ export const GasStationPrices = ({
               <Zap className="w-4 h-4 text-primary" />
               <span className="text-xs font-medium text-muted-foreground">Ładowanie w domu</span>
             </div>
-            <span className="text-lg font-bold text-primary">~0.65 zł</span>
+            <span className="text-lg font-bold text-primary">ok. 0,65 zł</span>
             <span className="text-xs text-muted-foreground">/kWh</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ export const GasStationPrices = ({
             Wybierz paliwo (kliknij)
           </span>
         </div>
-        <span className="text-[10px] text-muted-foreground">{formatDate(prices.lastUpdated)}</span>
+        <span className="text-[10px] text-muted-foreground">Aktualizacja: {new Date(prices.lastUpdated).toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' })}</span>
       </div>
       
       <div className="grid grid-cols-4 gap-2">

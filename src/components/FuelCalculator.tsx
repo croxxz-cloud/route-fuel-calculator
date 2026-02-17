@@ -355,9 +355,6 @@ export const FuelCalculator = () => {
                   selectedFuel={fuelType}
                   onFuelSelect={setFuelType}
                 />
-                <p className="text-xs text-muted-foreground">
-                  Pb95, Pb98, Diesel (ON) i LPG — spalanie na LPG jest wyższe o ok. 20%, ale cena litra o ponad połowę niższa. Diesel zużywa ok. 5% mniej paliwa niż benzyna.
-                </p>
 
                 {/* Consumption */}
                 <div>
