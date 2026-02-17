@@ -12,6 +12,11 @@ import { ExampleRoutes } from './ExampleRoutes';
 import { CalculatorModeSelector, CalculatorMode } from './CalculatorModeSelector';
 import { InfoBoxes } from './InfoBoxes';
 import { GasStationPrices } from './GasStationPrices';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useFuelPrices, VehicleType } from '@/hooks/useFuelPrices';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -27,7 +32,8 @@ import {
   Sparkles,
   Zap,
   Battery,
-  Receipt
+  Receipt,
+  Info
 } from 'lucide-react';
 
 interface Coordinates {
@@ -227,8 +233,21 @@ export const FuelCalculator = () => {
 
         {/* ── Wybierz tryb + route/distance ── */}
         <div className="p-4 md:p-5 border-b border-border">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Wybierz tryb</span>
-          <div className="flex gap-2 justify-center mb-2">
+          <div className="flex items-center justify-center gap-1.5 mb-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Wybierz tryb</span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button type="button" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Info className="w-3.5 h-3.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent side="top" className="max-w-[300px] text-xs text-muted-foreground space-y-2">
+                <p><strong className="text-foreground">Trasa A → B</strong> — wpisz skąd i dokąd, kalkulator automatycznie wyznaczy realną trasę drogową i dystans.</p>
+                <p><strong className="text-foreground">Własny dystans</strong> — wpisz kilometry ręcznie, jeśli znasz odległość z licznika lub planujesz trasę po mapie.</p>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="flex gap-2 justify-center mb-4">
             <button
               onClick={() => setMode('route')}
               className={`relative flex-1 max-w-[220px] flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all ${
@@ -253,11 +272,6 @@ export const FuelCalculator = () => {
               Własny dystans
             </button>
           </div>
-          <p className="text-xs text-muted-foreground text-center mb-4">
-            {mode === 'route' 
-              ? 'Wpisz skąd i dokąd — kalkulator automatycznie wyznaczy trasę drogową i dystans.' 
-              : 'Wpisz dystans ręcznie, jeśli znasz odległość z licznika lub planujesz trasę po mapie.'}
-          </p>
 
           {/* Route / Distance inline */}
           {mode === 'route' ? (
@@ -315,12 +329,20 @@ export const FuelCalculator = () => {
 
         {/* ── Typ pojazdu ── */}
         <div className="p-4 md:p-5 border-b border-border">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block text-center">Typ pojazdu</span>
-          <p className="text-xs text-muted-foreground text-center mb-2">
-            {vehicleType === 'fuel'
-              ? 'Pb95, Pb98, Diesel lub LPG — podaj spalanie w l/100 km i cenę za litr.'
-              : 'Podaj zużycie energii w kWh/100 km i cenę prądu za kWh.'}
-          </p>
+          <div className="flex items-center justify-center gap-1.5 mb-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Typ pojazdu</span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button type="button" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Info className="w-3.5 h-3.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent side="top" className="max-w-[300px] text-xs text-muted-foreground space-y-2">
+                <p><strong className="text-foreground">Spalinowy</strong> — Pb95, Pb98, Diesel lub LPG. Podaj spalanie w l/100 km i cenę za litr. LPG pali ok. 20% więcej, ale kosztuje o ponad połowę mniej. Diesel zużywa ok. 5% mniej paliwa.</p>
+                <p><strong className="text-foreground">Elektryczny</strong> — podaj zużycie energii w kWh/100 km (typowo 15–25 kWh) i cenę prądu za kWh.</p>
+              </PopoverContent>
+            </Popover>
+          </div>
           <div className="flex gap-2 justify-center">
             <button
               onClick={() => setVehicleType('fuel')}
@@ -540,7 +562,9 @@ export const FuelCalculator = () => {
       </div>
 
       {/* Example Routes */}
-      {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
+      <div className="mt-6">
+        {mode === 'route' && <ExampleRoutes onSelect={handleExampleRouteSelect} />}
+      </div>
 
       <InfoBoxes />
     </div>
