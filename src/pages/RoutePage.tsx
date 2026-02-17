@@ -64,15 +64,15 @@ const RoutePage = () => {
         {/* Hero Section */}
         <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 md:p-8 mb-6 overflow-hidden">
           <div className="mb-4">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Koszt paliwa na trasie {route.from} – {route.to}
-            </h1>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Route className="w-5 h-5 md:w-6 md:h-6 text-primary" />
               </div>
-              <p className="text-sm md:text-base text-muted-foreground">Ile zapłacisz za podróż?</p>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+                Koszt paliwa na trasie {route.from} – {route.to}
+              </h1>
             </div>
+            <p className="text-sm md:text-base text-muted-foreground">Ile zapłacisz za podróż?</p>
           </div>
 
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
