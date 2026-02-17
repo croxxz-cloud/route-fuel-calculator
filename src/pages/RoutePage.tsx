@@ -71,37 +71,27 @@ const RoutePage = () => {
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground break-words">
                 Koszt paliwa na trasie {route.from} – {route.to}
               </h1>
-              <p className="text-sm md:text-base text-muted-foreground">Ile paliwa spalisz na tej trasie?</p>
+              <p className="text-sm md:text-base text-muted-foreground">Ile zapłacisz za podróż?</p>
             </div>
           </div>
 
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-5 mb-6">
             <p className="text-sm sm:text-base md:text-lg text-foreground leading-relaxed break-words">
-              {route.variants.length > 1 ? (
-                <>
-                  Na trasie <strong>{route.from} – {route.to}</strong> masz do wyboru{' '}
-                  <strong>{route.variants.length} warianty</strong> – krótszą ({Math.min(...route.variants.map(v => v.distance))} km) 
-                  i dłuższą ({Math.max(...route.variants.map(v => v.distance))} km). 
-                  Sam koszt paliwa to odpowiednio{' '}
-                  <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">
-                    {variantCosts.map(v => v.fuel.toFixed(0)).join(' zł i ')} zł
-                  </span>{' '}
-                  (przy spalaniu {route.defaultConsumption} L/100km i cenie {route.defaultFuelPrice.toFixed(2)} zł/l).
-                </>
-              ) : (
-                <>
-                  Koszt paliwa na trasie <strong>{route.from} – {route.to}</strong> ({route.variants[0].distance} km) to{' '}
-                  <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">~{variantCosts[0].fuel.toFixed(0)} zł</span>{' '}
-                  (przy spalaniu {route.defaultConsumption} L/100km i cenie {route.defaultFuelPrice.toFixed(2)} zł/l).
-                </>
-              )}
-              {totalTollCost > 0 && (
-                <>
-                  {' '}Na tej trasie występują również <strong>dodatkowe opłaty drogowe</strong> (do {totalTollCost} zł), 
-                  które warto uwzględnić kalkulując całkowity koszt podróży.
-                </>
-              )}
+              Koszt paliwa na trasie <strong>{route.from} – {route.to}</strong> ({route.variants[0].distance} km) to{' '}
+              <span className="text-primary font-bold text-lg sm:text-xl md:text-2xl">~{variantCosts[0].fuel.toFixed(0)} zł</span>{' '}
+              (przy spalaniu {route.defaultConsumption} L/100km i cenie {route.defaultFuelPrice.toFixed(2)} zł/l).
             </p>
+            {route.variants.length > 1 && (
+              <p className="text-sm text-muted-foreground mt-3">
+                Alternatywna trasa ({route.variants[1].distance} km) to koszt ~{variantCosts[1].fuel.toFixed(0)} zł za paliwo.
+                {' '}Szczegóły poniżej.
+              </p>
+            )}
+            {totalTollCost > 0 && (
+              <p className="text-sm text-muted-foreground mt-2">
+                ⚠️ Na tej trasie mogą występować dodatkowe opłaty drogowe (do {totalTollCost} zł).
+              </p>
+            )}
           </div>
 
           <Link to={`/?from=${encodeURIComponent(route.from)}&to=${encodeURIComponent(route.to)}`}>
