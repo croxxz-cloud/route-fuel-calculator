@@ -293,17 +293,22 @@ export const FuelCalculator = () => {
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-center gap-3">
-              <Car className="w-5 h-5 text-primary flex-shrink-0" />
-              <Input
-                type="number"
-                value={manualDistance}
-                onChange={(e) => setManualDistance(e.target.value)}
-                placeholder="Wpisz dystans"
-                className="h-11 text-base max-w-[180px] text-center border-foreground/30 bg-background text-foreground"
-                min="0"
-              />
-              <span className="text-sm text-muted-foreground font-medium">km</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-3">
+                <Car className="w-5 h-5 text-primary flex-shrink-0" />
+                <Input
+                  type="number"
+                  value={manualDistance}
+                  onChange={(e) => setManualDistance(e.target.value)}
+                  placeholder="Wpisz dystans"
+                  className="h-11 text-base max-w-[180px] text-center border-foreground/30 bg-background text-foreground"
+                  min="0"
+                />
+                <span className="text-sm text-muted-foreground font-medium">km</span>
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                Wpisz dystans ręcznie, jeśli znasz odległość z licznika lub planujesz trasę po mapie.
+              </p>
             </div>
           )}
         </div>
@@ -350,6 +355,9 @@ export const FuelCalculator = () => {
                   selectedFuel={fuelType}
                   onFuelSelect={setFuelType}
                 />
+                <p className="text-xs text-muted-foreground">
+                  Pb95, Pb98, Diesel (ON) i LPG — spalanie na LPG jest wyższe o ok. 20%, ale cena litra o ponad połowę niższa. Diesel zużywa ok. 5% mniej paliwa niż benzyna.
+                </p>
 
                 {/* Consumption */}
                 <div>
@@ -439,7 +447,7 @@ export const FuelCalculator = () => {
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">zł/kWh</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">DC: ~1-2 zł, dom: ~0.65 zł</p>
+                  <p className="text-xs text-muted-foreground mt-1">Ładowarka DC (szybka): ok. 1–2 zł/kWh, ładowanie w domu: ok. 0,65 zł/kWh</p>
                 </div>
               </>
             )}
