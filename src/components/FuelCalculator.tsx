@@ -59,6 +59,7 @@ export const FuelCalculator = () => {
   const [electricPrice, setElectricPrice] = useState('0.89');
   const [tollCosts, setTollCosts] = useState('');
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
+  const [routeError, setRouteError] = useState<string | null>(null);
   const [cost, setCost] = useState<number | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [fuelPriceHighlight, setFuelPriceHighlight] = useState(false);
@@ -104,17 +105,22 @@ export const FuelCalculator = () => {
   // OpenRouteService API Key - get yours free at https://openrouteservice.org/dev/#/signup
   const ORS_API_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjdkZWJiNGYxMTk4YjQ0YWNhN2MwZjA1YzAyYmYwYzg4IiwiaCI6Im11cm11cjY0In0=';
 
+  const fetchDistanceRef = useRef(0);
+
   const fetchDistance = async () => {
     if (!coordsA || !coordsB) return;
 
+    const requestId = ++fetchDistanceRef.current;
+    setRouteError(null);
+
     if (!ORS_API_KEY) {
       console.warn('OpenRouteService API key not configured. Using fallback OSRM.');
-      // Fallback to OSRM demo (only for testing)
       setIsCalculatingDistance(true);
       try {
         const response = await fetch(
           `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
         );
+        if (requestId !== fetchDistanceRef.current) return;
         const data = await response.json();
         if (data.routes && data.routes.length > 0) {
           const distanceInKm = data.routes[0].distance / 1000;
@@ -122,11 +128,16 @@ export const FuelCalculator = () => {
           if (typeof data.routes[0].duration === 'number') {
             setAutoDurationSeconds(data.routes[0].duration);
           }
+        } else {
+          setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
         }
       } catch (error) {
-        console.error('Error fetching distance:', error);
+        if (requestId === fetchDistanceRef.current) {
+          console.error('Error fetching distance:', error);
+          setRouteError('Błąd połączenia. Spróbuj ponownie.');
+        }
       } finally {
-        setIsCalculatingDistance(false);
+        if (requestId === fetchDistanceRef.current) setIsCalculatingDistance(false);
       }
       return;
     }
@@ -136,6 +147,33 @@ export const FuelCalculator = () => {
       const response = await fetch(
         `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordsA.lon},${coordsA.lat}&end=${coordsB.lon},${coordsB.lat}`
       );
+      if (requestId !== fetchDistanceRef.current) return;
+
+      if (response.status === 429 || response.status === 403) {
+        // Rate limited — fall back to OSRM
+        console.warn('ORS rate limited, falling back to OSRM');
+        try {
+          const fallback = await fetch(
+            `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
+          );
+          if (requestId !== fetchDistanceRef.current) return;
+          const fbData = await fallback.json();
+          if (fbData.routes && fbData.routes.length > 0) {
+            setAutoDistance(Math.round((fbData.routes[0].distance / 1000) * 10) / 10);
+            if (typeof fbData.routes[0].duration === 'number') {
+              setAutoDurationSeconds(fbData.routes[0].duration);
+            }
+          } else {
+            setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
+          }
+        } catch {
+          if (requestId === fetchDistanceRef.current) {
+            setRouteError('Błąd połączenia. Spróbuj ponownie.');
+          }
+        }
+        return;
+      }
+
       const data = await response.json();
       
       if (data.features && data.features.length > 0) {
@@ -146,11 +184,17 @@ export const FuelCalculator = () => {
         if (typeof duration === 'number') {
           setAutoDurationSeconds(duration);
         }
+      } else if (data.error) {
+        console.warn('ORS error:', data.error);
+        setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
       }
     } catch (error) {
-      console.error('Error fetching distance from OpenRouteService:', error);
+      if (requestId === fetchDistanceRef.current) {
+        console.error('Error fetching distance from OpenRouteService:', error);
+        setRouteError('Błąd połączenia. Spróbuj ponownie.');
+      }
     } finally {
-      setIsCalculatingDistance(false);
+      if (requestId === fetchDistanceRef.current) setIsCalculatingDistance(false);
     }
   };
 
@@ -298,7 +342,19 @@ export const FuelCalculator = () => {
                 />
               </div>
 
-              {(isCalculatingDistance || autoDistance !== null) && (
+              {routeError && (
+                <div className="flex items-center justify-center gap-2 py-2.5 bg-destructive/10 border border-destructive/20 rounded-xl">
+                  <span className="text-sm text-destructive">{routeError}</span>
+                  <button 
+                    onClick={() => { setRouteError(null); fetchDistance(); }}
+                    className="text-xs text-primary underline hover:no-underline"
+                  >
+                    Ponów
+                  </button>
+                </div>
+              )}
+
+              {!routeError && (isCalculatingDistance || autoDistance !== null) && (
                 <div className="flex items-center justify-center gap-3 py-2.5 bg-primary/5 rounded-xl">
                   <Car className="w-5 h-5 text-primary" />
                   {isCalculatingDistance ? (
