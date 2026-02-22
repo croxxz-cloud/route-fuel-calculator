@@ -112,90 +112,62 @@ export const FuelCalculator = () => {
 
     const requestId = ++fetchDistanceRef.current;
     setRouteError(null);
-
-    if (!ORS_API_KEY) {
-      console.warn('OpenRouteService API key not configured. Using fallback OSRM.');
-      setIsCalculatingDistance(true);
-      try {
-        const response = await fetch(
-          `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
-        );
-        if (requestId !== fetchDistanceRef.current) return;
-        const data = await response.json();
-        if (data.routes && data.routes.length > 0) {
-          const distanceInKm = data.routes[0].distance / 1000;
-          setAutoDistance(Math.round(distanceInKm * 10) / 10);
-          if (typeof data.routes[0].duration === 'number') {
-            setAutoDurationSeconds(data.routes[0].duration);
-          }
-        } else {
-          setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
-        }
-      } catch (error) {
-        if (requestId === fetchDistanceRef.current) {
-          console.error('Error fetching distance:', error);
-          setRouteError('Błąd połączenia. Spróbuj ponownie.');
-        }
-      } finally {
-        if (requestId === fetchDistanceRef.current) setIsCalculatingDistance(false);
-      }
-      return;
-    }
-
     setIsCalculatingDistance(true);
-    try {
-      const response = await fetch(
-        `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordsA.lon},${coordsA.lat}&end=${coordsB.lon},${coordsB.lat}`
-      );
+
+    const maxRetries = 3;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
       if (requestId !== fetchDistanceRef.current) return;
 
-      if (response.status === 429 || response.status === 403) {
-        // Rate limited — fall back to OSRM
-        console.warn('ORS rate limited, falling back to OSRM');
-        try {
-          const fallback = await fetch(
-            `https://router.project-osrm.org/route/v1/driving/${coordsA.lon},${coordsA.lat};${coordsB.lon},${coordsB.lat}?overview=false`
-          );
-          if (requestId !== fetchDistanceRef.current) return;
-          const fbData = await fallback.json();
-          if (fbData.routes && fbData.routes.length > 0) {
-            setAutoDistance(Math.round((fbData.routes[0].distance / 1000) * 10) / 10);
-            if (typeof fbData.routes[0].duration === 'number') {
-              setAutoDurationSeconds(fbData.routes[0].duration);
-            }
-          } else {
-            setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
-          }
-        } catch {
-          if (requestId === fetchDistanceRef.current) {
-            setRouteError('Błąd połączenia. Spróbuj ponownie.');
-          }
-        }
-        return;
-      }
+      try {
+        const response = await fetch(
+          `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordsA.lon},${coordsA.lat}&end=${coordsB.lon},${coordsB.lat}`
+        );
+        if (requestId !== fetchDistanceRef.current) return;
 
-      const data = await response.json();
-      
-      if (data.features && data.features.length > 0) {
-        const distanceInKm = data.features[0].properties.segments[0].distance / 1000;
-        setAutoDistance(Math.round(distanceInKm * 10) / 10);
-
-        const duration = data.features?.[0]?.properties?.segments?.[0]?.duration;
-        if (typeof duration === 'number') {
-          setAutoDurationSeconds(duration);
+        if (response.status === 429) {
+          // Rate limited — wait and retry
+          const delay = Math.min(1000 * Math.pow(2, attempt), 4000);
+          console.warn(`ORS rate limited (attempt ${attempt + 1}/${maxRetries}), retrying in ${delay}ms`);
+          await new Promise(r => setTimeout(r, delay));
+          continue;
         }
-      } else if (data.error) {
-        console.warn('ORS error:', data.error);
-        setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
+
+        if (!response.ok) {
+          console.warn('ORS error status:', response.status);
+          setRouteError('Nie udało się wyznaczyć trasy. Spróbuj ponownie.');
+          break;
+        }
+
+        const data = await response.json();
+        if (requestId !== fetchDistanceRef.current) return;
+
+        if (data.features && data.features.length > 0) {
+          const distanceInKm = data.features[0].properties.segments[0].distance / 1000;
+          setAutoDistance(Math.round(distanceInKm * 10) / 10);
+
+          const duration = data.features?.[0]?.properties?.segments?.[0]?.duration;
+          if (typeof duration === 'number') {
+            setAutoDurationSeconds(duration);
+          }
+          setRouteError(null);
+        } else if (data.error) {
+          console.warn('ORS error:', data.error);
+          setRouteError('Nie udało się wyznaczyć trasy. Sprawdź lokalizacje.');
+        }
+        break; // Success or non-retryable error — exit loop
+      } catch (error) {
+        if (requestId !== fetchDistanceRef.current) return;
+        if (attempt === maxRetries - 1) {
+          console.error('Error fetching distance from OpenRouteService:', error);
+          setRouteError('Błąd połączenia. Spróbuj ponownie.');
+        } else {
+          await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+        }
       }
-    } catch (error) {
-      if (requestId === fetchDistanceRef.current) {
-        console.error('Error fetching distance from OpenRouteService:', error);
-        setRouteError('Błąd połączenia. Spróbuj ponownie.');
-      }
-    } finally {
-      if (requestId === fetchDistanceRef.current) setIsCalculatingDistance(false);
     }
+
+    if (requestId === fetchDistanceRef.current) setIsCalculatingDistance(false);
   };
 
   useEffect(() => {
