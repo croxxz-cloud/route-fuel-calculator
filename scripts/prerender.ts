@@ -356,7 +356,6 @@ function buildRoutePage(shell: string, route: RouteData): string {
     const toll = (route.hasTolls && v.tollIndices && v.tollIndices.length > 0)
       ? v.tollIndices.reduce((sum: number, idx: number) => sum + (route.tollSections[idx]?.cost ?? 0), 0)
       : 0;
-      : 0;
     return { fuel, toll, total: fuel + toll };
   });
 
