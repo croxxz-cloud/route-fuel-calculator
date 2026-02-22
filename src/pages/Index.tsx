@@ -2,11 +2,11 @@ import { FuelCalculator } from '@/components/FuelCalculator';
 import { FAQ } from '@/components/FAQ';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { AboutSection } from '@/components/AboutSection';
 import { DrivingCostGuide } from '@/components/DrivingCostGuide';
 import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
+
   return (
     <>
       <Helmet>
@@ -58,8 +58,6 @@ const Index = () => {
           <FuelCalculator />
 
           <DrivingCostGuide />
-
-          <AboutSection />
 
           <div id="faq">
             <FAQ />
