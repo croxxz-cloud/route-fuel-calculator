@@ -237,10 +237,10 @@ export const FuelCalculator = () => {
           <span>Aktualizacja: Luty 2026</span>
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
-          Kalkulator Kosztów Przejazdu {vehicleType === 'electric' ? '⚡' : '🚗'}
+          Kalkulator kosztów paliwa na trasie {vehicleType === 'electric' ? '⚡' : '🚗'}
         </h1>
         <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-          Oblicz ile zapłacisz za {vehicleType === 'electric' ? 'energię' : 'paliwo'} na trasie.
+          Podaj spalanie auta, a obliczymy ile zapłacisz za paliwo w podróży.
         </p>
       </div>
 
