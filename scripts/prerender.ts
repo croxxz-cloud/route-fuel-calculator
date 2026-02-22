@@ -156,8 +156,8 @@ function buildHomePage(shell: string): string {
   const bodyHtml = `
 <header>${navHtml()}</header>
 <main>
-  <h1>Kalkulator Kosztów Przejazdu 2026: Oblicz Koszt Paliwa na Trasie</h1>
-  <p>Darmowy kalkulator kosztów przejazdu samochodem. Oblicz ile zapłacisz za paliwo na trasie. Pb95, Pb98, Diesel, LPG. Aktualne ceny i realne trasy.</p>
+  <h1>Kalkulator kosztów paliwa na trasie</h1>
+  <p>Podaj spalanie auta, a obliczymy ile zapłacisz za paliwo w podróży.</p>
 
   <section aria-label="Kalkulator kosztów przejazdu">
     <h2>Kalkulator paliwa online</h2>
@@ -241,22 +241,37 @@ function buildHomePage(shell: string): string {
   </section>
 
   <section>
-    <h2>Jak obliczyć koszt przejazdu samochodem?</h2>
-    <p>Planowanie budżetu na podróż samochodem sprowadza się do trzech rzeczy: ile kilometrów jedziesz, ile pali Twój samochód i ile kosztuje paliwo. Wzór jest prosty: dzielisz dystans przez 100, mnożysz przez spalanie i cenę litra.</p>
-    <h3>Dystans i trasa</h3><p>Najkrótsza trasa nie zawsze jest najtańsza. Autostrady pozwalają jechać oszczędniej dzięki stałej prędkości, ale na niektórych odcinkach zapłacisz za przejazd.</p>
-    <h3>Spalanie auta</h3><p>Ile Twój samochód faktycznie pali, zależy od prędkości, stylu jazdy i tego, ile wiezie. Na autostradzie przy 90–110 km/h spalanie jest najniższe.</p>
-    <h3>Rodzaj paliwa</h3><p>LPG kosztuje o połowę mniej za litr niż benzyna, ale auto pali go o ok. 20% więcej. Diesel jest droższy od Pb95, ale silnik diesla zużywa ok. 5% mniej paliwa.</p>
-    <h3>Które autostrady w Polsce są płatne?</h3><p>W Polsce za przejazd samochodem osobowym zapłacisz na trzech odcinkach: A1 między Gdańskiem a Toruniem (AmberOne), A2 na odcinkach koncesyjnych między Nowym Tomyślem a Strykowem, oraz A4 między Katowicami a Krakowem (Stalexport).</p>
-    <h3>Czy warto tankować LPG na długą trasę?</h3><p>Na trasach powyżej 200 km LPG wychodzi zdecydowanie taniej niż benzyna — mimo wyższego spalania o ok. 20%, cena litra jest o ponad połowę niższa.</p>
+    <h2>Trasomat w pigułce, czyli jak liczymy koszty przejazdu</h2>
+    <p>Mechanizm działania naszego narzędzia opiera się na kilku założeniach.</p>
+    <p>Konkretnie, są to dane obejmujące:</p>
+    <ul>
+      <li><strong>Dystans:</strong> Przeliczymy dla Ciebie odległość trasy na podstawie map, jeżeli dobrze znasz dystans, możesz też wpisać własną odległość</li>
+      <li><strong>Stosowany wzór na koszt paliwa:</strong> (dystans / 100) × spalanie × cena za litr</li>
+      <li><strong>Opłaty drogowe:</strong> Doliczane są osobno do kosztu paliwa</li>
+    </ul>
+    <h3>Różnice między paliwami</h3>
+    <ul>
+      <li><strong>LPG:</strong> Cena litra o ponad połowę niższa niż benzyny, ale spalanie wyższe o ok. 20%</li>
+      <li><strong>Diesel:</strong> Droższy od Pb95, ale silnik zużywa ok. 5% mniej paliwa</li>
+      <li><strong>Pb98 vs Pb95:</strong> Wyższa cena, zbliżone spalanie — opłaca się głównie w silnikach wysokoprężnych</li>
+    </ul>
+    <h3>Co zobaczysz w wyniku?</h3>
+    <ul>
+      <li><strong>Koszt przejazdu:</strong> przedstawiony w złotówkach, z podziałem na paliwo i opłaty</li>
+      <li><strong>Zużycie paliwa:</strong> dowiesz się, ile litrów lub kWh potrzebujesz na trasę</li>
+      <li><strong>Porównanie kosztu paliw:</strong> zestawienie dla Pb95, Pb98, Diesel i LPG na tej samej trasie</li>
+      <li><strong>Szacunkowy koszt podróży:</strong> aby wiedzieć jak długa trasa Cię czeka i ile postojów zaplanować</li>
+    </ul>
   </section>
-  
+
   <section>
-    <h2>O Serwisie</h2>
-    <p>Kalkulator Paliwa to niezależne narzędzie stworzone z myślą o kierowcach planujących podróże po Polsce i Europie.</p>
-    <h3>Wiarygodne dane</h3><p>Ceny paliw opieramy na aktualnych danych i aktualizujemy co tydzień.</p>
-    <h3>Realne trasy</h3><p>Dystanse i czasy przejazdu bazują na tych samych danych, z których korzystają nawigacje.</p>
-    <h3>Prywatność</h3><p>Nie zbieramy danych osobowych. Obliczenia wykonywane są bezpośrednio w Twojej przeglądarce.</p>
-    <h3>Regularnie aktualizowane</h3><p>Ceny paliw, opłaty drogowe i winiety aktualizujemy regularnie.</p>
+    <h2>Jak obliczyć koszt przejazdu samochodem?</h2>
+    <p>Planowanie budżetu na podróż samochodem sprowadza się do trzech rzeczy: ile kilometrów jedziesz, ile pali Twój samochód i ile kosztuje paliwo.</p>
+    <h3>Dystans i trasa</h3><p>Najkrótsza trasa nie zawsze jest najtańsza. Autostrady pozwalają jechać oszczędniej dzięki stałej prędkości, ale na niektórych odcinkach zapłacisz za przejazd.</p>
+    <h3>Spalanie auta</h3><p>Ile Twój samochód faktycznie pali, zależy od prędkości, stylu jazdy i tego, ile wiezie.</p>
+    <h3>Rodzaj paliwa</h3><p>LPG kosztuje o połowę mniej za litr niż benzyna, ale auto pali go o ok. 20% więcej.</p>
+    <h3>Które autostrady w Polsce są płatne?</h3><p>A1 Gdańsk–Toruń, A2 Nowy Tomyśl–Stryków, A4 Katowice–Kraków.</p>
+    <h3>Czy warto tankować LPG na długą trasę?</h3><p>Na trasach powyżej 200 km LPG wychodzi zdecydowanie taniej niż benzyna.</p>
   </section>
   
   <section>
@@ -269,7 +284,7 @@ ${footerHtml()}`;
   const softwareApp = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Kalkulator Kosztów Przejazdu – Trasomat",
+    "name": "Kalkulator paliwa – Trasomat",
     "url": "https://trasomat.pl/",
     "applicationCategory": "TravelApplication",
     "operatingSystem": "Web",
@@ -290,8 +305,8 @@ ${footerHtml()}`;
   };
 
   return injectSeo(shell, {
-    title: 'Kalkulator Kosztów Przejazdu 2026: Oblicz Koszt Paliwa na Trasie',
-    description: 'Darmowy kalkulator kosztów przejazdu. Oblicz ile zapłacisz za paliwo na trasie samochodem. Pb95, Pb98, Diesel, LPG. Aktualne ceny i realne trasy.',
+    title: 'Kalkulator paliwa: policz ile zapłacisz za podróż w 2026',
+    description: 'Oblicz koszt paliwa na trasie w kilka sekund. Wpisz spalanie auta i sprawdź ile zapłacisz za przejazd według aktualnych cen – także samochodem elektrycznym.',
     canonical: 'https://trasomat.pl/',
     bodyHtml: bodyHtml,
     jsonLd: [softwareApp, faqLd],
@@ -351,8 +366,8 @@ ${footerHtml()}`;
   };
 
   return injectSeo(shell, {
-    title: `Koszt przejazdu ${route.from} - ${route.to} | Kalkulator Paliwa`,
-    description: `Oblicz koszt przejazdu na trasie ${route.from} - ${route.to}. Dystans ${route.distance} km. Szacunkowy koszt: ${estimatedCost} zł.`,
+    title: `Koszt paliwa na trasie ${route.from} – ${route.to} | Trasomat.pl`,
+    description: `Ile zapłacisz za paliwo na trasie ${route.from} – ${route.to}? Sprawdź koszt i zweryfikuj dostępne trasy wraz z opłatami drogowymi w 2026.`,
     canonical: `https://trasomat.pl/trasa/${route.slug}`,
     bodyHtml: bodyHtml,
     jsonLd: [breadcrumbLd],
