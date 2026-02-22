@@ -1,33 +1,13 @@
-import { TrendingDown, Gauge, Route, AlertTriangle, Users, Zap, BarChart3 } from 'lucide-react';
+import { TrendingDown, Gauge, Route } from 'lucide-react';
 
 export const DrivingCostGuide = () => {
   return (
     <section className="mt-8 bg-card border border-border rounded-2xl p-6 md:p-8">
       <h2 className="text-xl font-bold text-foreground mb-4">
-        Trasomat w pigułce, czyli jak liczymy koszty przejazdu?
+        Jak samodzielnie obliczyć koszt przejazdu samochodem?
       </h2>
 
       <div className="text-muted-foreground space-y-4 leading-relaxed text-sm">
-        <p>
-          Mechanizm działania naszego narzędzia opiera się na kilku założeniach. Konkretnie, są to dane obejmujące:
-        </p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li><strong className="text-foreground">Dystans</strong> — przeliczymy dla Ciebie odległość trasy na podstawie map, a jeżeli dobrze znasz dystans, możesz też wpisać własną odległość</li>
-          <li><strong className="text-foreground">Stosowany wzór na koszt paliwa</strong> — (dystans / 100) × spalanie × cena za litr</li>
-          <li><strong className="text-foreground">Opłaty drogowe</strong> — doliczane są osobno do kosztu paliwa</li>
-        </ul>
-
-        <h3 className="text-base font-semibold text-foreground mt-6">Co zobaczysz w wyniku?</h3>
-        <ul className="list-disc pl-5 space-y-1">
-          <li><strong className="text-foreground">Koszt przejazdu</strong> — przedstawiony w złotówkach, z podziałem na paliwo i opłaty</li>
-          <li><strong className="text-foreground">Zużycie paliwa</strong> — ile litrów lub kWh potrzebujesz na trasę</li>
-          <li><strong className="text-foreground">Porównanie kosztu paliw</strong> — zestawienie dla Pb95, Pb98, Diesel i LPG na tej samej trasie</li>
-          <li><strong className="text-foreground">Szacunkowy czas podróży</strong> — ile trwa trasa i ile postojów zaplanować (warto zrobić przerwę mniej więcej co 2 godziny jazdy)</li>
-        </ul>
-
-        <h3 className="text-base font-semibold text-foreground mt-6">
-          Jak samodzielnie obliczyć koszt przejazdu samochodem?
-        </h3>
         <p>
           Planując budżet na podróż samochodem, musisz wiedzieć trzy rzeczy:{' '}
           <strong className="text-foreground">ile kilometrów wynosi trasa</strong>,{' '}
