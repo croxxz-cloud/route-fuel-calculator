@@ -6,12 +6,15 @@ export const InfoBoxes = () => {
       <div className="bg-card border border-border rounded-2xl p-5">
         <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <Calculator className="w-4 h-4 text-primary" />
-          Jak liczymy?
+          Trasomat w pigułce, czyli jak liczymy koszty przejazdu?
         </h3>
+        <p className="text-sm text-muted-foreground mb-3">
+          Mechanizm działania naszego narzędzia opiera się na kilku założeniach. Konkretnie, są to dane obejmujące:
+        </p>
         <ul className="space-y-2 text-sm text-muted-foreground">
-          <li><strong>Dystans:</strong> Realna trasa drogowa na podstawie map</li>
-          <li><strong>Koszt paliwa:</strong> (dystans / 100) × spalanie × cena za litr</li>
-          <li><strong>Opłaty drogowe:</strong> Doliczane osobno do kosztu paliwa</li>
+          <li><strong>Dystans:</strong> Przeliczymy dla Ciebie odległość trasy na podstawie map, jeżeli dobrze znasz dystans, możesz też wpisać własną odległość</li>
+          <li><strong>Stosowany wzór na koszt paliwa:</strong> (dystans / 100) × spalanie × cena za litr</li>
+          <li><strong>Opłaty drogowe:</strong> Doliczane są osobno do kosztu paliwa</li>
         </ul>
       </div>
 
@@ -33,10 +36,10 @@ export const InfoBoxes = () => {
           Co zobaczysz w wyniku?
         </h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
-          <li><strong>Koszt przejazdu</strong> — w złotówkach, z podziałem na paliwo i opłaty</li>
-          <li><strong>Zużycie paliwa</strong> — ile litrów lub kWh potrzebujesz na trasę</li>
-          <li><strong>Porównanie paliw</strong> — Pb95 vs Pb98 vs Diesel vs LPG na tej samej trasie</li>
-          <li><strong>Spalinowy vs elektryczny</strong> — ile zaoszczędzisz na aucie elektrycznym</li>
+          <li><strong>Koszt przejazdu:</strong> przedstawiony w złotówkach, z podziałem na paliwo i opłaty</li>
+          <li><strong>Zużycie paliwa:</strong> dowiesz się, ile litrów lub kWh potrzebujesz na trasę</li>
+          <li><strong>Porównanie kosztu paliw:</strong> odpowie na pytanie: co właściwie wyjdzie najtaniej? Czyli zestawienie dla Pb95, Pb98, Diesel i LPG na tej samej trasie</li>
+          <li><strong>Szacunkowy koszt podróży:</strong> po to, aby wiedzieć jak długa trasa Cię czeka i ile postojów zaplanować (w praktyce na trasie warto zrobić krótką przerwę mniej więcej co 2 godziny jazdy)</li>
         </ul>
       </div>
     </div>
