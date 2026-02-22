@@ -10,17 +10,17 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Kalkulator Kosztów Przejazdu 2026: Oblicz Koszt Paliwa na Trasie</title>
+        <title>Kalkulator paliwa: policz ile zapłacisz za podróż w 2026</title>
         <meta 
           name="description" 
-          content="Darmowy kalkulator kosztów przejazdu. Oblicz ile zapłacisz za paliwo na trasie samochodem. Pb95, Pb98, Diesel, LPG. Aktualne ceny i realne trasy." 
+          content="Oblicz koszt paliwa na trasie w kilka sekund. Wpisz spalanie auta i sprawdź ile zapłacisz za przejazd według aktualnych cen – także samochodem elektrycznym." 
         />
         <meta name="keywords" content="kalkulator paliwa, koszt przejazdu, kalkulator trasy, spalanie, diesel, lpg, pb95, kalkulator benzyny" />
         <link rel="canonical" href="https://trasomat.pl/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "Kalkulator Kosztów Przejazdu – Trasomat",
+          "name": "Kalkulator paliwa – Trasomat",
           "url": "https://trasomat.pl/",
           "applicationCategory": "TravelApplication",
           "applicationSubCategory": "Route Planning & Fuel/Energy Cost Calculator",

@@ -42,10 +42,10 @@ const RoutePage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Helmet>
-        <title>Koszt paliwa na trasie {route.from} - {route.to} | Kalkulator Paliwa</title>
+        <title>Koszt paliwa na trasie {route.from} – {route.to} | Trasomat.pl</title>
         <meta 
           name="description" 
-          content={`Ile kosztuje paliwo na trasie ${route.from} - ${route.to}? Sprawdź koszt paliwa dla ${route.variants.length} ${route.variants.length === 1 ? 'wariantu trasy' : 'wariantów tras'}.`} 
+          content={`Ile zapłacisz za paliwo na trasie ${route.from} – ${route.to}? Sprawdź koszt i zweryfikuj dostępne trasy wraz z opłatami drogowymi w 2026.`} 
         />
       </Helmet>
 
