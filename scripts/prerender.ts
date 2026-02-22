@@ -224,7 +224,6 @@ function buildHomePage(shell: string): string {
         <li>Szacowany czas przejazdu</li>
         <li>Zużycie paliwa w litrach lub energii w kWh</li>
         <li>Porównanie kosztów: Pb95 vs Pb98 vs Diesel vs LPG</li>
-        <li>Porównanie: samochód spalinowy vs elektryczny</li>
       </ul>
     </div>
 
