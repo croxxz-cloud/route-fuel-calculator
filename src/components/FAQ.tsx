@@ -20,10 +20,6 @@ const faqItems = [
     answer: 'Tak, ale musisz je wpisać osobno w polu „Opłaty drogowe". Dla popularnych tras (np. Warszawa–Kraków, Poznań–Warszawa) pokazujemy konkretne kwoty za płatne odcinki, żebyś wiedział ile doliczyć. Opłaty są wyraźnie wyszczególnione w wyniku.',
   },
   {
-    question: 'Dlaczego wynik może się różnić od rzeczywistości?',
-    answer: 'Kalkulator podaje szacunek oparty na średnim spalaniu i aktualnych cenach paliw. W praktyce koszt zależy od wielu czynników: stylu jazdy, prędkości, korków, obciążenia auta, klimatyzacji czy warunków pogodowych. Traktuj wynik jako solidną orientację, nie dokładną kwotę co do grosza.',
-  },
-  {
     question: 'Co oznacza opcja „w obie strony"?',
     answer: 'Po włączeniu tego przełącznika kalkulator automatycznie podwaja dystans i oblicza łączny koszt przejazdu tam i z powrotem. W wyniku jest to wyraźnie oznaczone, więc od razu wiesz, czy patrzysz na koszt jednej trasy czy dwóch.',
   },
